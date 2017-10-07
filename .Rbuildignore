@@ -1,0 +1,6 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^vignettes.*
+^\.git.*
+^Journal.*
+^\.dropbox$
