@@ -7,14 +7,11 @@
 #' odds, relative risk, and odds ratio values.
 #'
 #' @section Sample Size Calculation:
+#' This is where I talk about the main function that calculates sample size.
 #'
 #' @section Helper Functions:
+#' This is where I talk about the odds and proportions stuff
 #'
 #' @docType package
 #' @name samplesizeCMH-package
 NULL
-
-# Just a little welcome message
-.onAttach <- function(libname, pkgname) {
-  packageStartupMessage("Welcome to the samplesizeCMH package")
-}

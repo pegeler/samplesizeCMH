@@ -3,7 +3,8 @@ Title: Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test
 Version: 0.0.0.9000
 Authors@R: c(
     person("Paul", "Egeler", email = "paul.egeler@spectrumhealth.org", role = c("aut", "cre")),
-    person("Laura", "Kapitula", email = "kapitull@gvsu.edu", role = "aut"))
+    person("Laura", "Kapitula", email = "kapitull@gvsu.edu", role = "aut"),
+    person("Spectrum Health", role = "cph"))
 Description: 
     This package provides a function for calculating the required number of 
     subjects per group to achieve a specified power for a Cochran-Mantel-Haenszel 
@@ -11,6 +12,7 @@ Description:
     There are also several helper functions for interconverting probability,
     odds, relative risk, and odds ratio values.
 Depends: R (>= 3.4.0)
+Imports: stats
 License: GPL-2
 Encoding: UTF-8
 LazyData: true

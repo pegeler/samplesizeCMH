@@ -72,47 +72,47 @@
 #' ## Should make our own examples
 #' #  Example 1
 #' samplesizeCMH(
-#' 	p1 = NULL,
-#' 	p2 = c(.426,.444,.364),
-#' 	theta = 2.5,
-#' 	sig.level = 0.05,
-#' 	power = .8,
-#' 	alternative = "two"
+#'   p1 = NULL,
+#'   p2 = c(.426,.444,.364),
+#'   theta = 2.5,
+#'   sig.level = 0.05,
+#'   power = .8,
+#'   alternative = "two"
 #' )
 #'
 #' #  Example 2
 #' samplesizeCMH(
-#' 	p1 = NULL,
-#' 	p2 = c(.426,.444,.364),
-#' 	theta = 2.5,
-#' 	sig.level = 0.05,
-#' 	power = .8,
-#' 	alternative = "two",
-#' 	t = c(4,1,4) / sum(c(4,1,4))
+#'   p1 = NULL,
+#'   p2 = c(.426,.444,.364),
+#'   theta = 2.5,
+#'   sig.level = 0.05,
+#'   power = .8,
+#'   alternative = "two",
+#'   t = c(4,1,4) / sum(c(4,1,4))
 #' )
 #'
 #' #  Example 3a
 #' samplesizeCMH(
-#' 	p1 = NULL,
-#' 	p2 = c(.426,.444,.364),
-#' 	theta = 2.5,
-#' 	sig.level = 0.05,
-#' 	power = .8,
-#' 	alternative = "two",
-#' 	t = c(4,1,4) / sum(c(4,1,4)),
-#' 	s = 1 - c(.47,.57,.51)
+#'   p1 = NULL,
+#'   p2 = c(.426,.444,.364),
+#'   theta = 2.5,
+#'   sig.level = 0.05,
+#'   power = .8,
+#'   alternative = "two",
+#'   t = c(4,1,4) / sum(c(4,1,4)),
+#'   s = 1 - c(.47,.57,.51)
 #' )
 #'
 #' #  Example 3b
 #' samplesizeCMH(
-#' 	p1 = NULL,
-#' 	p2 = c(.426,.444,.364),
-#' 	theta = 2.5,
-#' 	sig.level = 0.05,
-#' 	power = .8,
-#' 	alternative = "two",
-#' 	t = c(4,1,4) / sum(c(4,1,4)),
-#' 	s = 1 - c(.8,.7,.3)
+#'   p1 = NULL,
+#'   p2 = c(.426,.444,.364),
+#'   theta = 2.5,
+#'   sig.level = 0.05,
+#'   power = .8,
+#'   alternative = "two",
+#'   t = c(4,1,4) / sum(c(4,1,4)),
+#'   s = 1 - c(.8,.7,.3)
 #' )
 #'
 #' @source
@@ -124,125 +124,125 @@
 #'
 #' @export
 samplesizeCMH <- function(
-	p1 = NULL,
-	p2 = NULL,
-	theta = NULL,
-	sig.level = 0.05,
-	power = 0.80,
-	alternative = c("two.sided","one.sided"),
-	s = 0.5,
-	t = 1 / J,
-	method = c("binomial","hypergeometic","least.squares","unstratified")
-	) {
+  p1 = NULL,
+  p2 = NULL,
+  theta = NULL,
+  sig.level = 0.05,
+  power = 0.80,
+  alternative = c("two.sided","one.sided"),
+  s = 0.5,
+  t = 1 / J,
+  method = c("binomial","hypergeometic","least.squares","unstratified")
+  ) {
 
-	# Process the expected proportions and/or effect size
-	if (sum(sapply(list(p1,p2,theta),is.null)) != 1) {
-		stop("exactly one of 'p1', 'p2', or 'theta' must be NULL")
-	}
+  # Process the expected proportions and/or effect size
+  if (sum(sapply(list(p1,p2,theta),is.null)) != 1) {
+    stop("exactly one of 'p1', 'p2', or 'theta' must be NULL")
+  }
 
-	# Infer J from vector lengths of first three args
-	J <- max(sapply(list(p1,p2,theta),length))
+  # Infer J from vector lengths of first three args
+  J <- max(sapply(list(p1,p2,theta),length))
 
-	# If theta is used, determine the missing p vector
-	if (is.null(p1)) {
-		p1 <- (p2 * theta) / (1 - p2 + p2 * theta)
-	}	else if (is.null(p2)) {
-		p2 <- (p1 * theta) / (1 - p1 + p1 * theta)
-	}
+  # If theta is used, determine the missing p vector
+  if (is.null(p1)) {
+    p1 <- (p2 * theta) / (1 - p2 + p2 * theta)
+  }  else if (is.null(p2)) {
+    p2 <- (p1 * theta) / (1 - p1 + p1 * theta)
+  }
 
-	# Determine upper, lower, or two-sided hypothesis
-	alternative <- match.arg(alternative)
-	tside <- switch(alternative, two.sided = 2, 1)
+  # Determine upper, lower, or two-sided hypothesis
+  alternative <- match.arg(alternative)
+  tside <- switch(alternative, two.sided = 2, 1)
 
-	# Calculate z values for alpha and beta
-	z_a <- qnorm(sig.level / tside)
-	z_b <- qnorm(1 - power)
+  # Calculate z values for alpha and beta
+  z_a <- stats::qnorm(sig.level / tside)
+  z_b <- stats::qnorm(1 - power)
 
-	# Determine the method of calculation to use
-	method <- match.arg(method)
-	methods <- c(
-		"binomial" = "Weighted difference between two binomial distributions (Case-Control)",
-		"hypergeometic" = "Hypergeometric distribution with both margins fixed",
-		"least.squares" = "Weighted least squares",
-		"unstratified" = "Unstratified (ignoring confounding variable)"
-	)
+  # Determine the method of calculation to use
+  method <- match.arg(method)
+  methods <- c(
+    "binomial" = "Weighted difference between two binomial distributions (Case-Control)",
+    "hypergeometic" = "Hypergeometric distribution with both margins fixed",
+    "least.squares" = "Weighted least squares",
+    "unstratified" = "Unstratified (ignoring confounding variable)"
+  )
 
-	# Set up the different calcualtions based on method
-	calculations <- list(
-		"binomial" = quote({
-			pbar <- p1 * s + p2 * (1 - s)
+  # Set up the different calcualtions based on method
+  calculations <- list(
+    "binomial" = quote({
+      pbar <- p1 * s + p2 * (1 - s)
 
-			X <- sum(t * s * (1 - s) * pbar * (1 - pbar))
+      X <- sum(t * s * (1 - s) * pbar * (1 - pbar))
 
-			Y <- sum(t * s * (1 - s) * ((1 - s) * p1 * (1 - p1) + s * p2 * (1 - p2)))
+      Y <- sum(t * s * (1 - s) * ((1 - s) * p1 * (1 - p1) + s * p2 * (1 - p2)))
 
-			Z <- sum(t * s * (1 - s) * (p1 - p2))
+      Z <- sum(t * s * (1 - s) * (p1 - p2))
 
-			(z_a * sqrt(X) + z_b * sqrt(Y))^2 / Z^2
-		}),
-		"hypergeometric" = quote({
-			999 # Need to add
-		}),
-		"least.squares" =  quote({
-			888 # Need to add
-		}),
-		"unstratified" =  quote({
-			sum_ts <- sum(t * s)
+      (z_a * sqrt(X) + z_b * sqrt(Y))^2 / Z^2
+    }),
+    "hypergeometric" = quote({
+      999 # Need to add
+    }),
+    "least.squares" =  quote({
+      888 # Need to add
+    }),
+    "unstratified" =  quote({
+      sum_ts <- sum(t * s)
 
-			sum_t1ms <- sum(t * (1 - s))
+      sum_t1ms <- sum(t * (1 - s))
 
-			p2p <- sum(t * (1 - s) * p2 / sum_t1ms)
+      p2p <- sum(t * (1 - s) * p2 / sum_t1ms)
 
-			p1p <- sum(t * s * p1 / sum_ts) # Note to confirm
+      p1p <- sum(t * s * p1 / sum_ts) # Note to confirm
 
-			ppp <- p1p * sum_ts + p2p * sum_t1ms
+      ppp <- p1p * sum_ts + p2p * sum_t1ms
 
-			(z_a * sqrt(sum_ts * sum_t1ms * ppp * (1 - ppp)) +
-			 z_b * sqrt(sum_ts^2 * sum_t1ms^2 *
-			(p1p * (1 - p1p) / sum_ts + p2p * (1 - p2p) / sum_t1ms)))^2 /
-			((p1p - p2p) * sum_ts * sum_t1ms)^2
+      (z_a * sqrt(sum_ts * sum_t1ms * ppp * (1 - ppp)) +
+       z_b * sqrt(sum_ts^2 * sum_t1ms^2 *
+      (p1p * (1 - p1p) / sum_ts + p2p * (1 - p2p) / sum_t1ms)))^2 /
+      ((p1p - p2p) * sum_ts * sum_t1ms)^2
 
-		})
-	)
+    })
+  )
 
-	# Run the calculation
-	N <- eval(calculations[[method]])
+  # Run the calculation
+  N <- eval(calculations[[method]])
 
-	# Return an object of class "samplesize.cmh"
-	structure(
-		list(
-			n1 = ceiling(rep(N,J)*t*s),
-			n2 = ceiling(rep(N,J)*t*(1 - s)),
-			N = sum(ceiling(rep(N,J)*t*s), ceiling(rep(N,J)*t*(1 - s))),
-			N.exact = N, p1 = p1, p2 = p2, sig.level = sig.level,
-			power = power, alternative = alternative, s = s, t = t, J = J,
-			note = "N is *total* number of subjects",
-			method = method, method.desc = methods[method]),
-		class = "samplesize.cmh"
-		)
+  # Return an object of class "samplesize.cmh"
+  structure(
+    list(
+      n1 = ceiling(rep(N,J)*t*s),
+      n2 = ceiling(rep(N,J)*t*(1 - s)),
+      N = sum(ceiling(rep(N,J)*t*s), ceiling(rep(N,J)*t*(1 - s))),
+      N.exact = N, p1 = p1, p2 = p2, sig.level = sig.level,
+      power = power, alternative = alternative, s = s, t = t, J = J,
+      note = "N is *total* number of subjects",
+      method = method, method.desc = methods[method]),
+    class = "samplesize.cmh"
+    )
 }
 
 # Print method so that "samplesize.cmh" will look nice
 #' @export
-print.samplesize.cmh <- function(x) {
-	with(x, cat(
-		"Sample size calculation for the Cochran Mantel Haenszel test\n\n",
+print.samplesize.cmh <- function(x, ...) {
+  with(x, cat(
+    "Sample size calculation for the Cochran Mantel Haenszel test\n\n",
 
-		"                 N = ",N,"\n",
-		"Significance level = ",sig.level,"\n",
-		"     Nominal Power = ",power,"\n",
-		"             Sides = ",alternative,"\n\n",
+    "                 N = ",N,"\n",
+    "Significance level = ",sig.level,"\n",
+    "     Nominal Power = ",power,"\n",
+    "             Sides = ",alternative,"\n\n",
 
-		"Number of subjects per each group:\n",
-		rep("_",10 + J * 7),"\n",
-		"Group   |",sprintf(" %5i ",1:J),"\n",
-		rep("=",10 + J * 7),"\n",
-		"Case    |",sprintf(" %5i ",n1),"\n",
-		"Control |",sprintf(" %5i ",n2),"\n\n",
+    "Number of subjects per each group:\n",
+    rep("_",10 + J * 7),"\n",
+    "Group   |",sprintf(" %5i ",1:J),"\n",
+    rep("=",10 + J * 7),"\n",
+    "Case    |",sprintf(" %5i ",n1),"\n",
+    "Control |",sprintf(" %5i ",n2),"\n\n",
 
-		"METHOD: ",method.desc,"\n",
-		"NOTE  : ",note,
-		sep = ""
-		)
-	)
+    "METHOD: ",method.desc,"\n",
+    "NOTE  : ",note,
+    sep = ""
+    )
+  )
 }
