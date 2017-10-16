@@ -1,0 +1,199 @@
+
+PMID- 4765321
+OWN - NLM
+STAT- MEDLINE
+DA  - 19740222
+DCOM- 19740222
+LR  - 20071115
+IS  - 0021-9681 (Print)
+IS  - 0021-9681 (Linking)
+VI  - 26
+IP  - 10
+DP  - 1973 Oct
+TI  - The determination of sample sizes for trials involving several independent 2x2
+      tables.
+PG  - 669-73
+FAU - Gail, M
+AU  - Gail M
+LA  - eng
+PT  - Journal Article
+PL  - England
+TA  - J Chronic Dis
+JT  - Journal of chronic diseases
+JID - 2985123R
+SB  - IM
+MH  - *Statistics as Topic
+EDAT- 1973/10/01
+MHDA- 1973/10/01 00:01
+CRDT- 1973/10/01 00:00
+PST - ppublish
+SO  - J Chronic Dis. 1973 Oct;26(10):669-73.
+
+PMID- 3814733
+OWN - NLM
+STAT- MEDLINE
+DA  - 19870416
+DCOM- 19870416
+LR  - 20071115
+IS  - 0006-341X (Print)
+IS  - 0006-341X (Linking)
+VI  - 42
+IP  - 4
+DP  - 1986 Dec
+TI  - Sample size for case-control studies using Cochran's statistic.
+PG  - 927-32
+AB  - Sample size determination for case-control studies of chronic disease are often
+      based on the simple 2 X 2 tabular cross-classification of exposure and disease,
+      thereby ignoring stratification which may be considered in the analysis. One
+      consequence of this approach is that the sample size may be inadequate to attain 
+      a specified power and size when performing a statistical analysis on J 2 X 2
+      tables using Cochran's (1954, Biometrics 10, 417-451) statistic or the
+      Mantel-Haenszel (1959, Journal of the National Cancer Institute 22, 719-748)
+      statistic. A sample size formula is derived from Cochran's statistic and it is
+      compared with the corresponding one derived when the data are treated as
+      unstratified, and also with two other formulas proposed for stratified data
+      analysis. The formula developed yields values slightly higher than one recently
+      proposed by Munoz and Rosner (1984, Biometrics 40, 995-1004), which assumes that 
+      both margins of each 2 X 2 table are fixed, while the present study considers
+      only the case-control margin to be fixed.
+FAU - Woolson, R F
+AU  - Woolson RF
+FAU - Bean, J A
+AU  - Bean JA
+FAU - Rojas, P B
+AU  - Rojas PB
+LA  - eng
+GR  - 1 R01 CA39065-01/CA/NCI NIH HHS/United States
+GR  - CA28848/CA/NCI NIH HHS/United States
+PT  - Comparative Study
+PT  - Journal Article
+PT  - Research Support, U.S. Gov't, P.H.S.
+PL  - United States
+TA  - Biometrics
+JT  - Biometrics
+JID - 0370625
+SB  - IM
+MH  - Biometry/methods
+MH  - Chronic Disease/*therapy
+MH  - *Clinical Trials as Topic
+MH  - Humans
+MH  - *Research Design
+EDAT- 1986/12/01
+MHDA- 1986/12/01 00:01
+CRDT- 1986/12/01 00:00
+PST - ppublish
+SO  - Biometrics. 1986 Dec;42(4):927-32.
+
+PMID- 1637968
+OWN - NLM
+STAT- MEDLINE
+DA  - 19920901
+DCOM- 19920901
+LR  - 20131121
+IS  - 0006-341X (Print)
+IS  - 0006-341X (Linking)
+VI  - 48
+IP  - 2
+DP  - 1992 Jun
+TI  - Sample size determination for case-control studies and the comparison of
+      stratified and unstratified analyses.
+PG  - 389-95
+AB  - Woolson, Bean, and Rojas (1986, Biometrics 42, 927-932) present a simple
+      approximation of sample size for Cochran's (1954, Biometrics 10, 417-451) test
+      for detecting association between exposure and disease. It is useful in the
+      design of case-control studies. We derive a sample size formula for Cochran's
+      statistic with continuity correction which guarantees that the actual Type I
+      error rate of the test does not exceed the nominal level. The corrected sample
+      size is necessarily larger than the uncorrected one given by Woolson et al. and
+      the relative difference between the two sample sizes is considerable. Allocation 
+      of equal number of cases and controls within each stratum is asymptotically
+      optimal when the costs per case and control are the same. When any effect of
+      stratification is absent, Cochran's stratified test, although valid, is less
+      efficient than the unstratified one except for the important case of a balanced
+      design.
+FAU - Nam, J
+AU  - Nam J
+AD  - Mathematical Statistics and Applied Mathematics Section, National Cancer
+      Institute, Bethesda, Maryland 20892.
+LA  - eng
+PT  - Comparative Study
+PT  - Journal Article
+PL  - United States
+TA  - Biometrics
+JT  - Biometrics
+JID - 0370625
+RN  - 4R7X1O2820 (Chlorine)
+SB  - IM
+MH  - *Case-Control Studies
+MH  - *Chlorine
+MH  - Colonic Neoplasms/*etiology
+MH  - Humans
+MH  - Iowa/epidemiology
+MH  - Male
+MH  - *Mathematics
+MH  - *Water Supply
+EDAT- 1992/06/01
+MHDA- 1992/06/01 00:01
+CRDT- 1992/06/01 00:00
+PST - ppublish
+SO  - Biometrics. 1992 Jun;48(2):389-95.
+
+PMID- 8117902
+OWN - NLM
+STAT- MEDLINE
+DA  - 19940407
+DCOM- 19940407
+LR  - 20071115
+IS  - 0006-341X (Print)
+IS  - 0006-341X (Linking)
+VI  - 49
+IP  - 4
+DP  - 1993 Dec
+TI  - The power of the Mantel-Haenszel test for grouped failure time data.
+PG  - 1077-87
+AB  - The Mantel-Haenszel test for grouped failure time data (MHF test) compares the
+      distribution of failure times in two cohorts followed for an interval of time
+      when the data are collected in discrete subintervals. This paper derives
+      approximations to the power of the Mantel-Haenszel test for arbitrary failure
+      time distributions in the presence of censoring. The approximations are
+      appropriate for both equal and nonequal odds ratios in the constituent tables,
+      and can be used for arbitrary subdivisions of time. Four approximations are
+      proposed. They differ from each other according to whether the parameter
+      measuring treatment effect is an odds ratio or a difference in proportions, and
+      whether the survival distributions are calculated under the null or alternative
+      hypothesis. In addition, we demonstrate that when the hazards are constant,
+      increasing the number of subintervals often produces only a negligible increase
+      in the power of the MHF test. On the other hand, for arbitrary hazards and
+      nonconstant hazard ratios, the choice of frequency and actual times of
+      measurement can have important effects on power. Finally, the paper presents
+      simple expressions for power under exponential failure and censoring models.
+FAU - Wallenstein, S
+AU  - Wallenstein S
+AD  - Department of Biomathematics, Mount Sinai Medical School, New York, New York
+      10029.
+FAU - Wittes, J
+AU  - Wittes J
+LA  - eng
+GR  - ES 02557/ES/NIEHS NIH HHS/United States
+GR  - MO1 RR 0071/RR/NCRR NIH HHS/United States
+PT  - Journal Article
+PT  - Research Support, U.S. Gov't, P.H.S.
+PL  - United States
+TA  - Biometrics
+JT  - Biometrics
+JID - 0370625
+SB  - IM
+MH  - Biometry/*methods
+MH  - Cohort Studies
+MH  - Data Interpretation, Statistical
+MH  - Humans
+MH  - Models, Statistical
+MH  - Odds Ratio
+MH  - Proportional Hazards Models
+MH  - Randomized Controlled Trials as Topic/statistics & numerical data
+MH  - Time Factors
+EDAT- 1993/12/01
+MHDA- 1993/12/01 00:01
+CRDT- 1993/12/01 00:00
+PST - ppublish
+SO  - Biometrics. 1993 Dec;49(4):1077-87.

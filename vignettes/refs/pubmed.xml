@@ -1,0 +1,498 @@
+<?xml version="1.0" ?>
+<!DOCTYPE PubmedArticleSet PUBLIC "-//NLM//DTD PubMedArticle, 1st January 2017//EN" "https://dtd.nlm.nih.gov/ncbi/pubmed/out/pubmed_170101.dtd">
+<PubmedArticleSet>
+<PubmedArticle>
+    <MedlineCitation Status="MEDLINE" Owner="NLM">
+        <PMID Version="1">4765321</PMID>
+        <DateCreated>
+            <Year>1974</Year>
+            <Month>02</Month>
+            <Day>22</Day>
+        </DateCreated>
+        <DateCompleted>
+            <Year>1974</Year>
+            <Month>02</Month>
+            <Day>22</Day>
+        </DateCompleted>
+        <DateRevised>
+            <Year>2007</Year>
+            <Month>11</Month>
+            <Day>15</Day>
+        </DateRevised>
+        <Article PubModel="Print">
+            <Journal>
+                <ISSN IssnType="Print">0021-9681</ISSN>
+                <JournalIssue CitedMedium="Print">
+                    <Volume>26</Volume>
+                    <Issue>10</Issue>
+                    <PubDate>
+                        <Year>1973</Year>
+                        <Month>Oct</Month>
+                    </PubDate>
+                </JournalIssue>
+                <Title>Journal of chronic diseases</Title>
+                <ISOAbbreviation>J Chronic Dis</ISOAbbreviation>
+            </Journal>
+            <ArticleTitle>The determination of sample sizes for trials involving several independent 2x2 tables.</ArticleTitle>
+            <Pagination>
+                <MedlinePgn>669-73</MedlinePgn>
+            </Pagination>
+            <AuthorList CompleteYN="Y">
+                <Author ValidYN="Y">
+                    <LastName>Gail</LastName>
+                    <ForeName>M</ForeName>
+                    <Initials>M</Initials>
+                </Author>
+            </AuthorList>
+            <Language>eng</Language>
+            <PublicationTypeList>
+                <PublicationType UI="D016428">Journal Article</PublicationType>
+            </PublicationTypeList>
+        </Article>
+        <MedlineJournalInfo>
+            <Country>England</Country>
+            <MedlineTA>J Chronic Dis</MedlineTA>
+            <NlmUniqueID>2985123R</NlmUniqueID>
+            <ISSNLinking>0021-9681</ISSNLinking>
+        </MedlineJournalInfo>
+        <CitationSubset>IM</CitationSubset>
+        <MeshHeadingList>
+            <MeshHeading>
+                <DescriptorName UI="D013223" MajorTopicYN="Y">Statistics as Topic</DescriptorName>
+            </MeshHeading>
+        </MeshHeadingList>
+    </MedlineCitation>
+    <PubmedData>
+        <History>
+            <PubMedPubDate PubStatus="pubmed">
+                <Year>1973</Year>
+                <Month>10</Month>
+                <Day>1</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="medline">
+                <Year>1973</Year>
+                <Month>10</Month>
+                <Day>1</Day>
+                <Hour>0</Hour>
+                <Minute>1</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="entrez">
+                <Year>1973</Year>
+                <Month>10</Month>
+                <Day>1</Day>
+                <Hour>0</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+        </History>
+        <PublicationStatus>ppublish</PublicationStatus>
+        <ArticleIdList>
+            <ArticleId IdType="pubmed">4765321</ArticleId>
+        </ArticleIdList>
+    </PubmedData>
+</PubmedArticle>
+
+
+<PubmedArticle>
+    <MedlineCitation Status="MEDLINE" Owner="NLM">
+        <PMID Version="1">3814733</PMID>
+        <DateCreated>
+            <Year>1987</Year>
+            <Month>04</Month>
+            <Day>16</Day>
+        </DateCreated>
+        <DateCompleted>
+            <Year>1987</Year>
+            <Month>04</Month>
+            <Day>16</Day>
+        </DateCompleted>
+        <DateRevised>
+            <Year>2007</Year>
+            <Month>11</Month>
+            <Day>15</Day>
+        </DateRevised>
+        <Article PubModel="Print">
+            <Journal>
+                <ISSN IssnType="Print">0006-341X</ISSN>
+                <JournalIssue CitedMedium="Print">
+                    <Volume>42</Volume>
+                    <Issue>4</Issue>
+                    <PubDate>
+                        <Year>1986</Year>
+                        <Month>Dec</Month>
+                    </PubDate>
+                </JournalIssue>
+                <Title>Biometrics</Title>
+                <ISOAbbreviation>Biometrics</ISOAbbreviation>
+            </Journal>
+            <ArticleTitle>Sample size for case-control studies using Cochran's statistic.</ArticleTitle>
+            <Pagination>
+                <MedlinePgn>927-32</MedlinePgn>
+            </Pagination>
+            <Abstract>
+                <AbstractText>Sample size determination for case-control studies of chronic disease are often based on the simple 2 X 2 tabular cross-classification of exposure and disease, thereby ignoring stratification which may be considered in the analysis. One consequence of this approach is that the sample size may be inadequate to attain a specified power and size when performing a statistical analysis on J 2 X 2 tables using Cochran's (1954, Biometrics 10, 417-451) statistic or the Mantel-Haenszel (1959, Journal of the National Cancer Institute 22, 719-748) statistic. A sample size formula is derived from Cochran's statistic and it is compared with the corresponding one derived when the data are treated as unstratified, and also with two other formulas proposed for stratified data analysis. The formula developed yields values slightly higher than one recently proposed by Muñoz and Rosner (1984, Biometrics 40, 995-1004), which assumes that both margins of each 2 X 2 table are fixed, while the present study considers only the case-control margin to be fixed.</AbstractText>
+            </Abstract>
+            <AuthorList CompleteYN="Y">
+                <Author ValidYN="Y">
+                    <LastName>Woolson</LastName>
+                    <ForeName>R F</ForeName>
+                    <Initials>RF</Initials>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Bean</LastName>
+                    <ForeName>J A</ForeName>
+                    <Initials>JA</Initials>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Rojas</LastName>
+                    <ForeName>P B</ForeName>
+                    <Initials>PB</Initials>
+                </Author>
+            </AuthorList>
+            <Language>eng</Language>
+            <GrantList CompleteYN="Y">
+                <Grant>
+                    <GrantID>1 R01 CA39065-01</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>CA28848</GrantID>
+                    <Acronym>CA</Acronym>
+                    <Agency>NCI NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+            </GrantList>
+            <PublicationTypeList>
+                <PublicationType UI="D003160">Comparative Study</PublicationType>
+                <PublicationType UI="D016428">Journal Article</PublicationType>
+                <PublicationType UI="D013487">Research Support, U.S. Gov't, P.H.S.</PublicationType>
+            </PublicationTypeList>
+        </Article>
+        <MedlineJournalInfo>
+            <Country>United States</Country>
+            <MedlineTA>Biometrics</MedlineTA>
+            <NlmUniqueID>0370625</NlmUniqueID>
+            <ISSNLinking>0006-341X</ISSNLinking>
+        </MedlineJournalInfo>
+        <CitationSubset>IM</CitationSubset>
+        <MeshHeadingList>
+            <MeshHeading>
+                <DescriptorName UI="D001699" MajorTopicYN="N">Biometry</DescriptorName>
+                <QualifierName UI="Q000379" MajorTopicYN="N">methods</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D002908" MajorTopicYN="N">Chronic Disease</DescriptorName>
+                <QualifierName UI="Q000628" MajorTopicYN="Y">therapy</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D002986" MajorTopicYN="Y">Clinical Trials as Topic</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D006801" MajorTopicYN="N">Humans</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D012107" MajorTopicYN="Y">Research Design</DescriptorName>
+            </MeshHeading>
+        </MeshHeadingList>
+    </MedlineCitation>
+    <PubmedData>
+        <History>
+            <PubMedPubDate PubStatus="pubmed">
+                <Year>1986</Year>
+                <Month>12</Month>
+                <Day>1</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="medline">
+                <Year>1986</Year>
+                <Month>12</Month>
+                <Day>1</Day>
+                <Hour>0</Hour>
+                <Minute>1</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="entrez">
+                <Year>1986</Year>
+                <Month>12</Month>
+                <Day>1</Day>
+                <Hour>0</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+        </History>
+        <PublicationStatus>ppublish</PublicationStatus>
+        <ArticleIdList>
+            <ArticleId IdType="pubmed">3814733</ArticleId>
+        </ArticleIdList>
+    </PubmedData>
+</PubmedArticle>
+
+
+<PubmedArticle>
+    <MedlineCitation Status="MEDLINE" Owner="NLM">
+        <PMID Version="1">1637968</PMID>
+        <DateCreated>
+            <Year>1992</Year>
+            <Month>09</Month>
+            <Day>01</Day>
+        </DateCreated>
+        <DateCompleted>
+            <Year>1992</Year>
+            <Month>09</Month>
+            <Day>01</Day>
+        </DateCompleted>
+        <DateRevised>
+            <Year>2013</Year>
+            <Month>11</Month>
+            <Day>21</Day>
+        </DateRevised>
+        <Article PubModel="Print">
+            <Journal>
+                <ISSN IssnType="Print">0006-341X</ISSN>
+                <JournalIssue CitedMedium="Print">
+                    <Volume>48</Volume>
+                    <Issue>2</Issue>
+                    <PubDate>
+                        <Year>1992</Year>
+                        <Month>Jun</Month>
+                    </PubDate>
+                </JournalIssue>
+                <Title>Biometrics</Title>
+                <ISOAbbreviation>Biometrics</ISOAbbreviation>
+            </Journal>
+            <ArticleTitle>Sample size determination for case-control studies and the comparison of stratified and unstratified analyses.</ArticleTitle>
+            <Pagination>
+                <MedlinePgn>389-95</MedlinePgn>
+            </Pagination>
+            <Abstract>
+                <AbstractText>Woolson, Bean, and Rojas (1986, Biometrics 42, 927-932) present a simple approximation of sample size for Cochran's (1954, Biometrics 10, 417-451) test for detecting association between exposure and disease. It is useful in the design of case-control studies. We derive a sample size formula for Cochran's statistic with continuity correction which guarantees that the actual Type I error rate of the test does not exceed the nominal level. The corrected sample size is necessarily larger than the uncorrected one given by Woolson et al. and the relative difference between the two sample sizes is considerable. Allocation of equal number of cases and controls within each stratum is asymptotically optimal when the costs per case and control are the same. When any effect of stratification is absent, Cochran's stratified test, although valid, is less efficient than the unstratified one except for the important case of a balanced design.</AbstractText>
+            </Abstract>
+            <AuthorList CompleteYN="Y">
+                <Author ValidYN="Y">
+                    <LastName>Nam</LastName>
+                    <ForeName>J</ForeName>
+                    <Initials>J</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Mathematical Statistics and Applied Mathematics Section, National Cancer Institute, Bethesda, Maryland 20892.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+            </AuthorList>
+            <Language>eng</Language>
+            <PublicationTypeList>
+                <PublicationType UI="D003160">Comparative Study</PublicationType>
+                <PublicationType UI="D016428">Journal Article</PublicationType>
+            </PublicationTypeList>
+        </Article>
+        <MedlineJournalInfo>
+            <Country>United States</Country>
+            <MedlineTA>Biometrics</MedlineTA>
+            <NlmUniqueID>0370625</NlmUniqueID>
+            <ISSNLinking>0006-341X</ISSNLinking>
+        </MedlineJournalInfo>
+        <ChemicalList>
+            <Chemical>
+                <RegistryNumber>4R7X1O2820</RegistryNumber>
+                <NameOfSubstance UI="D002713">Chlorine</NameOfSubstance>
+            </Chemical>
+        </ChemicalList>
+        <CitationSubset>IM</CitationSubset>
+        <MeshHeadingList>
+            <MeshHeading>
+                <DescriptorName UI="D016022" MajorTopicYN="Y">Case-Control Studies</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D002713" MajorTopicYN="Y">Chlorine</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D003110" MajorTopicYN="N">Colonic Neoplasms</DescriptorName>
+                <QualifierName UI="Q000209" MajorTopicYN="Y">etiology</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D006801" MajorTopicYN="N">Humans</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D007484" MajorTopicYN="N" Type="Geographic">Iowa</DescriptorName>
+                <QualifierName UI="Q000453" MajorTopicYN="N">epidemiology</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D008297" MajorTopicYN="N">Male</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D008433" MajorTopicYN="Y">Mathematics</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D014881" MajorTopicYN="Y">Water Supply</DescriptorName>
+            </MeshHeading>
+        </MeshHeadingList>
+    </MedlineCitation>
+    <PubmedData>
+        <History>
+            <PubMedPubDate PubStatus="pubmed">
+                <Year>1992</Year>
+                <Month>6</Month>
+                <Day>1</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="medline">
+                <Year>1992</Year>
+                <Month>6</Month>
+                <Day>1</Day>
+                <Hour>0</Hour>
+                <Minute>1</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="entrez">
+                <Year>1992</Year>
+                <Month>6</Month>
+                <Day>1</Day>
+                <Hour>0</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+        </History>
+        <PublicationStatus>ppublish</PublicationStatus>
+        <ArticleIdList>
+            <ArticleId IdType="pubmed">1637968</ArticleId>
+        </ArticleIdList>
+    </PubmedData>
+</PubmedArticle>
+
+
+<PubmedArticle>
+    <MedlineCitation Status="MEDLINE" Owner="NLM">
+        <PMID Version="1">8117902</PMID>
+        <DateCreated>
+            <Year>1994</Year>
+            <Month>04</Month>
+            <Day>07</Day>
+        </DateCreated>
+        <DateCompleted>
+            <Year>1994</Year>
+            <Month>04</Month>
+            <Day>07</Day>
+        </DateCompleted>
+        <DateRevised>
+            <Year>2007</Year>
+            <Month>11</Month>
+            <Day>15</Day>
+        </DateRevised>
+        <Article PubModel="Print">
+            <Journal>
+                <ISSN IssnType="Print">0006-341X</ISSN>
+                <JournalIssue CitedMedium="Print">
+                    <Volume>49</Volume>
+                    <Issue>4</Issue>
+                    <PubDate>
+                        <Year>1993</Year>
+                        <Month>Dec</Month>
+                    </PubDate>
+                </JournalIssue>
+                <Title>Biometrics</Title>
+                <ISOAbbreviation>Biometrics</ISOAbbreviation>
+            </Journal>
+            <ArticleTitle>The power of the Mantel-Haenszel test for grouped failure time data.</ArticleTitle>
+            <Pagination>
+                <MedlinePgn>1077-87</MedlinePgn>
+            </Pagination>
+            <Abstract>
+                <AbstractText>The Mantel-Haenszel test for grouped failure time data (MHF test) compares the distribution of failure times in two cohorts followed for an interval of time when the data are collected in discrete subintervals. This paper derives approximations to the power of the Mantel-Haenszel test for arbitrary failure time distributions in the presence of censoring. The approximations are appropriate for both equal and nonequal odds ratios in the constituent tables, and can be used for arbitrary subdivisions of time. Four approximations are proposed. They differ from each other according to whether the parameter measuring treatment effect is an odds ratio or a difference in proportions, and whether the survival distributions are calculated under the null or alternative hypothesis. In addition, we demonstrate that when the hazards are constant, increasing the number of subintervals often produces only a negligible increase in the power of the MHF test. On the other hand, for arbitrary hazards and nonconstant hazard ratios, the choice of frequency and actual times of measurement can have important effects on power. Finally, the paper presents simple expressions for power under exponential failure and censoring models.</AbstractText>
+            </Abstract>
+            <AuthorList CompleteYN="Y">
+                <Author ValidYN="Y">
+                    <LastName>Wallenstein</LastName>
+                    <ForeName>S</ForeName>
+                    <Initials>S</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Biomathematics, Mount Sinai Medical School, New York, New York 10029.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Wittes</LastName>
+                    <ForeName>J</ForeName>
+                    <Initials>J</Initials>
+                </Author>
+            </AuthorList>
+            <Language>eng</Language>
+            <GrantList CompleteYN="Y">
+                <Grant>
+                    <GrantID>ES 02557</GrantID>
+                    <Acronym>ES</Acronym>
+                    <Agency>NIEHS NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+                <Grant>
+                    <GrantID>MO1 RR 0071</GrantID>
+                    <Acronym>RR</Acronym>
+                    <Agency>NCRR NIH HHS</Agency>
+                    <Country>United States</Country>
+                </Grant>
+            </GrantList>
+            <PublicationTypeList>
+                <PublicationType UI="D016428">Journal Article</PublicationType>
+                <PublicationType UI="D013487">Research Support, U.S. Gov't, P.H.S.</PublicationType>
+            </PublicationTypeList>
+        </Article>
+        <MedlineJournalInfo>
+            <Country>United States</Country>
+            <MedlineTA>Biometrics</MedlineTA>
+            <NlmUniqueID>0370625</NlmUniqueID>
+            <ISSNLinking>0006-341X</ISSNLinking>
+        </MedlineJournalInfo>
+        <CitationSubset>IM</CitationSubset>
+        <MeshHeadingList>
+            <MeshHeading>
+                <DescriptorName UI="D001699" MajorTopicYN="N">Biometry</DescriptorName>
+                <QualifierName UI="Q000379" MajorTopicYN="Y">methods</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D015331" MajorTopicYN="N">Cohort Studies</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D003627" MajorTopicYN="N">Data Interpretation, Statistical</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D006801" MajorTopicYN="N">Humans</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D015233" MajorTopicYN="N">Models, Statistical</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D016017" MajorTopicYN="N">Odds Ratio</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D016016" MajorTopicYN="N">Proportional Hazards Models</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D016032" MajorTopicYN="N">Randomized Controlled Trials as Topic</DescriptorName>
+                <QualifierName UI="Q000706" MajorTopicYN="N">statistics &amp; numerical data</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D013997" MajorTopicYN="N">Time Factors</DescriptorName>
+            </MeshHeading>
+        </MeshHeadingList>
+    </MedlineCitation>
+    <PubmedData>
+        <History>
+            <PubMedPubDate PubStatus="pubmed">
+                <Year>1993</Year>
+                <Month>12</Month>
+                <Day>1</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="medline">
+                <Year>1993</Year>
+                <Month>12</Month>
+                <Day>1</Day>
+                <Hour>0</Hour>
+                <Minute>1</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="entrez">
+                <Year>1993</Year>
+                <Month>12</Month>
+                <Day>1</Day>
+                <Hour>0</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+        </History>
+        <PublicationStatus>ppublish</PublicationStatus>
+        <ArticleIdList>
+            <ArticleId IdType="pubmed">8117902</ArticleId>
+        </ArticleIdList>
+    </PubmedData>
+</PubmedArticle>
+
+</PubmedArticleSet>

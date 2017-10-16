@@ -1,0 +1,8 @@
+To get citations from PubMed Id and then transform them into bibtex:
+
+https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=xml&id=<pmid>,<pmid>,...
+
+sudo apt-get install bibutils
+
+med2xml pubmed.xml | xml2bib > refs.bib
+
