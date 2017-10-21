@@ -120,7 +120,7 @@
 #' # We see that the N.exact is indeed equal to that which is reported in the paper
 #' sample_size_corrected$N.exact
 #'
-#' @source
+#' @references
 #' Gail, M. (1973). "The determination of sample sizes for trials involving
 #' several 2 x 2 tables." \emph{Journal of Chronic Disease} \strong{26}: 669-673.
 #'
@@ -178,7 +178,7 @@ samplesize.cmh <- function(
 
   # Check that 's' and 't' are reasonable
   if (any(s >= 1)) stop("The variable 's' must be a decimal fraction")
-  if (sum(t) != 1) stop("The 't' levels must sum to 1")
+  if (!isTRUE(all.equal(sum(t),1))) stop("The 't' levels must sum to 1")
 
   # If theta is used, determine the missing p vector
   if (is.null(p1)) {
