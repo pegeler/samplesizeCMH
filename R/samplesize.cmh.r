@@ -80,7 +80,11 @@
 #' a short description of the calculation method used, the original function
 #' call, and a note.
 #'
-#' @seealso \link[stats]{power.prop.test}, \link[stats]{mantelhaen.test}, \link{power.cmh}
+#' @seealso
+#' \link[stats]{power.prop.test},
+#' \link[stats]{mantelhaen.test},
+#' \link{power.cmh},
+#' \link[DescTools]{BreslowDayTest}
 #'
 #' @author Paul W. Egeler, M.S.; Laura Kapitula, PhD
 #'
