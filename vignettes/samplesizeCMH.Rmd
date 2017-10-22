@@ -1,58 +1,132 @@
 ---
 title: "Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test"
-author: "Paul W. Egeler, M.S., GStat"
+author: 
+  "Paul W. Egeler, M.S., GStat and Laura Kapitula, PhD"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+bibliography: refs.bib
 vignette: >
   %\VignetteIndexEntry{Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+<!-- Example of Bibliographic citation:
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+[@Agresti section 2.7; @Nam1992]
 
-## Vignette Info
+Use the refs.bib to find reference label
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+-->
 
-## Styles
+## Introduction
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+The **Cochran-Mantel-Haenszel test** (CMH) is an inferential test for the association between two binary variables, while controlling for a third confounding nominal variable. Two variables of interest, $X$ and $Y$, are compared at each level of the confounder variable $Z$. Essentially, the CMH test examines the *weighted* association of $X$ and $Y$. The CMH test is a common technique in the field of biostatistics, where it is often used for case-control studies.
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
+We are not aware of any other R packages, or indeed any free and open source software tools that will achieve these calculations. Hence the imperative to create such a package to fill the small gap in R's considerable suite of statistical capabilities.
 
-## Figures
+## Background
 
-The figure sizes have been customised so that you can easily put two images side-by-side. 
+### Partial and Marginal Tables
 
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+Consider a contingency table comparing $X$ and $Y$ at some fixed level of $Z$. These cross-sections of the three-way table at each level of $Z$ are called *partial tables*. The combined counts of $X$ and $Y$ across all levels of $Z$, *id est* a simple two-way contingency table ignoring $Z$, produce the *marginal table*. These concepts are described in depth in @Agresti [section 2.7.1]. 
+
+We will use the `Titanic` dataset in the `datasets` package to illustrate. This dataset is a four-dimensional table which includes the *Class* (1^st^, 2^nd^, 3^rd^, Crew), *Sex* (Male, Female), *Age* (Child, Adult), and *Survival* (No, Yes) of the passengers of the 1912 maritime disaster. Use `help("Titanic", "datasets")` to find more information.
+
+```{r load-data}
+data(Titanic, package = "datasets")
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+Let $X$ = sex, $Y$ = survival, and $Z$ = class. We will load in the data and look at suvival by sex at each level of class using the `margin.table()` function.
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+```{r partial-tables}
+partial_tables <- margin.table(Titanic, c(2,4,1))
+partial_tables
 ```
 
-Also a quote using `>`:
+Each of the tables above is a partial table of survival by sex at a fixed level of class. The table can be flattened for easier viewing using the `ftable()` function.
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+The code below shows the marginal table of survival by sex, ignoring class.
+
+```{r marginal-table}
+marginal_table <- margin.table(Titanic, c(2,4))
+marginal_table
+```
+
+We may get the table proportions using the `prop.table()` function. Because the `Titanic` dataset is a multidimensional table, it must first be transformed into a two-dimensional table using `margin.table()`.
+
+```{r prop-table}
+prop.table(marginal_table)
+```
+
+### Conditional and Marginal Odds Ratios
+
+In comparing variables $X$ and $Y$ at a fixed $k$ level of $Z$, we may use a *conditional odds ratio*, denoted by @Agresti [section 2.7.4] as $\theta_{XY(k)}$. The *marginal odds ratio* would then refer to the odds ratio of $X$ and $Y$ generated by the marginal table. 
+
+The odds ratios can be calculated from a table or matrix using the `samplesizeCMH` package using the `odds.ratio()` function. Let's first look at the marginal odds ratio of survival by sex.
+
+```{r marginal-OR}
+library(samplesizeCMH)
+
+odds.ratio(marginal_table)
+```
+
+The conditional odds ratios can be calculated using the partial tables.
+
+```{r conditional-OR}
+apply(partial_tables, 3, odds.ratio)
+```
+
+Obviously this is more informative than a simple marginal odds ratio. Based on what we see above, survival by sex appears to vary widely by class, where women in 1^st^ class survive at a much higher rate than men, whereas 3^rd^ class women had only slightly better change of survival than their male counterparts.
+
+We can produce a common (weighted) odds ratio using `mantelhaen.test()` from the `stats` package. Note that it differs slightly from the marginal odds ratio above since it takes into account the differential sizes of each partial table.
+
+```{r mantelhaen}
+library(stats)
+
+mantelhaen.test(partial_tables)
+```
+
+### Conditional and Marginal Association/Independence
+
+The term *conditional association* refers to the association of the $X$ and $Y$ variables conditional on the level of $Z$. Likewise, the *marginal association* refers to the overall association between $X$ and $Y$ while ignoring $Z$. 
+
+The finding of conditional association does not imply marginal association, nor vice-versa. The use of the CMH test to control for the stratifying variable in analysis serves to avoid the well-documented phenomenon of the Simpson's Paradox in which statistical significance may be found when considering the association between two variables, but where no such significance may be found after considering the stratification. Likewise, the reverse situation may arise where no association may be found between the binary variables, but may be observed when the third variable is introduced.
+
+Refer to @Agresti [section 2.7] for more information on the content of this section.
+
+### Case-Control Studies
+
+In case-control studies, . 
+
+<!-- I would like to include some calculations and further explanation of the CMH test here. It would also be nice to discuss case-control studies. Would also like to explore the `mantelhaen.test()` function breifly and use the same examples (also from Agresti) as our base examples. -->
+
+## Sample Size
+
+### Theory
+
+Show what we know
+
+### Calculation
+
+
+```{r test}
+library(samplesizeCMH)
+
+# Continuity corrected sample size estimate added by Nam
+sample_size_corrected <- samplesize.cmh(
+  p2 = c(0.75,0.70,0.65,0.60),
+  theta = 3,
+  power = 0.9,
+  t = c(0.10,0.40,0.35,0.15),
+  alternative = "one",
+  method = "cc.bin"
+)
+
+sample_size_corrected
+
+# We see that the N.exact is indeed equal to that which is reported in the paper
+sample_size_corrected$N.exact
+```
+
+## References
