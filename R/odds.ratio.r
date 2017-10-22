@@ -1,4 +1,4 @@
-#' Create odds ratios estimates from tables
+#' Create odds ratios estimates from a table
 #'
 #' @param x A two-dimensional matrix or table containing frequencies
 #'
@@ -7,7 +7,7 @@
 #' @export
 odds.ratio <- function (x) {
 
-  stopifnot(length(dim(x)) == 2L && all.equal(dim(x)[1:2],c(2,2)))
+  stopifnot(identical(dim(x), c(2L,2L)))
 
   x[1,1] * x[2,2] / x[1,2] / x[2,1]
 
