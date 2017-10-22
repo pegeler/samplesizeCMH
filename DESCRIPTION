@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: c(
     person("Paul", "Egeler", email = "paul.egeler@spectrumhealth.org", role = c("aut", "cre")),
     person("Laura", "Kapitula", email = "kapitull@gvsu.edu", role = "aut"),
-    person("Spectrum Health", role = "cph"))
+    person("Spectrum Health, Grand Rapids MI", role = "cph"))
 Description: 
     This package provides a function for calculating the required number of 
     subjects per group to achieve a specified power for a Cochran-Mantel-Haenszel 
@@ -16,7 +16,10 @@ Imports: stats
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-Suggests: knitr,
-    rmarkdown
+Suggests: 
+    knitr,
+    rmarkdown,
+    DescTools,
+    datasets
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
