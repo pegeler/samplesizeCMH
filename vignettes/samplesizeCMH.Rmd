@@ -10,20 +10,13 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
-<!-- Example of Bibliographic citation:
-
-[@Agresti section 2.7; @Nam1992]
-
-Use the refs.bib to find reference label
-
--->
+<!-- May someday want output: pdf_document -->
 
 ## Introduction
 
-The **Cochran-Mantel-Haenszel test** (CMH) is an inferential test for the association between two binary variables, while controlling for a third confounding nominal variable. Two variables of interest, $X$ and $Y$, are compared at each level of the confounder variable $Z$. Essentially, the CMH test examines the *weighted* association of $X$ and $Y$. The CMH test is a common technique in the field of biostatistics, where it is often used for case-control studies.
+The **Cochran-Mantel-Haenszel test** (CMH) is an inferential test for the association between two binary variables, while controlling for a third confounding nominal variable. Two variables of interest, $X$ and $Y$, are compared at each level of the confounder variable $Z$ and the results are combined. Essentially, the CMH test examines the *weighted* association of $X$ and $Y$. The CMH test is a common technique in the field of biostatistics, where it is often used for case-control studies.
 
-We are not aware of any other R packages, or indeed any free and open source software tools that will achieve these calculations. Hence the imperative to create such a package to fill the small gap in R's considerable suite of statistical capabilities.
+Researchers interested in estimating the probability of detecting a true positive result from an inferential test must a perform power calculation using a known sample size, effect size, significance level, *et cetera*. Likewise, given a target power which the researcher would like to achieve, a calculation can be performed in order to estimate the appropriate number of subjects for a study. We are not aware of any other R packages, or indeed any free and open source software tools that will achieve these calculations for the CMH test. Hence the imperative to create such a package to fill the small gap in R's considerable suite of statistical capabilities.
 
 ## Background
 
@@ -31,20 +24,22 @@ We are not aware of any other R packages, or indeed any free and open source sof
 
 Consider a contingency table comparing $X$ and $Y$ at some fixed level of $Z$. These cross-sections of the three-way table at each level of $Z$ are called *partial tables*. The combined counts of $X$ and $Y$ across all levels of $Z$, *id est* a simple two-way contingency table ignoring $Z$, produce the *marginal table*. These concepts are described in depth in @Agresti [section 2.7.1]. 
 
-We will use the `Titanic` dataset in the `datasets` package to illustrate. This dataset is a four-dimensional table which includes the *Class* (1^st^, 2^nd^, 3^rd^, Crew), *Sex* (Male, Female), *Age* (Child, Adult), and *Survival* (No, Yes) of the passengers of the 1912 maritime disaster. Use `help("Titanic", "datasets")` to find more information.
+---
+
+We will use the `Titanic`{.r} dataset in the `datasets`{.r} package to illustrate. This dataset is a four-dimensional table which includes the *Class* (1^st^, 2^nd^, 3^rd^, Crew), *Sex* (Male, Female), *Age* (Child, Adult), and *Survival* (No, Yes) of the passengers of the 1912 maritime disaster. Use `help("Titanic", "datasets")`{.r} to find more information.
 
 ```{r load-data}
 data(Titanic, package = "datasets")
 ```
 
-Let $X$ = sex, $Y$ = survival, and $Z$ = class. We will load in the data and look at suvival by sex at each level of class using the `margin.table()` function.
+Let $X$ = sex, $Y$ = survival, and $Z$ = class. We will load in the data and look at suvival by sex at each level of class using the `margin.table()` function in the `base` package.
 
 ```{r partial-tables}
 partial_tables <- margin.table(Titanic, c(2,4,1))
 partial_tables
 ```
 
-Each of the tables above is a partial table of survival by sex at a fixed level of class. The table can be flattened for easier viewing using the `ftable()` function.
+Each of the tables above is a partial table: *survival by sex at a fixed level of class*. The tables can be flattened for easier viewing using the `ftable()`{.r} function in the `stats`{.r} package.
 
 The code below shows the marginal table of survival by sex, ignoring class.
 
@@ -53,17 +48,48 @@ marginal_table <- margin.table(Titanic, c(2,4))
 marginal_table
 ```
 
-We may get the table proportions using the `prop.table()` function. Because the `Titanic` dataset is a multidimensional table, it must first be transformed into a two-dimensional table using `margin.table()`.
+We may get the table proportions using the `prop.table()`{.r} function. Because the `Titanic`{.r} dataset is a multidimensional table, it must first be transformed into a two-dimensional table using `margin.table()`{.r} (as performed above).
 
 ```{r prop-table}
 prop.table(marginal_table)
 ```
 
-### Conditional and Marginal Odds Ratios
+### Conditional, Marginal, and Common Odds Ratios
 
-In comparing variables $X$ and $Y$ at a fixed $k$ level of $Z$, we may use a *conditional odds ratio*, denoted by @Agresti [section 2.7.4] as $\theta_{XY(k)}$. The *marginal odds ratio* would then refer to the odds ratio of $X$ and $Y$ generated by the marginal table. 
+In comparing variables $X$ and $Y$ at a fixed $k$ level of $Z$, we may use a *conditional odds ratio*, denoted by @Agresti [section 2.7.4] as $\theta_{XY(k)}$. The *marginal odds ratio* would then refer to the odds ratio of $X$ and $Y$ generated by the marginal table. It follows that the marginal odds ratio would be denoted by $\theta_{XY}$.
 
-The odds ratios can be calculated from a table or matrix using the `samplesizeCMH` package using the `odds.ratio()` function. Let's first look at the marginal odds ratio of survival by sex.
+An odds ratio estimate ($\hat\theta$) can be calculated from a table or matrix using the `samplesizeCMH`{.r} package using the `odds.ratio()`{.r} function. The `odds.ratio()`{.r} function can take either a table of frequencies or percents, as they are algebraicly equivalent. 
+
+Using proportions as demonstrated below, we see how the ratio of the odds $o_1$ and $o_2$ are estimated.
+
+$$
+\hat{\theta}= 
+\frac{\hat{o}_1}{\hat{o}_2} = 
+\frac{\hat{\pi}_{11} / \hat{\pi}_{12}}{\hat{\pi}_{21} / \hat{\pi}_{22}} =
+\frac{\hat{\pi}_{11}\hat{\pi}_{22}}{\hat{\pi}_{12}\hat{\pi}_{21}}.
+$$
+
+And since row odds estimates are related to cell counts through the follwing,
+
+$$
+\hat{o} = 
+\frac{\hat{\pi}_1}{1 - \hat{\pi}_1} = 
+\frac{\hat{\pi}_1}{\hat{\pi}_2} = 
+\frac{n_1 / n_+}{n_2 / n_+} =
+\frac{n_1}{n_2},
+$$
+
+the odds estimate, defined as $\frac{\hat{\pi}_1}{\hat{\pi}_2}$, is equivalent to $\frac{n_1}{n_2}$. Therefore, 
+
+$$
+\hat{\theta}= 
+\frac{\hat{\pi}_{11}\hat{\pi}_{22}}{\hat{\pi}_{12}\hat{\pi}_{21}} = 
+\frac{n_{11}n_{22}}{n_{12}n_{21}}.
+$$
+
+---
+
+Let's first look at the marginal odds ratio of survival by sex using the Titanic data.
 
 ```{r marginal-OR}
 library(samplesizeCMH)
@@ -77,9 +103,9 @@ The conditional odds ratios can be calculated using the partial tables.
 apply(partial_tables, 3, odds.ratio)
 ```
 
-Obviously this is more informative than a simple marginal odds ratio. Based on what we see above, survival by sex appears to vary widely by class, where women in 1^st^ class survive at a much higher rate than men, whereas 3^rd^ class women had only slightly better change of survival than their male counterparts.
+Obviously this is more informative than a simple marginal odds ratio. Based on what we see above, survival by sex appears to vary widely by class, where women in 1^st^ class survive at a much higher rate than men, whereas 3^rd^ class women had only slightly better chance of survival than their male counterparts.
 
-We can produce a common (weighted) odds ratio using `mantelhaen.test()` from the `stats` package. Note that it differs slightly from the marginal odds ratio above since it takes into account the differential sizes of each partial table.
+We can produce a *common (weighted) odds ratio* using `mantelhaen.test()`{.r} from the `stats`{.r} package. Note that it differs slightly from the marginal odds ratio above since it takes into account the differential sizes of each partial table.
 
 ```{r mantelhaen}
 library(stats)
@@ -93,26 +119,124 @@ The term *conditional association* refers to the association of the $X$ and $Y$ 
 
 The finding of conditional association does not imply marginal association, nor vice-versa. The use of the CMH test to control for the stratifying variable in analysis serves to avoid the well-documented phenomenon of the Simpson's Paradox in which statistical significance may be found when considering the association between two variables, but where no such significance may be found after considering the stratification. Likewise, the reverse situation may arise where no association may be found between the binary variables, but may be observed when the third variable is introduced.
 
-Refer to @Agresti [section 2.7] for more information on the content of this section.
+Refer to @Agresti [section 2.7.3] for more information on the content of this section.
 
+### Homogeneous Association
+
+We will use BreslowDayTest here.
+
+<!--
 ### Case-Control Studies
 
 In case-control studies, . 
-
-<!-- I would like to include some calculations and further explanation of the CMH test here. It would also be nice to discuss case-control studies. Would also like to explore the `mantelhaen.test()` function breifly and use the same examples (also from Agresti) as our base examples. -->
+-->
 
 ## Sample Size
 
-### Theory
+The first method to estimate sample size for the CMH test was introduced by @Gail1973 using a least squares method. @Munoz1984 later produced a sample size estimator useful in the special case when both margins are fixed. However, this is often not the case in retrospective case-control designs. As such, @Woolson1986 introduced a calculation using the weighted difference between two binomial distributions. Later, @Nam1992 improved upon that calculation by introducing a coefficient to address continuity corrected CMH tests.
 
-Show what we know
+### The Research Question
 
-### Calculation
+<!--
+Let us consider a study where a researcher would like to retrospectively compare the postoperative infection rate associated with two commonly used medical implants. The study could randomly select a fixed number of patients based on the medical device implanted and then infection status could be observed. 
+
+Since the researcher is part of a regional health system, she may have access to data from several hospitals. Inclusion of the data from several hospitals could be a boon to the study since it can increase sample size and make the findings more generalizable. However, introducing the hospital variable may be considered a confounder and should be addressed appropriately. Of the three hospitals that perfrom the implantation procedure, the researcher estimates that the central hospital performs about 50% of the procedures, and the other two are split evenly with the remainder. Therefore, $t_1$ = 0.50, $t_2$ = 0.25, and $t_3$ = 0.25.
+
+Initial investigation shows that the central hospital uses device A at a rate of 0.75, 
+-->
+
+Starting with the example first used by @Woolson1986 and then revisited by @Nam1992, we will explore the usage of the central function of the `samplesizeCMH`{.r} package, the **`samplesize.cmh()`{.r}** function.
+
+This was a case--control study which looked at whether there was an assoiciation between colon cancer and chlorinated drinking water among males in Iowa. There were four age categories, 20--54 years, 55--69 years, 70--79 years, and 80--84 years; therefore $J$ = 4. The relative proportion of each age group is as follows: $t_1$ = 0.10, $t_2$ = 0.40, $t_3$ = 0.35, and $t_4$ = 0.15. The National Collaborative Bladder Cancer Study showed that exposure rate from controls for each stratum, denoted by $\pi_{2j}$ (where $j$ is the stratum) was $\pi_{21}$ = 0.75, $\pi_{22}$ = 0.70, $\pi_{23}$ = 0.65, and $\pi_{24}$ = 0.60. Level of significance was set at 0.05 and desired power was 90% with an effect size of 3. They matched equal number of cases and controls in each stratum, *i.e.*, $s_1=s_2=s_3=s_4=$ 0.5.
+
+### A Closer Look at a Partial Table
+
+Let's take a moment to look at the partial table of stratum $j$ = 1. Given the information above, we can reconstruct this table to better understand the question at hand. We can also use this as an opportunity to use some of the peripheral functions included in the `samplesizeCMH`{.r} package.
+
+The proportion of controls exposed to chlorinated drinking water was $\pi_{21}$ = 0.75. It follows then that the complementary column proportion is 0.25. The table below shows column percents.
 
 
-```{r test}
-library(samplesizeCMH)
+|           |Case | Control |
+------------|:---:|:-------:|
+Exposed     | ?   | 0.75
+Not Exposed | ?   | 0.25
+ 
+Using the `effect.size()`{.r} function, we can use the expected exposure rate of control to estimate expected exposure rate of cases.
 
+```{r effect-size}
+effect.size(0.75,3)
+```
+
+We can now use that to fill in the remainder of our table.
+
+|           |Case | Control |
+------------|:---:|:-------:|
+Exposed     | 0.90| 0.75
+Not Exposed | 0.10| 0.25
+
+To determine the odds of exposure for the two groups, we can use `prop2odds()`.
+
+```{r prop2odds}
+# Control
+prop2odds(0.75)
+
+# Case
+prop2odds(0.9)
+```
+
+There are several other peripheral functions in this package to interconvert between proportions, odds, relative risk, and odds ratios. Use `help("odds.and.proportions", "samplesizeCMH")`{.r} to find out more.
+
+### Calculating Sample Size
+
+#### Methods 
+
+##### Unstratified
+
+Suppose that the researchers first decided to ignore the stratification variable in their sample size calculation. The researcher could use the `method = "unstratified"`{.r} argument. We see that the researcher has put in the control exposure proportions as a vector in `p2`, the effect size has been assigned to `theta`, and a vector of relative stratum sizes has been assigned to `t`. Since there are equal numbers of cases and controls for each group, the `s` parameter is not required. Only `p1` and `p2` *or* one of the proportions and a `theta` are required to carry out the calculation. 
+
+```{r unstratified}
+sample_size_unstratified <- samplesize.cmh(
+  p2 = c(0.75,0.70,0.65,0.60),
+  theta = 3,
+  power = 0.9,
+  t = c(0.10,0.40,0.35,0.15),
+  alternative = "one",
+  method = "unstratified"
+)
+
+sample_size_unstratified
+```
+
+##### Weighted Difference between Binomial Distributions
+
+The researcher soon realized that failing to consider the confounding variable would lead to an underestimation of sample size. Adjusting the code above, an alteration is made to the `method` parameter, now using the calculation introduced by @Woolson1986.
+
+```{r binomial}
+# Uncorrected sample size estimate first introduced
+# by Woolson and others in 1986
+sample_size_binomial <- samplesize.cmh(
+  p2 = c(0.75,0.70,0.65,0.60),
+  theta = 3,
+  power = 0.9,
+  t = c(0.10,0.40,0.35,0.15),
+  alternative = "one",
+  method = "bin"
+)
+
+sample_size_binomial
+```
+
+We see that the `N.exact` is 171, the same as calculated by @Nam1992.
+
+```{r binomial2}
+sample_size_binomial$N.exact
+```
+
+##### Continuity Corrected Estimate
+
+The researcher now realizes that a continuity correction will be added in the statistical software (the default of the `mantaelhaen.test()`{.r} is `correct = TRUE`{.r}). Another adjustment is made to the `method` parameter in the code below.
+
+```{r cc}
 # Continuity corrected sample size estimate added by Nam
 sample_size_corrected <- samplesize.cmh(
   p2 = c(0.75,0.70,0.65,0.60),
@@ -124,9 +248,28 @@ sample_size_corrected <- samplesize.cmh(
 )
 
 sample_size_corrected
+```
 
-# We see that the N.exact is indeed equal to that which is reported in the paper
+We see that the `N.exact` is indeed equal to that which is reported in the paper.
+
+```{r cc2}
 sample_size_corrected$N.exact
+```
+
+#### Unequal Numbers of Cases and Controls
+
+Consider now that the researcher performed some preparatory work and realized that the number of cases available is about $\frac{1}{3}$ the number of available controls. Wanting to leverage all of the available data, an adjustment was be made to the sample size calculation performed earlier by including the `s` parameter.
+
+```{r s}
+samplesize.cmh(
+  p2 = c(0.75,0.70,0.65,0.60),
+  s = 1/3,
+  theta = 3,
+  power = 0.9,
+  t = c(0.10,0.40,0.35,0.15),
+  alternative = "one",
+  method = "cc.bin"
+)
 ```
 
 ## References
