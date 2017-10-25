@@ -18,3 +18,15 @@
 #' @docType package
 #' @name samplesizeCMH
 NULL
+
+# Warn the user that this package is still under construction
+.onAttach <- function(libname, pkgname) {
+
+  packageStartupMessage(
+  "This package is under construction!\n",
+  "------------------------------------\n",
+  "It has not been tested for accuracy.\n",
+  "Some features may be absent."
+  )
+
+}

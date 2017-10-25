@@ -161,13 +161,6 @@ samplesize.cmh <- function(
     )
   ) {
 
-  warning(
-    "\nThis function is under construction!\n",
-    "------------------------------------\n",
-    "It has not been tested for accuracy.\n",
-    "Some features may be absent."
-  )
-
   # Process the expected proportions and/or effect size
   if (sum(sapply(list(p1,p2,theta),is.null)) != 1) {
     stop("exactly one of 'p1', 'p2', or 'theta' must be NULL")
