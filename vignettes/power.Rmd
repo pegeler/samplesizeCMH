@@ -1,0 +1,56 @@
+---
+title: "Power Calcualtion for the Cochran-Mantel-Haenszel Test"
+author:
+  "Paul W. Egeler, M.S., GStat"
+date: "`r Sys.Date()`"
+output: word_document
+bibliography: refs.bib
+vignette: >
+  %\VignetteIndexEntry{Power Calcualtion for the Cochran-Mantel-Haenszel Test}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+<!--
+May someday want output:
+  pdf_document
+  rmarkdown::html_vignette
+  word_document
+-->
+
+## Background
+
+## The Data Set
+
+We will use the `Titanic`{.r} dataset in the `datasets`{.r} package to illustrate. This dataset is a four-dimensional table which includes the *Class* (1^st^, 2^nd^, 3^rd^, Crew), *Sex* (Male, Female), *Age* (Child, Adult), and *Survival* (No, Yes) of the passengers of the 1912 maritime disaster. Use `help("Titanic", "datasets")`{.r} to find more information.
+
+```{r load-data}
+data(Titanic, package = "datasets")
+str(Titanic)
+```
+
+Let $X$ = sex, $Y$ = survival, and $Z$ = class. We will load in the data and look at suvival by sex at each level of class using the `margin.table()` function in the `base` package.
+
+```{r partial-tables}
+partial_tables <- margin.table(Titanic, c(2,4,1))
+partial_tables
+```
+
+Each of the tables above is a partial table: *survival by sex at a fixed level of class*. The tables can be flattened for easier viewing using the `ftable()`{.r} function in the `stats`{.r} package.
+
+The code below shows the marginal table of survival by sex, ignoring class.
+
+```{r marginal-table}
+marginal_table <- margin.table(Titanic, c(2,4))
+marginal_table
+```
+
+
+## Calculating Power
+
+<!-- Using the `Titanic` dataset above, we may calculate the power of the inference of the Mantel-Haenzel test using the calculations put forth by @Wittes1987. -->
+
+*`power.cmh()`{.r} Under construction*
+
+## Conclusion
+
+## References
