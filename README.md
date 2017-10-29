@@ -1,7 +1,7 @@
 samplesizeCMH: Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test
 ===============
 
-by Paul. W. Egeler M.S. and Laura Kapitula, PhD
+by Paul. W. Egeler M.S.
 
 ## Description
 This R package provides a function for calculating the required number of

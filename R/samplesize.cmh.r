@@ -86,7 +86,7 @@
 #' \link{power.cmh},
 #' \link[DescTools]{BreslowDayTest}
 #'
-#' @author Paul W. Egeler, M.S.; Laura Kapitula, PhD
+#' @author Paul W. Egeler, M.S.
 #'
 #' @examples
 #' # From "Sample size determination for case-control studies and the comparison
