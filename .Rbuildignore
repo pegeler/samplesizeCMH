@@ -2,3 +2,7 @@
 ^\.Rproj\.user$
 ^\.git.*
 ^\.dropbox$
+^vignettes/refs/.
+^vignettes/samplesizeCMH.Rmd$
+^inst/journal.
+^inst/debug.

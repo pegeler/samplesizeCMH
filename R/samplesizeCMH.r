@@ -1,4 +1,4 @@
-#' samplesizeCMH: Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test
+#' samplesizeCMH: Power and Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test
 #'
 #' This package provides functions relating to power and sample size calculation
 #' for the CMH test. There are also several helper functions for interconverting
@@ -17,7 +17,7 @@
 #'
 #' Given a target power which the researcher would like to achieve, a
 #' calculation can be performed in order to estimate the appropriate number of
-#' subjects for a study. The \link{samplesize.cmh} function calculates the
+#' subjects for a study. The \link{samplesize.cmh.test} function calculates the
 #' required number of subjects per group to achieve a specified power for a
 #' Cochran-Mantel-Haenszel test. The user can select from various methods found
 #' in literature.
@@ -27,9 +27,8 @@
 #' Researchers interested in estimating the probability of detecting a true
 #' positive result from an inferential test must perform a power calculation
 #' using a known sample size, effect size, significance level, \emph{et cetera}.
-#' The \link{power.cmh} fuction can compute the power of a CMH test, given
-#' parameters from the experiment. Techniques for three experimental designs are
-#' included.
+#' The \link{power.cmh.test} fuction can compute the power of a CMH test, given
+#' parameters from the experiment.
 #'
 #' @docType package
 #' @name samplesizeCMH
