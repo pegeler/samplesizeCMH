@@ -1,16 +1,27 @@
-#' @title Sample size calculation for the Cochran Mantel Haenszel test
+#' @title Power and sample size calculation for the Cochran-Mantel-Haenszel test
 #'
 #' @description
-#' Computes the sample size for the test for assocaition between
-#' \emph{J 2 x 2} tables. The calculation can be performed using various
-#' methods found in literature.
+#' Compute the post-hoc power or required number of subjects for the
+#' Cochran-Mantel-Haenszel test for association in \emph{J} stratified 2 x 2
+#' tables. The calculations can be performed using various methods found in
+#' literature.
 #'
 #' @details
-#' By convention, the \code{p1} group is dubbed the \emph{Case} group and \code{p2}
-#' group is called the \emph{Control} group. This is carry-over language from the
-#' Case-Control terminology used by Woolson \emph{et al.} (1986).
+#' Terminology and symbolic conventions are borrowed from Woolson \emph{et al.}
+#' (1986). The \code{p1} group is dubbed the \emph{Case} group and \code{p2}
+#' group is called the \emph{Control} group.
 #'
-#' You must specify one of the following:
+#' @section Arguments:
+#'
+#' To calculate \strong{power}, the \code{power} parameter must be set to
+#' \code{NULL}. To calculate \strong{sample size}, the \code{N} parameter must
+#' be set to \code{NULL}.
+#'
+#' The \code{J} number of groups will be inferred by the maximum length of
+#' \code{p1}, \code{p2}, or \code{theta}.
+#'
+#' Effect size must be specified using one of the following combinations of
+#' arguments.
 #' \itemize{
 #'   \item Both case and control proportion vectors, ex.,
 #'     \itemize{\item \code{p1} and \code{p2} with \code{theta = NULL}.}
@@ -20,8 +31,6 @@
 #'       \item \code{p2} and \code{theta} with \code{p1 = NULL}.
 #'     }
 #' }
-#' The \code{J} number of groups will be inferred by the maximum length of
-#' \code{p1}, \code{p2}, or \code{theta}.
 #'
 #' @section Methods:
 #'
@@ -42,20 +51,6 @@
 #'     Described in the Woolson \emph{et al.} (1986).
 #'   }
 #'
-#'   \item{\code{hypergeometric}}{
-#'     \strong{Under construction}.
-#'     Described in Munoz and Rosner (1984). Woolson \emph{et al.} (1986)
-#'     state that this is the appropriate sample size estimator when both
-#'     margins are fixed.
-#'   }
-#'
-#'   \item{\code{least.squares}}{
-#'     \strong{Under construction}.
-#'     Described in Gail (1973). This may not be relevant, as subsequent
-#'     Munoz and Rosner (1984), Woolson \emph{et al.} (1986), and later
-#'     Nam (1992) described "improved" methods.
-#'   }
-#'
 #'   \item{\code{unstratified}}{
 #'     The use of this method ignores stratification of the \code{J} tables,
 #'     essentially turning the data into a simple 2 x 2 table for
@@ -65,25 +60,24 @@
 #'
 #' @param p1 Vector of proportions of the \emph{J} case groups.
 #' @param p2 Vector of proportions of the \emph{J} control groups.
-#' @param theta Vector of odds ratios relating to the \emph{J 2 x 2} tables.
+#' @param theta Vector of odds ratios relating to the \emph{J} 2 x 2 tables.
 #' @param sig.level Significance level (Type I error probability).
 #' @param power Power of test (1 minus Type II error probability).
 #' @param alternative Two- or one-sided test. Can be abbreviated.
 #' @param s Proportion of case versus control in \emph{J} stratum.
 #' @param t Proportion of total number of cases in \emph{J} stratum.
-#' @param method Method for calculation of sample size.
-#'  Can be abbreviated. (See \strong{Methods} section.)
+#' @param method Method for calculation of sample size. Can be abbreviated. (See
+#'   \strong{Methods} section.)
 #'
-#' @return An object of class \code{"samplesize.cmh"}: a list of the arguments
-#' (except theta, which is converted to the missing proportion if supplied)
-#' as well as effective N, exact N, a vector of n's per each group,
-#' a short description of the calculation method used, the original function
-#' call, and a note.
+#' @return
+#' An object of class \code{"power.cmh"}: a list of the original arguments, the
+#' function call, and the calculated sample size or power. Effective N, a vector
+#' of n's per each group, a short description of the calculation method used,
+#' the original function call, and a note are also included.
 #'
 #' @seealso
 #' \link[stats]{power.prop.test},
 #' \link[stats]{mantelhaen.test},
-#' \link{power.cmh},
 #' \link[DescTools]{BreslowDayTest}
 #'
 #' @author Paul W. Egeler, M.S.
@@ -94,7 +88,7 @@
 #'
 #' # Uncorrected sample size estimate first introduced
 #' # by Woolson and others in 1986
-#' sample_size_uncorrected <- samplesize.cmh(
+#' sample_size_uncorrected <- power.cmh.test(
 #'   p2 = c(0.75,0.70,0.65,0.60),
 #'   theta = 3,
 #'   power = 0.9,
@@ -106,11 +100,11 @@
 #' sample_size_uncorrected
 #'
 #' # We see that the N.exact is 171, the same as calculated by Nam
-#' sample_size_uncorrected$N.exact
+#' sample_size_uncorrected$N
 #'
 #'
 #' # Continuity corrected sample size estimate added by Nam
-#' sample_size_corrected <- samplesize.cmh(
+#' sample_size_corrected <- power.cmh.test(
 #'   p2 = c(0.75,0.70,0.65,0.60),
 #'   theta = 3,
 #'   power = 0.9,
@@ -122,7 +116,7 @@
 #' sample_size_corrected
 #'
 #' # We see that the N.exact is indeed equal to that which is reported in the paper
-#' sample_size_corrected$N.exact
+#' sample_size_corrected$N
 #'
 #' @references
 #' Gail, M. (1973). "The determination of sample sizes for trials involving
@@ -143,10 +137,11 @@
 #' \emph{Biometrics} \strong{42}: 927-932.
 #'
 #' @export
-samplesize.cmh <- function(
+power.cmh.test <- function(
   p1 = NULL,
   p2 = NULL,
   theta = NULL,
+  N = NULL,
   sig.level = 0.05,
   power = 0.80,
   alternative = c("two.sided","one.sided"),
@@ -155,14 +150,24 @@ samplesize.cmh <- function(
   method = c(
     "cc.binomial",
     "binomial",
-    "hypergeometric",
-    "least.squares",
     "unstratified"
     )
   ) {
 
+  # Determine the method of calculation to use
+  method <- match.arg(method)
+  methods <- c(
+    "cc.binomial" = "Continuity corrected weighted difference between two binomial distributions",
+    "binomial" = "Weighted difference between two binomial distributions (Case-Control)",
+    "unstratified" = "Unstratified (ignoring confounding variable)"
+  )
+
+  # Determine upper, lower, or two-sided hypothesis
+  alternative <- match.arg(alternative)
+  tside <- switch(alternative, two.sided = 2, 1)
+
   # Process the expected proportions and/or effect size
-  if (sum(sapply(list(p1,p2,theta),is.null)) != 1) {
+  if (sum(sapply(list(p1,p2,theta),is.null)) != 1L) {
     stop("exactly one of 'p1', 'p2', or 'theta' must be NULL")
   }
 
@@ -174,40 +179,43 @@ samplesize.cmh <- function(
   t <- rep(t, length.out = J)
 
   # Check that 's' and 't' are reasonable
-  if (any(s >= 1)) stop("The variable 's' must be a decimal fraction")
-  if (!isTRUE(all.equal(sum(t),1))) stop("The 't' levels must sum to 1")
-
-  # If theta is used, determine the missing p vector
-  if (is.null(p1)) {
-    p1 <- (p2 * theta) / (1 - p2 + p2 * theta)
-  }  else if (is.null(p2)) {
-    p2 <- (p1 * theta) / (1 - p1 + p1 * theta)
+  if (!isTRUE(all.equal(s + (1 - s), rep(1,J)))) {
+    stop("The variable 's' must be a decimal fraction")
+  }
+  if (!isTRUE(all.equal(sum(t),1))) {
+    stop("The 't' levels must sum to 1")
   }
 
-  # Determine upper, lower, or two-sided hypothesis
-  alternative <- match.arg(alternative)
-  tside <- switch(alternative, two.sided = 2, 1)
+  # Determine missing p vector or theta
+  if (is.null(theta)) {
+    theta <- props2theta(p1,p2)
+  } else if (is.null(p1)) {
+    p1 <- effect.size(p2,theta)
+  } else {
+    p2 <- effect.size(p1,theta)
+  }
+
+  if (!isTRUE(all.equal(min(theta), max(theta)))) {
+    warning("'theta' differs among groups. This may violate assumptions.")
+  }
 
   # Calculate z values for alpha and beta
   z_a <- stats::qnorm(sig.level / tside)
   z_b <- stats::qnorm(1 - power)
 
-  # Determine the method of calculation to use
-  method <- match.arg(method)
-  methods <- c(
-    "cc.binomial" = "Continuity corrected weighted difference between two binomial distributions",
-    "binomial" = "Weighted difference between two binomial distributions (Case-Control)",
-    "hypergeometric" = "Hypergeometric distribution with both margins fixed",
-    "least.squares" = "Weighted least squares",
-    "unstratified" = "Unstratified (ignoring confounding variable)"
-  )
-
   # Set up the different calcualtions based on method
   calculations <- list(
     "cc.binomial" = quote({
-      N_uncorrected <- eval(calculations[["binomial"]])
+      pbar <- p1 * s + p2 * (1 - s)
 
-      (1 + sqrt(1 + 2 / (Z * N_uncorrected) ))^2 * N_uncorrected / 4
+      X <- sum(t * s * (1 - s) * pbar * (1 - pbar))
+
+      Y <- sum(t * s * (1 - s) * ((1 - s) * p1 * (1 - p1) + s * p2 * (1 - p2)))
+
+      Z <- sum(t * s * (1 - s) * (p1 - p2))
+
+      (1 + sqrt(1 + 2 / (Z * ((z_a * sqrt(X) + z_b * sqrt(Y))^2 / Z^2)) ))^2 *
+        ((z_a * sqrt(X) + z_b * sqrt(Y))^2 / Z^2) / 4
     }),
     "binomial" = quote({
       pbar <- p1 * s + p2 * (1 - s)
@@ -219,12 +227,6 @@ samplesize.cmh <- function(
       Z <- sum(t * s * (1 - s) * (p1 - p2))
 
       (z_a * sqrt(X) + z_b * sqrt(Y))^2 / Z^2
-    }),
-    "hypergeometric" = quote({
-      stop("Method under construction")
-    }),
-    "least.squares" =  quote({
-      stop("Method under construction")
     }),
     "unstratified" =  quote({
       sum_ts <- sum(t * s)
@@ -246,47 +248,70 @@ samplesize.cmh <- function(
   )
 
   # Run the calculation
-  N <- eval(calculations[[method]])
+  if (is.null(N)) {
+    N <- eval(calculations[[method]])
+  } else {
+    power <- 1 - pnorm(
+      uniroot(function(z_b) eval(calculations[[method]]) - N, c(-10^6,0))$root
+    )
+  }
 
   # Return an object of class "samplesize.cmh"
   structure(
     list(
       n1 = ceiling(rep(N,J)*t*s),
       n2 = ceiling(rep(N,J)*t*(1 - s)),
-      N = sum(ceiling(rep(N,J)*t*s), ceiling(rep(N,J)*t*(1 - s))),
-      N.exact = N, p1 = p1, p2 = p2, sig.level = sig.level,
+      N.effective = sum(ceiling(rep(N,J)*t*s), ceiling(rep(N,J)*t*(1 - s))),
+      N = N, p1 = p1, p2 = p2, sig.level = sig.level,
       power = power, alternative = alternative, s = s, t = t, J = J,
-      note = "N is *total* number of subjects",
+      note = paste(
+        "N is the calculated *total* number of subjects;",
+        "Effective N is the minimum number of subjects to satisfy whole number",
+        "requirement in each cell",
+        sep = "\n"
+      ),
       method = method, method.desc = methods[method],
       call = match.call()
     ),
-    class = "samplesize.cmh"
+    class = "power.cmh"
     )
 }
 
 # Print method so that "samplesize.cmh" will look nice
 #' @export
-print.samplesize.cmh <- function(x, ...) {
-  with(x, cat(
-    "Sample size calculation for the Cochran Mantel Haenszel test\n\n",
+print.power.cmh <- function(x, detail = TRUE, ...) {
+  with(x, {
+    cat(
+      "Power and sample size calculation for the Cochran Mantel Haenszel test\n\n",
+      # "CALL  : ",print(call),"\n",
 
-    "                 N = ",N,"\n",
-    "Significance level = ",sig.level,"\n",
-    "     Nominal Power = ",power,"\n",
-    "             Sides = ",alternative,"\n\n",
-
-    "Number of subjects per each group:\n",
-    rep("_",10 + J * 7),"\n",
-    "Group   |",sprintf(" %5i ",1:J),"\n",
-    rep("=",10 + J * 7),"\n",
-    "Case    |",sprintf(" %5i ",n1),"\n",
-    "Control |",sprintf(" %5i ",n2),"\n\n",
-
-    "METHOD: ",method.desc,"\n",
-    "NOTE  : ",note,
-    sep = ""
+      "                 N = ",N,"\n",
+      "       Effective N = ",N.effective,"\n",
+      "Significance level = ",sig.level,"\n",
+      "             Power = ",power,"\n",
+      "             Sides = ",alternative,"\n\n",
+      sep = ""
     )
-  )
+
+    if (detail) {
+      cat(
+        "Number of subjects per each group:\n",
+        rep("_",10 + J * 7),"\n",
+        "Group   |",sprintf(" %5i ",1:J),"\n",
+        rep("=",10 + J * 7),"\n",
+        "Case    |",sprintf(" %5i ",n1),"\n",
+        "Control |",sprintf(" %5i ",n2),"\n\n",
+
+        sep = ""
+      )
+    }
+
+    cat(
+      "METHOD: ",method.desc,"\n",
+      "NOTE  : ",note,
+      sep = ""
+    )
+  })
 
   invisible(x)
 
