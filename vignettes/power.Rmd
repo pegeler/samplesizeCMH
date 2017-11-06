@@ -3,7 +3,7 @@ title: "Power Calcualtion for the Cochran-Mantel-Haenszel Test"
 author:
   "Paul W. Egeler, M.S., GStat"
 date: "`r Sys.Date()`"
-output: word_document
+output: rmarkdown::html_vignette
 bibliography: refs.bib
 vignette: >
   %\VignetteIndexEntry{Power Calcualtion for the Cochran-Mantel-Haenszel Test}
@@ -49,7 +49,7 @@ marginal_table
 
 <!-- Using the `Titanic` dataset above, we may calculate the power of the inference of the Mantel-Haenzel test using the calculations put forth by @Wittes1987. -->
 
-*`power.cmh()`{.r} Under construction*
+*`power.cmh.test()`{.r} Under construction*
 
 ## Conclusion
 

@@ -3,7 +3,7 @@ title: "Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test"
 author: 
   "Paul W. Egeler, M.S., GStat"
 date: "`r Sys.Date()`"
-output: word_document
+output: rmarkdown::html_vignette
 bibliography: refs.bib
 vignette: >
   %\VignetteIndexEntry{Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test}
