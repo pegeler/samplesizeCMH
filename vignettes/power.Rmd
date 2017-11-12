@@ -17,9 +17,9 @@ May someday want output:
   word_document
 -->
 
-## Background
+## Calculating *post hoc* Power
 
-## The Data Set
+### The Data Set
 
 We will use the `Titanic`{.r} dataset in the `datasets`{.r} package to illustrate. This dataset is a four-dimensional table which includes the *Class* (1^st^, 2^nd^, 3^rd^, Crew), *Sex* (Male, Female), *Age* (Child, Adult), and *Survival* (No, Yes) of the passengers of the 1912 maritime disaster. Use `help("Titanic", "datasets")`{.r} to find more information.
 
@@ -45,12 +45,80 @@ marginal_table
 ```
 
 
-## Calculating Power
+### The Test Statistic
 
-<!-- Using the `Titanic` dataset above, we may calculate the power of the inference of the Mantel-Haenzel test using the calculations put forth by @Wittes1987. -->
+Performing a CMH test on the partial tables above shows that there is strong evidence that the common odds ratio is greater than one.
 
-*`power.cmh.test()`{.r} Under construction*
+```{r mantelhaen}
+library(stats)
 
-## Conclusion
+mantelhaen.test(partial_tables)
+```
+
+### The Power Calculation
+
+Using the `power.cmh.test()`{.r} function, we may calculate the probability that our rejection of the null hypothesis is a true result.
+
+```{r power}
+library(samplesizeCMH)
+
+power.cmh.test(
+  p1 = partial_tables[1,1,] / apply(partial_tables[,1,],2,sum),
+  p2 = partial_tables[1,2,] / apply(partial_tables[,2,],2,sum),
+  N = sum(Titanic),
+  power = NULL,
+  s = apply(partial_tables[,1,],2,sum) / apply(partial_tables,3,sum),
+  t = apply(partial_tables, 3, sum) / sum(Titanic)
+)
+
+```
+
+Perhaps unsurprisingly, the power of this test approaches 100%.
+
+## Power and Effect Size in a Negative Result
+
+It does not make sense to calculate power in a study when the null hypothesis is not rejected. However, it may be of interest to the researcher to determine the minimum effect size that could be detected, given the sample size of the study and a specified power. We use the example of the Nurses' Health Study explored by @Munoz1984. This study looked for a link between oral contraceptives and breast cancer [@Barton1980, @Hennekens1984]. The data has been included in the `samplesizeCMH` package for this illustration.
+
+Here, as shown in @Hennekens1984, the Mantel-Haenszel test shows non-significant results, with the common odds ratio approximately equal to 1.
+
+```{r contraceptives-mh}
+data(contraceptives, package = "samplesizeCMH")
+
+mantelhaen.test(contraceptives)
+```
+
+The question now is what effect size would be detectable if an effect truly did exist in the data. That is to say, what effect size were we prepared to correctly detect given our data and specified significance level and power? We may vectorize the `power.cmh.test()`{.r} function to test a wide range of effect sizes to see where the effect size crosses over into adequate power.
+
+```{r contraceptives-effect.size}
+vpower <- Vectorize(power.cmh.test, "theta", SIMPLIFY = FALSE)
+
+thetas <- seq(1.05,1.5,0.05)
+
+power_list <-vpower(
+  theta = thetas,
+  p2 = contraceptives[1,2,] / apply(contraceptives[,2,],2,sum),
+  N = sum(contraceptives),
+  power = NULL,
+  s = 1/11,
+  t = apply(contraceptives, 3, sum) / sum(contraceptives),
+  alternative = "one"
+)
+
+powers <- sapply(power_list, "[[", "power")
+
+names(powers) <- thetas
+
+powers
+```
+
+Using the data above, we may create a power curve.
+
+```{r contraceptives-plot, fig.width = 6, fig.height = 4}
+plot(y = powers, x = thetas, main = "Power curve as a function of effect size")
+abline(h = 0.9, col = "red")
+abline(h = 0.8, col = "blue")
+```
+
+As we can see from above, 90% power would have been achieved if the common odds ratio was estimated to be approximately 1.25.
 
 ## References

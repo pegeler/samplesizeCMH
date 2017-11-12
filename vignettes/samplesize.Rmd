@@ -36,39 +36,32 @@ The methods included in the package are as follows:
   binomial proportions."
   Described in the @Woolson1986.
 
-`hypergeometric`
-  : Described in @Munoz1984. @Woolson1986
-  state that this is the appropriate sample size estimator when both
-  margins are fixed.
-
-`least.squares`
-  : Described in @Gail1973.
-
 `unstratified`
   : The use of this method ignores stratification of the $J$ tables,
   essentially turning the data into a simple 2 $\times$ 2 table for
-  calculation of sample size.
+  calculation of sample size. This is the same as calculating sample
+  size for the marginal table.
 
 ## The Research Question
 
-Starting with the example first used by @Woolson1986 and then revisited by @Nam1992, we will explore the usage of the central function of the `samplesizeCMH`{.r} package, the `samplesize.cmh.test()`{.r} function.
+Starting with the example first used by @Woolson1986 and then revisited by @Nam1992, we will explore the usage of the central function of the `samplesizeCMH`{.r} package, the `power.cmh.test()`{.r} function.
 
-This was a case--control study which looked at whether there was an association between colon cancer and chlorinated drinking water among males in Iowa. There were four age categories, 20--54 years, 55--69 years, 70--79 years, and 80--84 years; therefore $J$ = 4. The relative proportion of each age group to the total sample is as follows: $t_1$ = 0.10, $t_2$ = 0.40, $t_3$ = 0.35, and $t_4$ = 0.15. The National Collaborative Bladder Cancer Study showed that exposure rate from controls for each age stratum, denoted by $\pi_{2j}$ (where $j$ is the stratum), was $\pi_{21}$ = 0.75, $\pi_{22}$ = 0.70, $\pi_{23}$ = 0.65, and $\pi_{24}$ = 0.60. Level of significance was set at 0.05 and desired power was 90% with an effect size of 3. They matched equal number of cases and controls in each stratum, *i.e.*, $s_1=s_2=s_3=s_4=$ 0.5.
+This was a case--control study which looked at whether there was an association between colon cancer and chlorinated drinking water among males in Iowa. There were four age categories, 20--54 years, 55--69 years, 70--79 years, and 80--84 years; therefore $J$ = 4. The relative proportion of each age group to the total sample is as follows: $t_1$ = 0.10, $t_2$ = 0.40, $t_3$ = 0.35, and $t_4$ = 0.15. The National Collaborative Bladder Cancer Study showed that exposure rate for controls for each age stratum, denoted by $\pi_{2j}$ (where $j$ is the stratum), was $\pi_{21}$ = 0.75, $\pi_{22}$ = 0.70, $\pi_{23}$ = 0.65, and $\pi_{24}$ = 0.60. Level of significance was set at 0.05 and desired power was 90% with an effect size of 3. They matched equal number of cases and controls in each stratum, *i.e.*, $s_1=s_2=s_3=s_4=$ 0.5.
 
 ## Calculating Sample Size
 
 ### Methods
 
-We will go over several calculation methods to compare the usage of the `samplesize.cmh.test()`{.r} function for different data sets and experimental designs.
+We will go over several calculation methods to compare the usage of the `power.cmh.test()`{.r} function for different data sets and experimental designs.
 
 #### Unstratified
 
-Suppose that the researchers first decided to ignore the stratification variable in their sample size calculation. The researcher could use the `method = "unstratified"`{.r} argument. We see that the researcher has put in the control exposure proportions as a vector (`p2`), the effect size has been given (`theta`), and a vector of relative stratum sizes has been assigned (`t`). Since there are equal numbers of cases and controls for each group, the `s` parameter is not required. Only `p1` and `p2` *or* one of the proportions and a `theta` are required to carry out the calculation. The number of strata ($J$) is inferred from the maximum vector length of `p1`, `p2`, or `theta`.
+Suppose that the researchers first decided to ignore the stratification variable in their sample size calculation, *i.e.*, they intended to perform a $\chi^2$ test on the marginal table. The researcher could use the `method = "unstratified"`{.r} argument. We see that the researcher has put in the control exposure proportions as a vector (`p2`), the effect size has been given (`theta`), and a vector of relative stratum sizes has been assigned (`t`). Since there are equal numbers of cases and controls for each group, the `s` parameter is not required. Only `p1` and `p2` *or* one of the proportions and a `theta` are required to carry out the calculation. The number of strata ($J$) is inferred from the maximum vector length of `p1`, `p2`, or `theta`.
 
 ```{r unstratified}
 library(samplesizeCMH)
 
-sample_size_unstratified <- samplesize.cmh.test(
+sample_size_unstratified <- power.cmh.test(
   p2 = c(0.75,0.70,0.65,0.60),
   theta = 3,
   power = 0.9,
@@ -85,9 +78,7 @@ sample_size_unstratified
 The researcher soon realized that failing to consider the confounding variable tends to lead to an underestimation of sample size. Adjusting the code above, an alteration is made to the `method` parameter, now using the calculation introduced by @Woolson1986. Note that the `"binomial"`{.r} option has been abbreviated.
 
 ```{r binomial}
-# Uncorrected sample size estimate first introduced
-# by Woolson and others in 1986
-sample_size_binomial <- samplesize.cmh.test(
+sample_size_binomial <- power.cmh.test(
   p2 = c(0.75,0.70,0.65,0.60),
   theta = 3,
   power = 0.9,
@@ -107,7 +98,7 @@ The researcher now realizes that a continuity correction would be appropriate wh
 
 ```{r cc}
 # Continuity corrected sample size estimate added by Nam
-sample_size_corrected <- samplesize.cmh.test(
+sample_size_corrected <- power.cmh.test(
   p2 = c(0.75,0.70,0.65,0.60),
   theta = 3,
   power = 0.9,
@@ -119,18 +110,18 @@ sample_size_corrected <- samplesize.cmh.test(
 sample_size_corrected
 ```
 
-We see that the `N.exact` is indeed equal to that which is reported in the paper by @Nam1992.
+We see that the `N` is indeed equal to that which is reported in the paper by @Nam1992.
 
 ```{r cc2}
-sample_size_corrected$N.exact
+sample_size_corrected$N
 ```
 
 #### Unequal Numbers of Cases and Controls
 
-Consider now that the researcher performed some preparatory work and realized that the number of cases available is about $\frac{1}{3}$ the number of available controls. Wanting to leverage all of the available data, an adjustment was be made to the sample size calculation performed earlier by including the `s` parameter.
+Consider now that the researcher performed some preparatory work and realized that the number of cases available is much fewer than the number of available controls. In fact, it is very difficult to find cases that meet the inclusion criteria, but is relatively easy to find controls that meet the inclusion criteria. Wanting to leverage all of the available data, an adjustment was be made to the sample size calculation performed earlier by including the `s` parameter. The design now supposes two controls matched to each case.
 
 ```{r s}
-samplesize.cmh.test(
+power.cmh.test(
   p2 = c(0.75,0.70,0.65,0.60),
   s = 1/3,
   theta = 3,
@@ -141,6 +132,7 @@ samplesize.cmh.test(
 )
 ```
 
+Note that effective N has increased by 24 subjects. The CMH test is at optimum efficiency when `s` is balanced. Therefore, altering the case/control ratio should be implemented only when there is a compelling reason to do so, such as difficulty in finding cases or prohibitive costs.
 
 ## A Closer Look at a Partial Table
 
@@ -183,8 +175,8 @@ We can also use either row or column proportions to calculate the odds ratio for
 props2theta(0.90,0.75)
 ```
 
-There are several other peripheral functions in this package to interconvert between proportions, odds, relative risk, and odds ratios. Use `help("odds.and.proportions", "samplesizeCMH")`{.r} to find out more.
+We see that this brings us back to our specified effect size, `theta` = 3, which was used in the sample size calculaion.
 
-## Conclusion
+There are several other peripheral functions in this package to interconvert between proportions, odds, relative risk, and odds ratios. Use `help("odds.and.proportions", "samplesizeCMH")`{.r} to find out more.
 
 ## References
