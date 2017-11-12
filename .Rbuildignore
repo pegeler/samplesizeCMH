@@ -2,9 +2,10 @@
 ^\.Rproj\.user$
 ^\.git.*
 ^\.dropbox$
-^vignettes/refs/.
+^vignettes/refs$
 ^vignettes/samplesizeCMH.Rmd$
-^inst/journal.
-^inst/debug.
+^inst/journal$
+^inst/debug$
 ^R/samplesize.cmh.test.r$
+^R/contraceptives.r$
 ^data-raw$

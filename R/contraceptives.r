@@ -12,6 +12,7 @@
 #' @docType data
 #' @keywords datasets
 #' @name contraceptives
+#' @alias contraceptives_marginal
 #' @usage data(contraceptives)
 #' @format A 3-dimensional table.
 #'
@@ -21,4 +22,6 @@
 #'   \item \code{Age Group}: Age group of the subject.
 #'
 #' }
+#'
+#' \code{contraceptives_marginal} is the marginal table when age group is ignored.
 NULL
