@@ -11,6 +11,8 @@
 #' (1986). The \code{p1} group is dubbed the \emph{Case} group and \code{p2}
 #' group is called the \emph{Control} group.
 #'
+#' Power is solved iteratively.
+#'
 #' @section Arguments:
 #'
 #' To calculate \strong{power}, the \code{power} parameter must be set to
