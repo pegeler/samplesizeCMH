@@ -61,19 +61,28 @@
 #' @param p1 Vector of proportions of the \emph{J} case groups.
 #' @param p2 Vector of proportions of the \emph{J} control groups.
 #' @param theta Vector of odds ratios relating to the \emph{J} 2 x 2 tables.
+#' @param N Total number of subjects.
 #' @param sig.level Significance level (Type I error probability).
 #' @param power Power of test (1 minus Type II error probability).
 #' @param alternative Two- or one-sided test. Can be abbreviated.
-#' @param s Proportion of case versus control in \emph{J} stratum.
-#' @param t Proportion of total number of cases in \emph{J} stratum.
+#' @param s Proportion (weight) of case versus control in \emph{J} stratum.
+#' @param t Proportion (weight) of total number of cases of \emph{J} stratum.
 #' @param method Method for calculation of sample size. Can be abbreviated. (See
 #'   \strong{Methods} section.)
 #'
 #' @return
-#' An object of class \code{"power.cmh"}: a list of the original arguments, the
-#' function call, and the calculated sample size or power. Effective N, a vector
-#' of n's per each group, a short description of the calculation method used,
-#' the original function call, and a note are also included.
+#' An object of class \code{"power.cmh"}: a list of the original arguments and
+#' the calculated sample size or power. Also included are vectors of n's per
+#' each group, a short description of the calculation method used, the original
+#' function call, and \code{N.effective}.
+#'
+#' The vectors of n's per each group, \code{n1} and \code{n2}, are the
+#' fractional n's required to achieve a final total N specified by the
+#' calculation while satisfying the constraints of \code{s} and \code{t}.
+#' However, the effective N, given the requirement of cell counts populated by
+#' whole numbers is provided by \code{N.effective}. By default, the print method
+#' is set to \code{n.frac = FALSE}, which will round each cell n up to the
+#' nearest whole number.
 #'
 #' @seealso
 #' \link[stats]{power.prop.test},
@@ -84,7 +93,7 @@
 #'
 #' @examples
 #' # From "Sample size determination for case-control studies and the comparison
-#' # of stratified and unstratified analyses", Nam (1992). See references.
+#' # of stratified and unstratified analyses", (Nam 1992). See references.
 #'
 #' # Uncorrected sample size estimate first introduced
 #' # by Woolson and others in 1986
@@ -99,7 +108,7 @@
 #'
 #' sample_size_uncorrected
 #'
-#' # We see that the N.exact is 171, the same as calculated by Nam
+#' # We see that the N is 171, the same as calculated by Nam
 #' sample_size_uncorrected$N
 #'
 #'
@@ -115,18 +124,20 @@
 #'
 #' sample_size_corrected
 #'
-#' # We see that the N.exact is indeed equal to that which is reported in the paper
+#' # We see that the N is indeed equal to that which is reported in the paper
 #' sample_size_corrected$N
 #'
 #' @references
 #' Gail, M. (1973). "The determination of sample sizes for trials involving
-#' several 2 x 2 tables." \emph{Journal of Chronic Disease} \strong{26}: 669-673.
+#' several 2 x 2 tables."
+#' \emph{Journal of Chronic Disease} \strong{26}: 669-673.
 #'
 #' Munoz, A. and B. Rosner. (1984). "Power and sample size for a collection of 2
 #' x 2 tables." \emph{Biometrics} \strong{40}: 995-1004.
 #'
 #' Nam, J. (1992). "Sample size determination for case-control studies and the
-#' comparison of stratified and unstratified analyses." \emph{Biometrics} \strong{48}: 389-395.
+#' comparison of stratified and unstratified analyses."
+#' \emph{Biometrics} \strong{48}: 389-395.
 #'
 #' Wittes, J. and S. Wallenstein. (1987). "The power of the Mantel-Haensel test."
 #' \emph{Journal of the American Statistical Association} \strong{82}:
@@ -154,6 +165,15 @@ power.cmh.test <- function(
     )
   ) {
 
+  # Process the expected proportions and/or effect size
+  if (sum(sapply(list(p1,p2,theta),is.null)) != 1L) {
+    stop("exactly one of 'p1', 'p2', or 'theta' must be NULL")
+  }
+
+  if (sum(sapply(list(N, power),is.null)) != 1L) {
+    stop("either 'N'or 'power' must be NULL")
+  }
+
   # Determine the method of calculation to use
   method <- match.arg(method)
   methods <- c(
@@ -166,17 +186,12 @@ power.cmh.test <- function(
   alternative <- match.arg(alternative)
   tside <- switch(alternative, two.sided = 2, 1)
 
-  # Process the expected proportions and/or effect size
-  if (sum(sapply(list(p1,p2,theta),is.null)) != 1L) {
-    stop("exactly one of 'p1', 'p2', or 'theta' must be NULL")
-  }
-
   # Infer J from vector lengths of first three args
   J <- max(sapply(list(p1,p2,theta),length))
 
   #Ensure that s and t are of correct lengths
-  s <- rep(s, length.out = J)
-  t <- rep(t, length.out = J)
+  s <- rep(as.vector(s), length.out = J)
+  t <- rep(as.vector(t), length.out = J)
 
   # Check that 's' and 't' are reasonable
   if (!isTRUE(all.equal(s + (1 - s), rep(1,J)))) {
@@ -195,8 +210,8 @@ power.cmh.test <- function(
     p2 <- effect.size(p1,theta)
   }
 
-  if (!isTRUE(all.equal(min(theta), max(theta)))) {
-    warning("'theta' differs among groups. This may violate assumptions.")
+  if (!isTRUE(all.equal(min(as.vector(theta)), max(as.vector(theta))))) {
+    warning("'theta' differs among groups. This may violate assumptions.\n")
   }
 
   # Calculate z values for alpha and beta
@@ -251,25 +266,31 @@ power.cmh.test <- function(
   if (is.null(N)) {
     N <- eval(calculations[[method]])
   } else {
-    power <- 1 - pnorm(
-      uniroot(function(z_b) eval(calculations[[method]]) - N, c(-10^6,0))$root
-    )
+    power <-
+      try(
+        1 - stats::pnorm(
+          stats::uniroot(
+            function(z_b) eval(calculations[[method]]) - N,
+            c(-10^6,0),
+            extendInt = "downX"
+          )$root
+        ),
+        silent = TRUE
+      )
+
+    if (inherits(power, "try-error")) {
+      power <- NA
+      warning("Could not calculate 'power'")
+    }
   }
 
-  # Return an object of class "samplesize.cmh"
+  # Return an object of class "power.cmh"
   structure(
     list(
-      n1 = ceiling(rep(N,J)*t*s),
-      n2 = ceiling(rep(N,J)*t*(1 - s)),
-      N.effective = sum(ceiling(rep(N,J)*t*s), ceiling(rep(N,J)*t*(1 - s))),
-      N = N, p1 = p1, p2 = p2, sig.level = sig.level,
+      p1 = p1, p2 = p2, theta = theta, N = N, sig.level = sig.level,
       power = power, alternative = alternative, s = s, t = t, J = J,
-      note = paste(
-        "N is the calculated *total* number of subjects;",
-        "Effective N is the minimum number of subjects to satisfy whole number",
-        "requirement in each cell",
-        sep = "\n"
-      ),
+      n1 = N*t*s, n2 = N*t*(1 - s),
+      N.effective = sum(ceiling(rep(N,J)*t*s), ceiling(rep(N,J)*t*(1 - s))),
       method = method, method.desc = methods[method],
       call = match.call()
     ),
@@ -279,11 +300,10 @@ power.cmh.test <- function(
 
 # Print method so that "samplesize.cmh" will look nice
 #' @export
-print.power.cmh <- function(x, detail = TRUE, ...) {
+print.power.cmh <- function(x, detail = TRUE, n.frac = FALSE, ...) {
   with(x, {
     cat(
       "Power and sample size calculation for the Cochran Mantel Haenszel test\n\n",
-      # "CALL  : ",print(call),"\n",
 
       "                 N = ",N,"\n",
       "       Effective N = ",N.effective,"\n",
@@ -294,23 +314,35 @@ print.power.cmh <- function(x, detail = TRUE, ...) {
     )
 
     if (detail) {
-      cat(
-        "Number of subjects per each group:\n",
-        rep("_",10 + J * 7),"\n",
-        "Group   |",sprintf(" %5i ",1:J),"\n",
-        rep("=",10 + J * 7),"\n",
-        "Case    |",sprintf(" %5i ",n1),"\n",
-        "Control |",sprintf(" %5i ",n2),"\n\n",
 
-        sep = ""
-      )
+      if (n.frac) {
+        cat(
+          "Number of subjects per each group:\n",
+          rep("_",10 + J * 9),"\n",
+          "Group   |",sprintf(" %7i ",1:J),"\n",
+          rep("=",10 + J * 9),"\n",
+          "Case    |",sprintf(" %7.2f ",n1),"\n",
+          "Control |",sprintf(" %7.2f ",n2),"\n\n",
+          sep = ""
+        )
+      } else {
+        cat(
+          "Number of subjects per each group:\n",
+          rep("_",10 + J * 7),"\n",
+          "Group   |",sprintf(" %5i ",1:J),"\n",
+          rep("=",10 + J * 7),"\n",
+          "Case    |",sprintf(" %5i ",ceiling(n1)),"\n",
+          "Control |",sprintf(" %5i ",ceiling(n2)),"\n\n",
+          sep = ""
+        )
+      }
     }
 
     cat(
-      "METHOD: ",method.desc,"\n",
-      "NOTE  : ",note,
-      sep = ""
+      "CALL: \n", paste(deparse(x$call), sep = "\n", collapse = "\n"), "\n\n",
+      "METHOD: ", method.desc, "\n", sep = ""
     )
+
   })
 
   invisible(x)

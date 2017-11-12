@@ -17,7 +17,7 @@
 #'
 #' Given a target power which the researcher would like to achieve, a
 #' calculation can be performed in order to estimate the appropriate number of
-#' subjects for a study. The \link{samplesize.cmh.test} function calculates the
+#' subjects for a study. The \link{power.cmh.test} function calculates the
 #' required number of subjects per group to achieve a specified power for a
 #' Cochran-Mantel-Haenszel test. The user can select from various methods found
 #' in literature.

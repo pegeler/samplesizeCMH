@@ -184,8 +184,6 @@
 #' Woolson, R. F., Bean, J. A., and P. B. Rojas. (1986).
 #' "Sample size for case-control studies using Cochran's statistic."
 #' \emph{Biometrics} \strong{42}: 927-932.
-#'
-#' @export
 samplesize.cmh.test <- function(
   p1 = NULL,
   p2 = NULL,
