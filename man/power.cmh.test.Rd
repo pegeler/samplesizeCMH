@@ -5,8 +5,8 @@
 \title{Power and sample size calculation for the Cochran-Mantel-Haenszel test}
 \usage{
 power.cmh.test(p1 = NULL, p2 = NULL, theta = NULL, N = NULL,
-  sig.level = 0.05, power = 0.8, alternative = c("two.sided",
-  "one.sided"), s = 0.5, t = 1/J, method = c("cc.binomial", "binomial",
+  sig.level = 0.05, power = 0.8, alternative = c("two.sided", "less",
+  "greater"), s = 0.5, t = 1/J, method = c("cc.binomial", "binomial",
   "unstratified"))
 }
 \arguments{
@@ -22,7 +22,9 @@ power.cmh.test(p1 = NULL, p2 = NULL, theta = NULL, N = NULL,
 
 \item{power}{Power of test (1 minus Type II error probability).}
 
-\item{alternative}{Two- or one-sided test. Can be abbreviated.}
+\item{alternative}{Two- or one-sided test. If one-sided, the direction of the
+association must be defined (less than 1 or greater than 1). Can be
+abbreviated.}
 
 \item{s}{Proportion (weight) of case versus control in \emph{J} stratum.}
 
@@ -55,6 +57,8 @@ literature.
 Terminology and symbolic conventions are borrowed from Woolson \emph{et al.}
 (1986). The \code{p1} group is dubbed the \emph{Case} group and \code{p2}
 group is called the \emph{Control} group.
+
+Power is solved iteratively.
 }
 \section{Arguments}{
 

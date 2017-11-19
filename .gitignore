@@ -1,9 +1,10 @@
 .Rproj.user
 .Rhistory
 .RData
-inst/doc
-inst/journal/author-guide.pdf
-inst/journal/Instructions
-inst/debug/
+RBuildIgnore/journal/
+RBuildIgnore/debug/
 .dropbox
 vignettes/refs/
+vignettes/*.R
+vignettes/*.html
+vignettes/.*

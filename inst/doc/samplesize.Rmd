@@ -66,7 +66,7 @@ sample_size_unstratified <- power.cmh.test(
   theta = 3,
   power = 0.9,
   t = c(0.10,0.40,0.35,0.15),
-  alternative = "greater",
+  alternative = "one",
   method = "unstratified"
 )
 
@@ -85,7 +85,7 @@ sample_size_binomial <- power.cmh.test(
   theta = 3,
   power = 0.9,
   t = c(0.10,0.40,0.35,0.15),
-  alternative = "greater",
+  alternative = "one",
   method = "bin"
 )
 
@@ -105,7 +105,7 @@ sample_size_corrected <- power.cmh.test(
   theta = 3,
   power = 0.9,
   t = c(0.10,0.40,0.35,0.15),
-  alternative = "greater",
+  alternative = "one",
   method = "cc.bin"
 )
 
@@ -129,7 +129,7 @@ power.cmh.test(
   theta = 3,
   power = 0.9,
   t = c(0.10,0.40,0.35,0.15),
-  alternative = "greater",
+  alternative = "one",
   method = "cc.bin"
 )
 ```

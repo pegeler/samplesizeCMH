@@ -66,7 +66,9 @@
 #' @param N Total number of subjects.
 #' @param sig.level Significance level (Type I error probability).
 #' @param power Power of test (1 minus Type II error probability).
-#' @param alternative Two- or one-sided test. Can be abbreviated.
+#' @param alternative Two- or one-sided test. If one-sided, the direction of the
+#'   association must be defined (less than 1 or greater than 1). Can be
+#'   abbreviated.
 #' @param s Proportion (weight) of case versus control in \emph{J} stratum.
 #' @param t Proportion (weight) of total number of cases of \emph{J} stratum.
 #' @param method Method for calculation of sample size. Can be abbreviated. (See
@@ -104,11 +106,11 @@
 #'   theta = 3,
 #'   power = 0.9,
 #'   t = c(0.10,0.40,0.35,0.15),
-#'   alternative = "one",
+#'   alternative = "greater",
 #'   method = "bin"
 #' )
 #'
-#' sample_size_uncorrected
+#' print(sample_size_uncorrected, detail = FALSE)
 #'
 #' # We see that the N is 171, the same as calculated by Nam
 #' sample_size_uncorrected$N
@@ -120,11 +122,11 @@
 #'   theta = 3,
 #'   power = 0.9,
 #'   t = c(0.10,0.40,0.35,0.15),
-#'   alternative = "one",
+#'   alternative = "greater",
 #'   method = "cc.bin"
 #' )
 #'
-#' sample_size_corrected
+#' print(sample_size_corrected, n.frac = TRUE)
 #'
 #' # We see that the N is indeed equal to that which is reported in the paper
 #' sample_size_corrected$N
@@ -141,8 +143,8 @@
 #' comparison of stratified and unstratified analyses."
 #' \emph{Biometrics} \strong{48}: 389-395.
 #'
-#' Wittes, J. and S. Wallenstein. (1987). "The power of the Mantel-Haensel test."
-#' \emph{Journal of the American Statistical Association} \strong{82}:
+#' Wittes, J. and S. Wallenstein. (1987). "The power of the Mantel-Haensel
+#' test." \emph{Journal of the American Statistical Association} \strong{82}:
 #' 1104-1109.
 #'
 #' Woolson, R. F., Bean, J. A., and P. B. Rojas. (1986).
@@ -157,7 +159,7 @@ power.cmh.test <- function(
   N = NULL,
   sig.level = 0.05,
   power = 0.80,
-  alternative = c("two.sided","one.sided"),
+  alternative = c("two.sided","less","greater"),
   s = 0.5,
   t = 1 / J,
   method = c(
@@ -179,14 +181,19 @@ power.cmh.test <- function(
   # Determine the method of calculation to use
   method <- match.arg(method)
   methods <- c(
-    "cc.binomial" = "Continuity corrected weighted difference between two binomial distributions",
-    "binomial" = "Weighted difference between two binomial distributions (Case-Control)",
-    "unstratified" = "Unstratified (ignoring confounding variable)"
+    "cc.binomial" = paste(
+      "Continuity corrected weighted difference",
+      "between two binomial distributions"),
+    "binomial" =
+      "Weighted difference between two binomial distributions (Case-Control)",
+    "unstratified" =
+      "Unstratified (ignoring confounding variable)"
   )
 
   # Determine upper, lower, or two-sided hypothesis
   alternative <- match.arg(alternative)
   tside <- switch(alternative, two.sided = 2, 1)
+  lower.tail <- switch(alternative, less = TRUE, FALSE)
 
   # Infer J from vector lengths of first three args
   J <- max(sapply(list(p1,p2,theta),length))
@@ -212,78 +219,117 @@ power.cmh.test <- function(
     p2 <- effect.size(p1,theta)
   }
 
+  if (all(theta == 1)) {
+    stop(
+      "Effect size ('theta') is 1 across all strata.\n",
+      "Calculation cannot be performed.\n"
+    )
+  }
+  if (!all(theta >= 1) && !all(theta <= 1)) {
+    message("NOTE: Effect size ('theta') differs in direction across strata.")
+  }
   if (!isTRUE(all.equal(min(as.vector(theta)), max(as.vector(theta))))) {
-    warning("'theta' differs among groups. This may violate assumptions.\n")
+    message("NOTE: Effect size ('theta') is not consistent between strata.")
   }
 
   # Calculate z values for alpha and beta
-  z_a <- stats::qnorm(sig.level / tside)
-  z_b <- stats::qnorm(1 - power)
+  z_a <- stats::qnorm(sig.level / tside, lower.tail = lower.tail)
 
   # Set up the different calcualtions based on method
-  calculations <- list(
-    "cc.binomial" = quote({
-      pbar <- p1 * s + p2 * (1 - s)
+  calculations <-
+    list(
+      sample.size = list(
+        "cc.binomial" = quote({
+          N_uncorrected <- eval(calculations[["sample.size"]][["binomial"]])
 
-      X <- sum(t * s * (1 - s) * pbar * (1 - pbar))
+          if (!lower.tail)
+            (1 + sqrt(1 + 2 / (abs(Z) * N_uncorrected) ))^2 * N_uncorrected / 4
+          else
+            (1 + sqrt(1 - 2 / (Z * N_uncorrected) ))^2 * N_uncorrected / 4
+        }),
+        "binomial" = quote({
+          pbar <- p1 * s + p2 * (1 - s)
 
-      Y <- sum(t * s * (1 - s) * ((1 - s) * p1 * (1 - p1) + s * p2 * (1 - p2)))
+          X <- sum(t * s * (1 - s) * pbar * (1 - pbar))
 
-      Z <- sum(t * s * (1 - s) * (p1 - p2))
+          Y <- sum(t * s * (1 - s) * ((1 - s) * p1 * (1 - p1) + s * p2 * (1 - p2)))
 
-      (1 + sqrt(1 + 2 / (Z * ((z_a * sqrt(X) + z_b * sqrt(Y))^2 / Z^2)) ))^2 *
-        ((z_a * sqrt(X) + z_b * sqrt(Y))^2 / Z^2) / 4
-    }),
-    "binomial" = quote({
-      pbar <- p1 * s + p2 * (1 - s)
+          Z <- sum(t * s * (1 - s) * (p1 - p2))
 
-      X <- sum(t * s * (1 - s) * pbar * (1 - pbar))
+          (z_a * sqrt(X) + z_b * sqrt(Y))^2 / Z^2
+        }),
+        "unstratified" =  quote({
+          sum_ts <- sum(t * s)
 
-      Y <- sum(t * s * (1 - s) * ((1 - s) * p1 * (1 - p1) + s * p2 * (1 - p2)))
+          sum_t1ms <- sum(t * (1 - s))
 
-      Z <- sum(t * s * (1 - s) * (p1 - p2))
+          p2p <- sum(t * (1 - s) * p2 / sum_t1ms)
 
-      (z_a * sqrt(X) + z_b * sqrt(Y))^2 / Z^2
-    }),
-    "unstratified" =  quote({
-      sum_ts <- sum(t * s)
+          p1p <- sum(t * s * p1 / sum_ts) # Note to confirm
 
-      sum_t1ms <- sum(t * (1 - s))
+          ppp <- p1p * sum_ts + p2p * sum_t1ms
 
-      p2p <- sum(t * (1 - s) * p2 / sum_t1ms)
+          (z_a * sqrt(sum_ts * sum_t1ms * ppp * (1 - ppp)) +
+           z_b * sqrt(sum_ts^2 * sum_t1ms^2 *
+          (p1p * (1 - p1p) / sum_ts + p2p * (1 - p2p) / sum_t1ms)))^2 /
+          ((p1p - p2p) * sum_ts * sum_t1ms)^2
 
-      p1p <- sum(t * s * p1 / sum_ts) # Note to confirm
+        })
+      ),
+      power = list(
+        "cc.binomial" = quote({
+          std_dev <- sqrt(
+            sum(t * s * (1 - s) * ((1 - s) * p1 * (1 - p1) + s * p2 * (1 - p2)))
+          )
 
-      ppp <- p1p * sum_ts + p2p * sum_t1ms
+          pbar <- p1 * s + p2 * (1 - s)
 
-      (z_a * sqrt(sum_ts * sum_t1ms * ppp * (1 - ppp)) +
-       z_b * sqrt(sum_ts^2 * sum_t1ms^2 *
-      (p1p * (1 - p1p) / sum_ts + p2p * (1 - p2p) / sum_t1ms)))^2 /
-      ((p1p - p2p) * sum_ts * sum_t1ms)^2
+          phi <- pbar * (1 - pbar) + (p1 - p2)^2 * s * (1 - s) / (N * t - 1)
 
-    })
-  )
+          numerator <-
+            if (alternative == "two.sided") {
+              abs(sqrt(N) * sum(t * s * (1 - s) * (p1 - p2)) -
+                     z_a * sqrt(sum(t * s * (1 - s) * phi))) - 0.5
+            } else {
+              # Do I need to change sign for lesser?
+              (sqrt(N) * sum(t * s * (1 - s) * (p1 - p2)) -
+                  z_a * sqrt(sum(t * s * (1 - s) * phi))) - 0.5
+            }
+
+          pnorm(numerator / std_dev, lower.tail = !lower.tail)
+        }),
+        "binomial" = quote({
+          std_dev <- sqrt(
+            sum(t * s * (1 - s) * ((1 - s) * p1 * (1 - p1) + s * p2 * (1 - p2)))
+            )
+
+          pbar <- p1 * s + p2 * (1 - s)
+
+          phi <- pbar * (1 - pbar) + (p1 - p2)^2 * s * (1 - s) / (N * t - 1)
+
+          numerator <-
+            if (alternative == "two.sided") {
+              abs(sqrt(N) * sum(t * s * (1 - s) * (p1 - p2)) -
+                     z_a * sqrt(sum(t * s * (1 - s) * phi)))
+            } else {
+              sqrt(N) * sum(t * s * (1 - s) * (p1 - p2)) -
+                  z_a * sqrt(sum(t * s * (1 - s) * phi))
+            }
+
+          pnorm(numerator / std_dev, lower.tail = !lower.tail)
+        }),
+        "unstratified" =  quote({
+          stop("Under construction")
+        })
+      )
+    )
 
   # Run the calculation
   if (is.null(N)) {
-    N <- eval(calculations[[method]])
+    z_b <- stats::qnorm(1 - power, lower.tail = lower.tail)
+    N <- eval(calculations[["sample.size"]][[method]])
   } else {
-    power <-
-      try(
-        1 - stats::pnorm(
-          stats::uniroot(
-            function(z_b) eval(calculations[[method]]) - N,
-            c(-10^6,0),
-            extendInt = "downX"
-          )$root
-        ),
-        silent = TRUE
-      )
-
-    if (inherits(power, "try-error")) {
-      power <- NA
-      warning("Could not calculate 'power'")
-    }
+    power <- eval(calculations[["power"]][[method]])
   }
 
   # Return an object of class "power.cmh"
@@ -307,11 +353,11 @@ print.power.cmh <- function(x, detail = TRUE, n.frac = FALSE, ...) {
     cat(
       "Power and sample size calculation for the Cochran Mantel Haenszel test\n\n",
 
-      "                 N = ",N,"\n",
+      "                 N = ",ceiling(N),"\n",
       "       Effective N = ",N.effective,"\n",
       "Significance level = ",sig.level,"\n",
       "             Power = ",power,"\n",
-      "             Sides = ",alternative,"\n\n",
+      "       Alternative = ",alternative,"\n\n",
       sep = ""
     )
 

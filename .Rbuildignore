@@ -3,9 +3,5 @@
 ^\.git.*
 ^\.dropbox$
 ^vignettes/refs$
-^vignettes/samplesizeCMH.Rmd$
-^inst/journal$
-^inst/debug$
-^R/samplesize.cmh.test.r$
-^R/contraceptives.r$
+^RBuildIgnore$
 ^data-raw$

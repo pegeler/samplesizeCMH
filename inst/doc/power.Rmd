@@ -28,7 +28,7 @@ Let $X$ = sex, $Y$ = survival, and $Z$ = class. Just as was performed in the int
 ```{r partial-tables}
 data(Titanic, package = "datasets")
 partial_tables <- margin.table(Titanic, c(2,4,1))
-ftable(partial_tables)
+partial_tables
 ```
 
 ### The Test Statistic
@@ -36,6 +36,8 @@ ftable(partial_tables)
 Performing a CMH test on the partial tables above shows that there is strong evidence that the common odds ratio is greater than one.
 
 ```{r mantelhaen}
+library(stats)
+
 mantelhaen.test(partial_tables)
 ```
 
@@ -47,8 +49,8 @@ Using the `power.cmh.test()`{.r} function, we may calculate the probability that
 library(samplesizeCMH)
 
 power.cmh.test(
-  p1 = apply(partial_tables, 3, prop.table, 2)[1,],
-  p2 = apply(partial_tables, 3, prop.table, 2)[3,],
+  p1 = partial_tables[1,1,] / apply(partial_tables[,1,],2,sum),
+  p2 = partial_tables[1,2,] / apply(partial_tables[,2,],2,sum),
   N = sum(Titanic),
   power = NULL,
   s = apply(partial_tables[,1,],2,sum) / apply(partial_tables,3,sum),
@@ -65,7 +67,7 @@ It does not make sense to calculate power in a study when the null hypothesis is
 
 ```{r contraceptives-display}
 data(contraceptives, package = "samplesizeCMH")
-ftable(contraceptives)
+contraceptives
 ```
 
 
@@ -89,7 +91,7 @@ power_list <- vpower(
   power = NULL,
   s = 1/11,
   t = apply(contraceptives, 3, sum) / sum(contraceptives),
-  alternative = "greater"
+  alternative = "one"
 )
 
 powers <- sapply(power_list, "[[", "power")
