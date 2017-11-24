@@ -1,6 +1,6 @@
 Package: samplesizeCMH
 Title: Power and Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test
-Version: 0.0.0.9001
+Version: 0.0.0
 Authors@R: c(
     person("Paul", "Egeler", email = "paul.egeler@spectrumhealth.org", role = c("aut", "cre")),
     person("Spectrum Health, Grand Rapids, MI", role = "cph"))

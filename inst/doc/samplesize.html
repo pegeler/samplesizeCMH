@@ -74,16 +74,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<!--
-May someday want output:
-  pdf_document
-  rmarkdown::html_vignette
-  word_document
--->
 <div id="background" class="section level2">
 <h2>Background</h2>
 <p>The first method to estimate sample size for the CMH test was introduced by <span class="citation">Gail (1973)</span> using a least squares method. <span class="citation">Munoz and Rosner (1984)</span> later produced sample size estimators useful in the special case when both margins are fixed. However, this is often not the case in retrospective case-control designs. As such, <span class="citation">Woolson, Bean, and Rojas (1986)</span> introduced a calculation using the weighted difference between two binomial distributions, which assumes only one margin to be fixed. This was corroborated by <span class="citation">Wittes and Wallenstein (1987)</span> in their paper a year later. Later still, <span class="citation">Nam (1992)</span> improved upon that calculation by introducing a coefficient to address continuity corrected CMH tests.</p>
-<p>The methods included in the package are based on calculations derived by <span class="citation">Woolson, Bean, and Rojas (1986)</span> for uncorrected statistics and <span class="citation">Nam (1992)</span> for continuity corrected statistics. A slightly more precise power calculation is used based on <span class="citation">Wittes and Wallenstein (1987)</span>, but it is functionally equivalent to the calculation by <span class="citation">Woolson, Bean, and Rojas (1986)</span>. <!--Power was solved for algebraicly based on those works.--></p>
+<p>The methods included in the package are based on calculations derived by <span class="citation">Woolson, Bean, and Rojas (1986)</span> for uncorrected statistics and <span class="citation">Nam (1992)</span> for continuity corrected statistics. A slightly more precise power calculation is used based on <span class="citation">Wittes and Wallenstein (1987)</span>, but it is functionally equivalent to the calculation by <span class="citation">Woolson, Bean, and Rojas (1986)</span>.</p>
 </div>
 <div id="the-research-question" class="section level2">
 <h2>The Research Question</h2>

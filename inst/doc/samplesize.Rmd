@@ -10,18 +10,12 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-<!--
-May someday want output:
-  pdf_document
-  rmarkdown::html_vignette
-  word_document
--->
 
 ## Background
 
 The first method to estimate sample size for the CMH test was introduced by @Gail1973 using a least squares method. @Munoz1984 later produced sample size estimators useful in the special case when both margins are fixed. However, this is often not the case in retrospective case-control designs. As such, @Woolson1986 introduced a calculation using the weighted difference between two binomial distributions, which assumes only one margin to be fixed. This was corroborated by @Wittes1987 in their paper a year later. Later still, @Nam1992 improved upon that calculation by introducing a coefficient to address continuity corrected CMH tests.
 
-The methods included in the package are based on calculations derived by @Woolson1986 for uncorrected statistics and @Nam1992 for continuity corrected statistics. A slightly more precise power calculation is used based on @Wittes1987, but it is functionally equivalent to the calculation by @Woolson1986. <!--Power was solved for algebraicly based on those works.-->
+The methods included in the package are based on calculations derived by @Woolson1986 for uncorrected statistics and @Nam1992 for continuity corrected statistics. A slightly more precise power calculation is used based on @Wittes1987, but it is functionally equivalent to the calculation by @Woolson1986. 
 
 ## The Research Question
 

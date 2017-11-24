@@ -243,20 +243,6 @@ power.cmh.test <- function(
 
     phi <- pbar * (1 - pbar) + (p1 - p2)^2 * s * (1 - s) / (N * t - 1)
 
-    ## Correction procedure according to Wittes and Wallenstein
-    ## DOES NOT RETURN CORRECT NUMBERS!!!
-    # numerator <-
-    #   sqrt(N) * sum(t * s * (1 - s) * (p1 - p2)) -
-    #   z_a * sqrt(sum(t * s * (1 - s) * phi))
-    #
-    # if (alternative == "two.sided")
-    #   numerator <- abs(numerator)
-    #
-    # U <-
-    #   (numerator - ifelse(!correct,0,ifelse(alternative == "less",-0.5,0.5))) /
-    #   std_dev
-
-    ## Alternate attempt to get numbers in Table 3 of Wittes & Wallenstein
     Eg <- sum(N * t * s * (1 - s) * (p1 - p2))
     numerator <- (
       ifelse(alternative == "two.sided", abs(Eg), Eg) +
@@ -265,25 +251,7 @@ power.cmh.test <- function(
 
     U <- numerator / std_dev
 
-    ## Woolson, Rojas, & Bean
-    # numerator <- sqrt(N) * Z - z_a * sqrt(X) -
-    #   ifelse(!correct,0,ifelse(alternative == "less",-0.5,0.5))
-    #
-    # if (alternative == "two.sided")
-    #   numerator <- abs(numerator)
-    #
-    # U <- numerator / sqrt(Y)
-
     power <- stats::pnorm(U, lower.tail = !lower.tail)
-
-    ## Debugging
-    # cat(
-    #   "Numerator  : ", numerator, "\n",
-    #   "Denominator: ", std_dev, "\n",
-    #   "U          : ", U, "\n",
-    #   "Power      : ", power, "\n",
-    #   sep = ""
-    #   )
 
     # Splitting N into groups
     n1 <- round(N*t*s,0)

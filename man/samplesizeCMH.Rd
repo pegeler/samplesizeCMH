@@ -25,10 +25,9 @@ often used for case-control studies.
 
 Given a target power which the researcher would like to achieve, a
 calculation can be performed in order to estimate the appropriate number of
-subjects for a study. The \code{\link{power.cmh.test}} function calculates the
-required number of subjects per group to achieve a specified power for a
-Cochran-Mantel-Haenszel test. The user can select from various methods found
-in literature.
+subjects for a study. The \code{\link{power.cmh.test}} function calculates
+the required number of subjects per group to achieve a specified power for a
+Cochran-Mantel-Haenszel test.
 }
 
 \section{Power Calculation}{
@@ -37,7 +36,7 @@ in literature.
 Researchers interested in estimating the probability of detecting a true
 positive result from an inferential test must perform a power calculation
 using a known sample size, effect size, significance level, \emph{et cetera}.
-The \code{\link{power.cmh.test}} fuction can compute the power of a CMH test, given
-parameters from the experiment.
+The \code{\link{power.cmh.test}} fuction can compute the power of a CMH test,
+given parameters from the experiment.
 }
 

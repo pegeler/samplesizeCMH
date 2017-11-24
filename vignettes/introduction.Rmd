@@ -10,12 +10,6 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-<!--
-May someday want output:
-  pdf_document
-  rmarkdown::html_vignette
-  word_document
--->
 
 ## Introduction
 
