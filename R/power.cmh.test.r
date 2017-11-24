@@ -274,7 +274,7 @@ power.cmh.test <- function(
     #
     # U <- numerator / sqrt(Y)
 
-    power <- pnorm(U, lower.tail = !lower.tail)
+    power <- stats::pnorm(U, lower.tail = !lower.tail)
 
     ## Debugging
     # cat(

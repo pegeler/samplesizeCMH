@@ -6,8 +6,7 @@
 \usage{
 power.cmh.test(p1 = NULL, p2 = NULL, theta = NULL, N = NULL,
   sig.level = 0.05, power = 0.8, alternative = c("two.sided", "less",
-  "greater"), s = 0.5, t = 1/J, method = c("cc.binomial", "binomial",
-  "unstratified"))
+  "greater"), s = 0.5, t = 1/J, correct = TRUE)
 }
 \arguments{
 \item{p1}{Vector of proportions of the \emph{J} case groups.}
@@ -30,14 +29,13 @@ abbreviated.}
 
 \item{t}{Proportion (weight) of total number of cases of \emph{J} stratum.}
 
-\item{method}{Method for calculation of sample size. Can be abbreviated. (See
-\strong{Methods} section.)}
+\item{correct}{Logical indicating whether to apply continuity correction.}
 }
 \value{
 An object of class \code{"power.cmh"}: a list of the original arguments and
 the calculated sample size or power. Also included are vectors of n's per
-each group, a short description of the calculation method used, the original
-function call, and \code{N.effective}.
+each group, an indicator or whether continuity correction was used, the
+original function call, and \code{N.effective}.
 
 The vectors of n's per each group, \code{n1} and \code{n2}, are the
 fractional n's required to achieve a final total N specified by the
@@ -50,15 +48,26 @@ nearest whole number.
 \description{
 Compute the post-hoc power or required number of subjects for the
 Cochran-Mantel-Haenszel test for association in \emph{J} stratified 2 x 2
-tables. The calculations can be performed using various methods found in
-literature.
+tables.
 }
 \details{
+This sample size calculation is based on the derivations described in the
+Woolson \emph{et al.} (1986). It is designed for case-control studies where
+one margin is fixed. The method is "based on the Cochran-Mantel-Haenszel
+statistic expressed as a weighted difference in binomial proportions."
+
+Continuity corrected sample size is described in Nam's 1992 paper. This uses
+the weighted binomial sample size calculation described in Woolson \emph{et
+al.} (1986) but is enhanced for use with the continuity corrected Cochran's
+test.
+
+Power calculations are based on the writings of Wittes and Wallenstein
+(1987). They are functionally equivalent to the derivations of the sample
+size calculation desribed by Woolson and others and Nam.
+
 Terminology and symbolic conventions are borrowed from Woolson \emph{et al.}
 (1986). The \code{p1} group is dubbed the \emph{Case} group and \code{p2}
 group is called the \emph{Control} group.
-
-Power is solved iteratively.
 }
 \section{Arguments}{
 
@@ -83,34 +92,6 @@ arguments.
 }
 }
 
-\section{Methods}{
-
-
-\describe{
-
-  \item{\code{cc.binomial}}{
-    Continuity corrected weighted binomial sample size estimator described
-    in the Nam (1992). This uses the weighted binomial sample size
-    calculation described in Woolson \emph{et al.} (1986) but is enhanced
-    for use with the continuity corrected Cochran's test.
-  }
-
-  \item{\code{binomial}}{
-    This sample size calculation is designed for case-control studies
-    where one margin is fixed. The method is "based on the
-    Cochran-Mantel-Haenszel statistic expressed as a weighted difference in
-    binomial proportions."
-    Described in the Woolson \emph{et al.} (1986).
-  }
-
-  \item{\code{unstratified}}{
-    The use of this method ignores stratification of the \code{J} tables,
-    essentially turning the data into a simple 2 x 2 table for
-    calculation of sample size.
-  }
-}
-}
-
 \examples{
 # From "Sample size determination for case-control studies and the comparison
 # of stratified and unstratified analyses", (Nam 1992). See references.
@@ -122,11 +103,11 @@ sample_size_uncorrected <- power.cmh.test(
   theta = 3,
   power = 0.9,
   t = c(0.10,0.40,0.35,0.15),
-  alternative = "one",
-  method = "bin"
+  alternative = "greater",
+  correct = FALSE
 )
 
-sample_size_uncorrected
+print(sample_size_uncorrected, detail = FALSE)
 
 # We see that the N is 171, the same as calculated by Nam
 sample_size_uncorrected$N
@@ -138,11 +119,11 @@ sample_size_corrected <- power.cmh.test(
   theta = 3,
   power = 0.9,
   t = c(0.10,0.40,0.35,0.15),
-  alternative = "one",
-  method = "cc.bin"
+  alternative = "greater",
+  correct = TRUE
 )
 
-sample_size_corrected
+print(sample_size_corrected, n.frac = TRUE)
 
 # We see that the N is indeed equal to that which is reported in the paper
 sample_size_corrected$N
@@ -160,8 +141,8 @@ Nam, J. (1992). "Sample size determination for case-control studies and the
 comparison of stratified and unstratified analyses."
 \emph{Biometrics} \strong{48}: 389-395.
 
-Wittes, J. and S. Wallenstein. (1987). "The power of the Mantel-Haensel test."
-\emph{Journal of the American Statistical Association} \strong{82}:
+Wittes, J. and S. Wallenstein. (1987). "The power of the Mantel-Haensel
+test." \emph{Journal of the American Statistical Association} \strong{82}:
 1104-1109.
 
 Woolson, R. F., Bean, J. A., and P. B. Rojas. (1986).
