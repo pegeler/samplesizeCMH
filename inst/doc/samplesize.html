@@ -12,7 +12,7 @@
 
 <meta name="author" content="Paul W. Egeler, M.S., GStat" />
 
-<meta name="date" content="2017-11-16" />
+<meta name="date" content="2017-11-24" />
 
 <title>Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test</h1>
 <h4 class="author"><em>Paul W. Egeler, M.S., GStat</em></h4>
-<h4 class="date"><em>2017-11-16</em></h4>
+<h4 class="date"><em>2017-11-24</em></h4>
 
 
 
@@ -83,131 +83,78 @@ May someday want output:
 <div id="background" class="section level2">
 <h2>Background</h2>
 <p>The first method to estimate sample size for the CMH test was introduced by <span class="citation">Gail (1973)</span> using a least squares method. <span class="citation">Munoz and Rosner (1984)</span> later produced sample size estimators useful in the special case when both margins are fixed. However, this is often not the case in retrospective case-control designs. As such, <span class="citation">Woolson, Bean, and Rojas (1986)</span> introduced a calculation using the weighted difference between two binomial distributions, which assumes only one margin to be fixed. This was corroborated by <span class="citation">Wittes and Wallenstein (1987)</span> in their paper a year later. Later still, <span class="citation">Nam (1992)</span> improved upon that calculation by introducing a coefficient to address continuity corrected CMH tests.</p>
-<p>The methods included in the package are as follows:</p>
-<dl>
-<dt><code>cc.binomial</code></dt>
-<dd>Continuity corrected weighted binomial sample size estimator described in the <span class="citation">Nam (1992)</span>. This uses the weighted binomial sample size calculation described in <span class="citation">Woolson, Bean, and Rojas (1986)</span> but is enhanced for use with the continuity corrected Cochran’s test.
-</dd>
-<dt><code>binomial</code></dt>
-<dd>This sample size calculation is designed for case-control studies where one margin is fixed. The method is “based on the Cochran-Mantel-Haenszel statistic expressed as a weighted difference in binomial proportions.” Described in the <span class="citation">Woolson, Bean, and Rojas (1986)</span>.
-</dd>
-<dt><code>unstratified</code></dt>
-<dd>The use of this method ignores stratification of the <span class="math inline">\(J\)</span> tables, essentially turning the data into a simple 2 <span class="math inline">\(\times\)</span> 2 table for calculation of sample size. This is the same as calculating sample size for the marginal table.
-</dd>
-</dl>
+<p>The methods included in the package are based on calculations derived by <span class="citation">Woolson, Bean, and Rojas (1986)</span> for uncorrected statistics and <span class="citation">Nam (1992)</span> for continuity corrected statistics. A slightly more precise power calculation is used based on <span class="citation">Wittes and Wallenstein (1987)</span>, but it is functionally equivalent to the calculation by <span class="citation">Woolson, Bean, and Rojas (1986)</span>. <!--Power was solved for algebraicly based on those works.--></p>
 </div>
 <div id="the-research-question" class="section level2">
 <h2>The Research Question</h2>
 <p>Starting with the example first used by <span class="citation">Woolson, Bean, and Rojas (1986)</span> and then revisited by <span class="citation">Nam (1992)</span>, we will explore the usage of the central function of the <code class="sourceCode r">samplesizeCMH</code> package, the <code class="sourceCode r"><span class="kw">power.cmh.test</span>()</code> function.</p>
-<p>This was a case–control study which looked at whether there was an association between colon cancer and chlorinated drinking water among males in Iowa, stratified by age. There were four age categories, 20–54 years, 55–69 years, 70–79 years, and 80–84 years; therefore <span class="math inline">\(J\)</span> = 4. The relative proportion of each age group to the total sample is as follows: <span class="math inline">\(t_1\)</span> = 0.10, <span class="math inline">\(t_2\)</span> = 0.40, <span class="math inline">\(t_3\)</span> = 0.35, and <span class="math inline">\(t_4\)</span> = 0.15. The National Collaborative Bladder Cancer Study showed that exposure rate for controls for each age stratum, denoted by <span class="math inline">\(\pi_{2j}\)</span> (where <span class="math inline">\(j\)</span> is the stratum), was <span class="math inline">\(\pi_{21}\)</span> = 0.75, <span class="math inline">\(\pi_{22}\)</span> = 0.70, <span class="math inline">\(\pi_{23}\)</span> = 0.65, and <span class="math inline">\(\pi_{24}\)</span> = 0.60. Level of significance was set at 0.05 and desired power was 90% with an effect size of 3. They matched equal number of cases and controls in each stratum, <em>i.e.</em>, <span class="math inline">\(s_1=s_2=s_3=s_4=\)</span> 0.5.</p>
+<p>This was a case–control study which looked at whether there was an association between colon cancer and chlorinated drinking water among males in Iowa, stratified by age. There were four age categories, 20–54 years, 55–69 years, 70–79 years, and 80–84 years; therefore the number of levels of the stratifying variable <span class="math inline">\(J\)</span> = 4. The relative proportion of each age group to the total sample is as follows: <span class="math inline">\(t_1\)</span> = 0.10, <span class="math inline">\(t_2\)</span> = 0.40, <span class="math inline">\(t_3\)</span> = 0.35, and <span class="math inline">\(t_4\)</span> = 0.15. The National Collaborative Bladder Cancer Study showed that exposure rate for controls for each age stratum, denoted by <span class="math inline">\(\pi_{2j}\)</span> (where the subscript ‘2’ indicates second column proportions and <span class="math inline">\(j\)</span> is the stratum), was <span class="math inline">\(\pi_{21}\)</span> = 0.75, <span class="math inline">\(\pi_{22}\)</span> = 0.70, <span class="math inline">\(\pi_{23}\)</span> = 0.65, and <span class="math inline">\(\pi_{24}\)</span> = 0.60. Level of significance was set at 0.05 and desired power was 90% with an effect size of 3. They matched equal number of cases and controls in each stratum, <em>i.e.</em>, <span class="math inline">\(s_1=s_2=s_3=s_4=\)</span> 0.5.</p>
 </div>
 <div id="calculating-sample-size" class="section level2">
 <h2>Calculating Sample Size</h2>
 <div id="methods" class="section level3">
 <h3>Methods</h3>
-<p>We will go over several calculation methods to compare the usage of the <code class="sourceCode r"><span class="kw">power.cmh.test</span>()</code> function for different data sets and experimental designs.</p>
-<div id="unstratified" class="section level4">
-<h4>Unstratified</h4>
-<p>Suppose that the researchers first decided to ignore the stratification variable in their sample size calculation, <em>i.e.</em>, they intended to perform a <span class="math inline">\(\chi^2\)</span> test on the marginal table. The researcher could use the <code class="sourceCode r">method =<span class="st"> &quot;unstratified&quot;</span></code> argument. We see that the researcher has put in the control exposure proportions as a vector (<code>p2</code>), the effect size has been given (<code>theta</code>), and a vector of relative stratum sizes has been assigned (<code>t</code>). Since there are equal numbers of cases and controls for each group, the <code>s</code> parameter is not required. Only <code>p1</code> and <code>p2</code> <em>or</em> one of the proportions and a <code>theta</code> are required to carry out the calculation. The number of strata (<span class="math inline">\(J\)</span>) is inferred from the maximum vector length of <code>p1</code>, <code>p2</code>, or <code>theta</code>.</p>
+<p>We will go over several variations on the experimental design to explore the usage of the <code class="sourceCode r"><span class="kw">power.cmh.test</span>()</code> function.</p>
+<div id="uncorrected" class="section level4">
+<h4>Uncorrected</h4>
+<p>Suppose that the researchers first decided to use the original CMH calculation, ignoring contnuity correction. As such, the parameter <code>correct</code> is set to <code class="sourceCode r"><span class="ot">FALSE</span></code>. We see that the researcher has put in the control exposure proportions as a vector (<code>p2</code>), the effect size has been given (<code>theta</code>), and a vector of relative stratum sizes has been assigned (<code>t</code>). Since there are equal numbers of cases and controls for each group, the <code>s</code> parameter is not required. Only <code>p1</code> and <code>p2</code> <em>or</em> one of the proportions and a <code>theta</code> are required to carry out the calculation. The number of strata (<span class="math inline">\(J\)</span>) is inferred from the maximum vector length of <code>p1</code>, <code>p2</code>, or <code>theta</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(samplesizeCMH)
 
-sample_size_unstratified &lt;-<span class="st"> </span><span class="kw">power.cmh.test</span>(
+sample_size_uncorrected &lt;-<span class="st"> </span><span class="kw">power.cmh.test</span>(
   <span class="dt">p2 =</span> <span class="kw">c</span>(<span class="fl">0.75</span>,<span class="fl">0.70</span>,<span class="fl">0.65</span>,<span class="fl">0.60</span>),
   <span class="dt">theta =</span> <span class="dv">3</span>,
   <span class="dt">power =</span> <span class="fl">0.9</span>,
   <span class="dt">t =</span> <span class="kw">c</span>(<span class="fl">0.10</span>,<span class="fl">0.40</span>,<span class="fl">0.35</span>,<span class="fl">0.15</span>),
-  <span class="dt">alternative =</span> <span class="st">&quot;one&quot;</span>,
-  <span class="dt">method =</span> <span class="st">&quot;unstratified&quot;</span>
+  <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>,
+  <span class="dt">correct =</span> <span class="ot">FALSE</span>
 )
 
-<span class="kw">print</span>(sample_size_unstratified, <span class="dt">detail =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<span class="kw">print</span>(sample_size_uncorrected, <span class="dt">detail =</span> <span class="ot">FALSE</span>)</code></pre></div>
 <pre><code>## Power and sample size calculation for the Cochran Mantel Haenszel test
 ## 
-##                  N = 171.8814
-##        Effective N = 176
-## Significance level = 0.05
-##              Power = 0.9
-##              Sides = one.sided
-## 
-## CALL: 
-## power.cmh.test(p2 = c(0.75, 0.7, 0.65, 0.6), theta = 3, power = 0.9, 
-##     alternative = &quot;one&quot;, t = c(0.1, 0.4, 0.35, 0.15), method = &quot;unstratified&quot;)
-## 
-## METHOD: Unstratified (ignoring confounding variable)</code></pre>
-<p>Note that the <code class="sourceCode r">detail =<span class="st"> </span><span class="ot">FALSE</span></code> parameter was passed to the <code class="sourceCode r">print</code> method to reduce output.</p>
-</div>
-<div id="weighted-difference-between-binomial-distributions" class="section level4">
-<h4>Weighted Difference between Binomial Distributions</h4>
-<p>The researcher soon realized that failing to consider the confounding variable tends to lead to an underestimation of sample size. Adjusting the code above, an alteration is made to the <code>method</code> parameter, now using the calculation introduced by <span class="citation">Woolson, Bean, and Rojas (1986)</span>. Note that the <code class="sourceCode r"><span class="st">&quot;binomial&quot;</span></code> option has been abbreviated.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sample_size_binomial &lt;-<span class="st"> </span><span class="kw">power.cmh.test</span>(
-  <span class="dt">p2 =</span> <span class="kw">c</span>(<span class="fl">0.75</span>,<span class="fl">0.70</span>,<span class="fl">0.65</span>,<span class="fl">0.60</span>),
-  <span class="dt">theta =</span> <span class="dv">3</span>,
-  <span class="dt">power =</span> <span class="fl">0.9</span>,
-  <span class="dt">t =</span> <span class="kw">c</span>(<span class="fl">0.10</span>,<span class="fl">0.40</span>,<span class="fl">0.35</span>,<span class="fl">0.15</span>),
-  <span class="dt">alternative =</span> <span class="st">&quot;one&quot;</span>,
-  <span class="dt">method =</span> <span class="st">&quot;bin&quot;</span>
-)
-
-sample_size_binomial</code></pre></div>
-<pre><code>## Power and sample size calculation for the Cochran Mantel Haenszel test
-## 
-##                  N = 170.7412
+##                  N = 171
 ##        Effective N = 174
 ## Significance level = 0.05
 ##              Power = 0.9
-##              Sides = one.sided
-## 
-## Number of subjects per each group:
-## ______________________________________
-## Group   |     1      2      3      4 
-## ======================================
-## Case    |     9     35     30     13 
-## Control |     9     35     30     13 
+##        Alternative = greater
 ## 
 ## CALL: 
 ## power.cmh.test(p2 = c(0.75, 0.7, 0.65, 0.6), theta = 3, power = 0.9, 
-##     alternative = &quot;one&quot;, t = c(0.1, 0.4, 0.35, 0.15), method = &quot;bin&quot;)
-## 
-## METHOD: Weighted difference between two binomial distributions (Case-Control)</code></pre>
-<p>In this case, the sample size has decreased slightly with this new calculation method. Meaning that the unstratified calcuation slightly overestimated sample size with respect to the formula proposed by <span class="citation">Woolson, Bean, and Rojas (1986)</span>.</p>
+##     alternative = &quot;greater&quot;, t = c(0.1, 0.4, 0.35, 0.15), correct = FALSE)</code></pre>
+<p>Note that the <code class="sourceCode r">detail =<span class="st"> </span><span class="ot">FALSE</span></code> parameter was passed to the <code class="sourceCode r">print</code> method to reduce output.</p>
 </div>
 <div id="continuity-corrected-estimate" class="section level4">
 <h4>Continuity Corrected Estimate</h4>
-<p>The researcher has now determined that a continuity correction would be appropriate when performing the CMH test (the default of the <code class="sourceCode r"><span class="kw">mantaelhaen.test</span>()</code> is <code class="sourceCode r">correct =<span class="st"> </span><span class="ot">TRUE</span></code>). Another adjustment is made to the <code>method</code> parameter in the code below to take continuity correction into account.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Continuity corrected sample size estimate added by Nam</span>
-sample_size_corrected &lt;-<span class="st"> </span><span class="kw">power.cmh.test</span>(
+<p>After further reading, the researcher has now determined that a continuity correction would be appropriate when performing the CMH test (the default of the <code class="sourceCode r"><span class="kw">mantaelhaen.test</span>()</code> is <code class="sourceCode r">correct =<span class="st"> </span><span class="ot">TRUE</span></code>). The <code>correct</code> parameter in the code below has be flipped to <code class="sourceCode r"><span class="ot">TRUE</span></code> to take continuity correction into account.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sample_size_corrected &lt;-<span class="st"> </span><span class="kw">power.cmh.test</span>(
   <span class="dt">p2 =</span> <span class="kw">c</span>(<span class="fl">0.75</span>,<span class="fl">0.70</span>,<span class="fl">0.65</span>,<span class="fl">0.60</span>),
   <span class="dt">theta =</span> <span class="dv">3</span>,
   <span class="dt">power =</span> <span class="fl">0.9</span>,
   <span class="dt">t =</span> <span class="kw">c</span>(<span class="fl">0.10</span>,<span class="fl">0.40</span>,<span class="fl">0.35</span>,<span class="fl">0.15</span>),
-  <span class="dt">alternative =</span> <span class="st">&quot;one&quot;</span>,
-  <span class="dt">method =</span> <span class="st">&quot;cc.bin&quot;</span>
+  <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>,
+  <span class="dt">correct =</span> <span class="ot">TRUE</span>
 )
 
-sample_size_corrected</code></pre></div>
+<span class="kw">print</span>(sample_size_corrected, <span class="dt">n.frac =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## Power and sample size calculation for the Cochran Mantel Haenszel test
 ## 
 ##                  N = 191.538
 ##        Effective N = 196
 ## Significance level = 0.05
 ##              Power = 0.9
-##              Sides = one.sided
+##        Alternative = greater
 ## 
 ## Number of subjects per each group:
-## ______________________________________
-## Group   |     1      2      3      4 
-## ======================================
-## Case    |    10     39     34     15 
-## Control |    10     39     34     15 
+## ______________________________________________
+## Group   |       1        2        3        4 
+## ==============================================
+## Case    |    9.58    38.31    33.52    14.37 
+## Control |    9.58    38.31    33.52    14.37 
 ## 
 ## CALL: 
 ## power.cmh.test(p2 = c(0.75, 0.7, 0.65, 0.6), theta = 3, power = 0.9, 
-##     alternative = &quot;one&quot;, t = c(0.1, 0.4, 0.35, 0.15), method = &quot;cc.bin&quot;)
-## 
-## METHOD: Continuity corrected weighted difference between two binomial distributions</code></pre>
-<p>We see that the <code>N</code> is indeed equal to that which is reported in the paper by <span class="citation">Nam (1992)</span>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sample_size_corrected$N</code></pre></div>
-<pre><code>## [1] 191.538</code></pre>
+##     alternative = &quot;greater&quot;, t = c(0.1, 0.4, 0.35, 0.15), correct = TRUE)</code></pre>
+<p>We see that the <code>N</code> has increased by <span class="math inline">\(\approx\)</span> 12%, as is expected when continuity correction is taken into account. The <code>n.frac</code> option was used to get fractional n’s, rather than rounding the the next whole number.</p>
 </div>
 <div id="unequal-numbers-of-cases-and-controls" class="section level4">
 <h4>Unequal Numbers of Cases and Controls</h4>
@@ -218,16 +165,16 @@ sample_size_corrected</code></pre></div>
   <span class="dt">theta =</span> <span class="dv">3</span>,
   <span class="dt">power =</span> <span class="fl">0.9</span>,
   <span class="dt">t =</span> <span class="kw">c</span>(<span class="fl">0.10</span>,<span class="fl">0.40</span>,<span class="fl">0.35</span>,<span class="fl">0.15</span>),
-  <span class="dt">alternative =</span> <span class="st">&quot;one&quot;</span>,
-  <span class="dt">method =</span> <span class="st">&quot;cc.bin&quot;</span>
+  <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>,
+  <span class="dt">correct =</span> <span class="ot">TRUE</span>
 )</code></pre></div>
 <pre><code>## Power and sample size calculation for the Cochran Mantel Haenszel test
 ## 
-##                  N = 216.4977
+##                  N = 217
 ##        Effective N = 220
 ## Significance level = 0.05
 ##              Power = 0.9
-##              Sides = one.sided
+##        Alternative = greater
 ## 
 ## Number of subjects per each group:
 ## ______________________________________
@@ -238,10 +185,8 @@ sample_size_corrected</code></pre></div>
 ## 
 ## CALL: 
 ## power.cmh.test(p2 = c(0.75, 0.7, 0.65, 0.6), theta = 3, power = 0.9, 
-##     alternative = &quot;one&quot;, s = 1/3, t = c(0.1, 0.4, 0.35, 0.15), 
-##     method = &quot;cc.bin&quot;)
-## 
-## METHOD: Continuity corrected weighted difference between two binomial distributions</code></pre>
+##     alternative = &quot;greater&quot;, s = 1/3, t = c(0.1, 0.4, 0.35, 0.15), 
+##     correct = TRUE)</code></pre>
 <p>Note that effective N has increased by 24 subjects. The CMH test is at optimum efficiency when <code>s</code> is balanced. Therefore, altering the case/control ratio should be implemented only when there is a compelling reason to do so, such as difficulty in finding cases or prohibitive costs.</p>
 </div>
 </div>

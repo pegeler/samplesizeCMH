@@ -1,19 +1,17 @@
 ## ----partial-tables------------------------------------------------------
 data(Titanic, package = "datasets")
 partial_tables <- margin.table(Titanic, c(2,4,1))
-partial_tables
+ftable(partial_tables)
 
 ## ----mantelhaen----------------------------------------------------------
-library(stats)
-
 mantelhaen.test(partial_tables)
 
 ## ----power---------------------------------------------------------------
 library(samplesizeCMH)
 
 power.cmh.test(
-  p1 = partial_tables[1,1,] / apply(partial_tables[,1,],2,sum),
-  p2 = partial_tables[1,2,] / apply(partial_tables[,2,],2,sum),
+  p1 = apply(partial_tables, 3, prop.table, 2)[1,],
+  p2 = apply(partial_tables, 3, prop.table, 2)[3,],
   N = sum(Titanic),
   power = NULL,
   s = apply(partial_tables[,1,],2,sum) / apply(partial_tables,3,sum),
@@ -23,7 +21,7 @@ power.cmh.test(
 
 ## ----contraceptives-display----------------------------------------------
 data(contraceptives, package = "samplesizeCMH")
-contraceptives
+ftable(contraceptives)
 
 ## ----contraceptives-mh---------------------------------------------------
 mantelhaen.test(contraceptives)
@@ -40,7 +38,7 @@ power_list <- vpower(
   power = NULL,
   s = 1/11,
   t = apply(contraceptives, 3, sum) / sum(contraceptives),
-  alternative = "one"
+  alternative = "greater"
 )
 
 powers <- sapply(power_list, "[[", "power")

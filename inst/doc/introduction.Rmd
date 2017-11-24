@@ -19,7 +19,7 @@ May someday want output:
 
 ## Introduction
 
-The **Cochran-Mantel-Haenszel test** (CMH) is an inferential test for the association between two binary variables, while controlling for a third confounding nominal variable [@Cochran1954; @Mantel1959]. Essentially, the CMH test examines the *weighted* association of a set of 2 $\times$ 2 tables. A common odds ratio relating to the test statistic can also be generated. The CMH test is a common technique in the field of biostatistics, where it is often used for case-control studies.
+The **Cochran-Mantel-Haenszel test** (CMH) is an inferential test for the association between two binary variables, while controlling for a third confounding nominal variable [@Cochran1954; @Mantel1959]. Essentially, the CMH test examines the *weighted* association of a set of 2 $\times$ 2 tables. A common odds ratio relating to the test statistic can also be generated [@Mantel1959]. The CMH test is a common technique in the field of biostatistics, where it is often used for case-control studies.
 
 This introduction briefly describes some of the terminology and concepts surrounding stratified tables. Examples are given which show some basic techniques for working with multidimensional tables in `R`. Functionality of the `samplesizeCMH` package is highlighted where it may augment the analysis.
 
@@ -52,10 +52,17 @@ marginal_table <- margin.table(Titanic, c(2,4))
 marginal_table
 ```
 
-As an aside, we may get the table proportions using the `prop.table()`{.r} function. Because the `Titanic`{.r} dataset is a multidimensional table, it must first be transformed into a two-dimensional table using `margin.table()`{.r} (as was performed above). Failure to do so will produce unexpected results.
+As an aside, we may get the table, row, or column proportions using the `prop.table()`{.r} function. Because the `Titanic`{.r} dataset is a multidimensional table, it must first be transformed into a two-dimensional table using `margin.table()`{.r} (as was performed above). Failure to do so will produce unexpected results.
 
 ```{r prop-table}
+# Table proportions
 prop.table(marginal_table)
+
+# Row proportions
+prop.table(marginal_table, 1)
+
+# Column proportions
+prop.table(marginal_table, 2)
 ```
 
 ## Conditional, Marginal, and Common Odds Ratios
@@ -114,8 +121,6 @@ Obviously this is more informative than a simple marginal odds ratio. Based on w
 We can produce a *common (weighted) odds ratio* using `mantelhaen.test()`{.r} from the `stats`{.r} package. Note that it differs slightly from the marginal odds ratio above since it takes into account the differential sizes of each partial table.
 
 ```{r mantelhaen}
-library(stats)
-
 mantelhaen.test(partial_tables)
 ```
 
@@ -131,7 +136,7 @@ Refer to @Agresti [section 2.7.3] for more information on the content of this se
 
 *Homogeneous association* is when all the odds ratios between binary variables $X$ and $Y$ are equal for all $j$ levels of variable $Z$, such that $$\theta_{XY(1)}=\theta_{XY(2)}=...=\theta_{XY(j)}.$$ [@Agresti section 2.7.6]
 
-The Breslow-Day test can be used to check the null hypothesis that all odds ratios are equal. The Cochran-Mantel-Haenszel test is a special case of the Breslow-Day test wherein the common odds ratio is assumed to be 1. Using the `Titanic` data, we can perform the Breslow-Day test using `BreslowDayTest()`{.r} from the `DescTools`{.r} package.
+The Breslow-Day test can be used to check the null hypothesis that all odds ratios are equal. The Cochran-Mantel-Haenszel test can be thought of as a special case of the Breslow-Day test wherein the common odds ratio is assumed to be 1 (however, the calculations are not equivalent). Using the `Titanic` data, we can perform the Breslow-Day test using `BreslowDayTest()`{.r} from the `DescTools`{.r} package.
 
 ```{r BreslowDay}
 library(DescTools)

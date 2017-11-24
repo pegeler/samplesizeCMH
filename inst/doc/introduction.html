@@ -12,7 +12,7 @@
 
 <meta name="author" content="Paul W. Egeler, M.S., GStat" />
 
-<meta name="date" content="2017-11-16" />
+<meta name="date" content="2017-11-24" />
 
 <title>Introduction to the Cochran-Mantel-Haenszel Test</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Introduction to the Cochran-Mantel-Haenszel Test</h1>
 <h4 class="author"><em>Paul W. Egeler, M.S., GStat</em></h4>
-<h4 class="date"><em>2017-11-16</em></h4>
+<h4 class="date"><em>2017-11-24</em></h4>
 
 
 
@@ -82,7 +82,7 @@ May someday want output:
 -->
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>The <strong>Cochran-Mantel-Haenszel test</strong> (CMH) is an inferential test for the association between two binary variables, while controlling for a third confounding nominal variable <span class="citation">(Cochran 1954; Mantel and Haenszel 1959)</span>. Essentially, the CMH test examines the <em>weighted</em> association of a set of 2 <span class="math inline">\(\times\)</span> 2 tables. A common odds ratio relating to the test statistic can also be generated. The CMH test is a common technique in the field of biostatistics, where it is often used for case-control studies.</p>
+<p>The <strong>Cochran-Mantel-Haenszel test</strong> (CMH) is an inferential test for the association between two binary variables, while controlling for a third confounding nominal variable <span class="citation">(Cochran 1954; Mantel and Haenszel 1959)</span>. Essentially, the CMH test examines the <em>weighted</em> association of a set of 2 <span class="math inline">\(\times\)</span> 2 tables. A common odds ratio relating to the test statistic can also be generated <span class="citation">(Mantel and Haenszel 1959)</span>. The CMH test is a common technique in the field of biostatistics, where it is often used for case-control studies.</p>
 <p>This introduction briefly describes some of the terminology and concepts surrounding stratified tables. Examples are given which show some basic techniques for working with multidimensional tables in <code>R</code>. Functionality of the <code>samplesizeCMH</code> package is highlighted where it may augment the analysis.</p>
 </div>
 <div id="partial-and-marginal-tables" class="section level2">
@@ -137,12 +137,25 @@ marginal_table</code></pre></div>
 ## Sex        No  Yes
 ##   Male   1364  367
 ##   Female  126  344</code></pre>
-<p>As an aside, we may get the table proportions using the <code class="sourceCode r"><span class="kw">prop.table</span>()</code> function. Because the <code class="sourceCode r">Titanic</code> dataset is a multidimensional table, it must first be transformed into a two-dimensional table using <code class="sourceCode r"><span class="kw">margin.table</span>()</code> (as was performed above). Failure to do so will produce unexpected results.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">prop.table</span>(marginal_table)</code></pre></div>
+<p>As an aside, we may get the table, row, or column proportions using the <code class="sourceCode r"><span class="kw">prop.table</span>()</code> function. Because the <code class="sourceCode r">Titanic</code> dataset is a multidimensional table, it must first be transformed into a two-dimensional table using <code class="sourceCode r"><span class="kw">margin.table</span>()</code> (as was performed above). Failure to do so will produce unexpected results.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Table proportions</span>
+<span class="kw">prop.table</span>(marginal_table)</code></pre></div>
 <pre><code>##         Survived
 ## Sex              No        Yes
 ##   Male   0.61971831 0.16674239
 ##   Female 0.05724671 0.15629259</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Row proportions</span>
+<span class="kw">prop.table</span>(marginal_table, <span class="dv">1</span>)</code></pre></div>
+<pre><code>##         Survived
+## Sex             No       Yes
+##   Male   0.7879838 0.2120162
+##   Female 0.2680851 0.7319149</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Column proportions</span>
+<span class="kw">prop.table</span>(marginal_table, <span class="dv">2</span>)</code></pre></div>
+<pre><code>##         Survived
+## Sex              No        Yes
+##   Male   0.91543624 0.51617440
+##   Female 0.08456376 0.48382560</code></pre>
 </div>
 </div>
 <div id="conditional-marginal-and-common-odds-ratios" class="section level2">
@@ -186,9 +199,7 @@ marginal_table</code></pre></div>
 ## 67.088710 44.067692  4.071612 23.263889</code></pre>
 <p>Obviously this is more informative than a simple marginal odds ratio. Based on what we see above, survival by sex appears to vary widely by class, where women in 1<sup>st</sup> class survive at a much higher rate than men, whereas 3<sup>rd</sup> class women had only slightly better chance of survival than their male counterparts.</p>
 <p>We can produce a <em>common (weighted) odds ratio</em> using <code class="sourceCode r"><span class="kw">mantelhaen.test</span>()</code> from the <code class="sourceCode r">stats</code> package. Note that it differs slightly from the marginal odds ratio above since it takes into account the differential sizes of each partial table.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stats)
-
-<span class="kw">mantelhaen.test</span>(partial_tables)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mantelhaen.test</span>(partial_tables)</code></pre></div>
 <pre><code>## 
 ##  Mantel-Haenszel chi-squared test with continuity correction
 ## 
@@ -211,7 +222,7 @@ marginal_table</code></pre></div>
 <div id="homogeneous-associationindependence" class="section level2">
 <h2>Homogeneous Association/Independence</h2>
 <p><em>Homogeneous association</em> is when all the odds ratios between binary variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are equal for all <span class="math inline">\(j\)</span> levels of variable <span class="math inline">\(Z\)</span>, such that <span class="math display">\[\theta_{XY(1)}=\theta_{XY(2)}=...=\theta_{XY(j)}.\]</span> <span class="citation">(Agresti 2002, sec. 2.7.6)</span></p>
-<p>The Breslow-Day test can be used to check the null hypothesis that all odds ratios are equal. The Cochran-Mantel-Haenszel test is a special case of the Breslow-Day test wherein the common odds ratio is assumed to be 1. Using the <code>Titanic</code> data, we can perform the Breslow-Day test using <code class="sourceCode r"><span class="kw">BreslowDayTest</span>()</code> from the <code class="sourceCode r">DescTools</code> package.</p>
+<p>The Breslow-Day test can be used to check the null hypothesis that all odds ratios are equal. The Cochran-Mantel-Haenszel test can be thought of as a special case of the Breslow-Day test wherein the common odds ratio is assumed to be 1 (however, the calculations are not equivalent). Using the <code>Titanic</code> data, we can perform the Breslow-Day test using <code class="sourceCode r"><span class="kw">BreslowDayTest</span>()</code> from the <code class="sourceCode r">DescTools</code> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DescTools)
 
 <span class="kw">BreslowDayTest</span>(<span class="dt">x =</span> partial_tables, <span class="dt">OR =</span> <span class="dv">1</span>)</code></pre></div>

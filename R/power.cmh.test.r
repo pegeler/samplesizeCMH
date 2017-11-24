@@ -3,15 +3,26 @@
 #' @description
 #' Compute the post-hoc power or required number of subjects for the
 #' Cochran-Mantel-Haenszel test for association in \emph{J} stratified 2 x 2
-#' tables. The calculations can be performed using various methods found in
-#' literature.
+#' tables.
 #'
 #' @details
+#' This sample size calculation is based on the derivations described in the
+#' Woolson \emph{et al.} (1986). It is designed for case-control studies where
+#' one margin is fixed. The method is "based on the Cochran-Mantel-Haenszel
+#' statistic expressed as a weighted difference in binomial proportions."
+#'
+#' Continuity corrected sample size is described in Nam's 1992 paper. This uses
+#' the weighted binomial sample size calculation described in Woolson \emph{et
+#' al.} (1986) but is enhanced for use with the continuity corrected Cochran's
+#' test.
+#'
+#' Power calculations are based on the writings of Wittes and Wallenstein
+#' (1987). They are functionally equivalent to the derivations of the sample
+#' size calculation desribed by Woolson and others and Nam.
+#'
 #' Terminology and symbolic conventions are borrowed from Woolson \emph{et al.}
 #' (1986). The \code{p1} group is dubbed the \emph{Case} group and \code{p2}
 #' group is called the \emph{Control} group.
-#'
-#' Power is solved iteratively.
 #'
 #' @section Arguments:
 #'
@@ -34,32 +45,6 @@
 #'     }
 #' }
 #'
-#' @section Methods:
-#'
-#' \describe{
-#'
-#'   \item{\code{cc.binomial}}{
-#'     Continuity corrected weighted binomial sample size estimator described
-#'     in the Nam (1992). This uses the weighted binomial sample size
-#'     calculation described in Woolson \emph{et al.} (1986) but is enhanced
-#'     for use with the continuity corrected Cochran's test.
-#'   }
-#'
-#'   \item{\code{binomial}}{
-#'     This sample size calculation is designed for case-control studies
-#'     where one margin is fixed. The method is "based on the
-#'     Cochran-Mantel-Haenszel statistic expressed as a weighted difference in
-#'     binomial proportions."
-#'     Described in the Woolson \emph{et al.} (1986).
-#'   }
-#'
-#'   \item{\code{unstratified}}{
-#'     The use of this method ignores stratification of the \code{J} tables,
-#'     essentially turning the data into a simple 2 x 2 table for
-#'     calculation of sample size.
-#'   }
-#' }
-#'
 #' @param p1 Vector of proportions of the \emph{J} case groups.
 #' @param p2 Vector of proportions of the \emph{J} control groups.
 #' @param theta Vector of odds ratios relating to the \emph{J} 2 x 2 tables.
@@ -71,14 +56,13 @@
 #'   abbreviated.
 #' @param s Proportion (weight) of case versus control in \emph{J} stratum.
 #' @param t Proportion (weight) of total number of cases of \emph{J} stratum.
-#' @param method Method for calculation of sample size. Can be abbreviated. (See
-#'   \strong{Methods} section.)
+#' @param correct Logical indicating whether to apply continuity correction.
 #'
 #' @return
 #' An object of class \code{"power.cmh"}: a list of the original arguments and
 #' the calculated sample size or power. Also included are vectors of n's per
-#' each group, a short description of the calculation method used, the original
-#' function call, and \code{N.effective}.
+#' each group, an indicator or whether continuity correction was used, the
+#' original function call, and \code{N.effective}.
 #'
 #' The vectors of n's per each group, \code{n1} and \code{n2}, are the
 #' fractional n's required to achieve a final total N specified by the
@@ -107,7 +91,7 @@
 #'   power = 0.9,
 #'   t = c(0.10,0.40,0.35,0.15),
 #'   alternative = "greater",
-#'   method = "bin"
+#'   correct = FALSE
 #' )
 #'
 #' print(sample_size_uncorrected, detail = FALSE)
@@ -123,7 +107,7 @@
 #'   power = 0.9,
 #'   t = c(0.10,0.40,0.35,0.15),
 #'   alternative = "greater",
-#'   method = "cc.bin"
+#'   correct = TRUE
 #' )
 #'
 #' print(sample_size_corrected, n.frac = TRUE)
@@ -162,11 +146,7 @@ power.cmh.test <- function(
   alternative = c("two.sided","less","greater"),
   s = 0.5,
   t = 1 / J,
-  method = c(
-    "cc.binomial",
-    "binomial",
-    "unstratified"
-    )
+  correct = TRUE
   ) {
 
   # Process the expected proportions and/or effect size
@@ -177,18 +157,6 @@ power.cmh.test <- function(
   if (sum(sapply(list(N, power),is.null)) != 1L) {
     stop("either 'N'or 'power' must be NULL")
   }
-
-  # Determine the method of calculation to use
-  method <- match.arg(method)
-  methods <- c(
-    "cc.binomial" = paste(
-      "Continuity corrected weighted difference",
-      "between two binomial distributions"),
-    "binomial" =
-      "Weighted difference between two binomial distributions (Case-Control)",
-    "unstratified" =
-      "Unstratified (ignoring confounding variable)"
-  )
 
   # Determine upper, lower, or two-sided hypothesis
   alternative <- match.arg(alternative)
@@ -232,104 +200,98 @@ power.cmh.test <- function(
     message("NOTE: Effect size ('theta') is not consistent between strata.")
   }
 
-  # Calculate z values for alpha and beta
+  # Calculate z value for alpha
   z_a <- stats::qnorm(sig.level / tside, lower.tail = lower.tail)
 
-  # Set up the different calcualtions based on method
-  calculations <-
-    list(
-      sample.size = list(
-        "cc.binomial" = quote({
-          N_uncorrected <- eval(calculations[["sample.size"]][["binomial"]])
-
-          if (!lower.tail)
-            (1 + sqrt(1 + 2 / (abs(Z) * N_uncorrected) ))^2 * N_uncorrected / 4
-          else
-            (1 + sqrt(1 - 2 / (Z * N_uncorrected) ))^2 * N_uncorrected / 4
-        }),
-        "binomial" = quote({
-          pbar <- p1 * s + p2 * (1 - s)
-
-          X <- sum(t * s * (1 - s) * pbar * (1 - pbar))
-
-          Y <- sum(t * s * (1 - s) * ((1 - s) * p1 * (1 - p1) + s * p2 * (1 - p2)))
-
-          Z <- sum(t * s * (1 - s) * (p1 - p2))
-
-          (z_a * sqrt(X) + z_b * sqrt(Y))^2 / Z^2
-        }),
-        "unstratified" =  quote({
-          sum_ts <- sum(t * s)
-
-          sum_t1ms <- sum(t * (1 - s))
-
-          p2p <- sum(t * (1 - s) * p2 / sum_t1ms)
-
-          p1p <- sum(t * s * p1 / sum_ts) # Note to confirm
-
-          ppp <- p1p * sum_ts + p2p * sum_t1ms
-
-          (z_a * sqrt(sum_ts * sum_t1ms * ppp * (1 - ppp)) +
-           z_b * sqrt(sum_ts^2 * sum_t1ms^2 *
-          (p1p * (1 - p1p) / sum_ts + p2p * (1 - p2p) / sum_t1ms)))^2 /
-          ((p1p - p2p) * sum_ts * sum_t1ms)^2
-
-        })
-      ),
-      power = list(
-        "cc.binomial" = quote({
-          std_dev <- sqrt(
-            sum(t * s * (1 - s) * ((1 - s) * p1 * (1 - p1) + s * p2 * (1 - p2)))
-          )
-
-          pbar <- p1 * s + p2 * (1 - s)
-
-          phi <- pbar * (1 - pbar) + (p1 - p2)^2 * s * (1 - s) / (N * t - 1)
-
-          numerator <-
-            if (alternative == "two.sided") {
-              abs(sqrt(N) * sum(t * s * (1 - s) * (p1 - p2)) -
-                     z_a * sqrt(sum(t * s * (1 - s) * phi))) - 0.5
-            } else {
-              # Do I need to change sign for lesser?
-              (sqrt(N) * sum(t * s * (1 - s) * (p1 - p2)) -
-                  z_a * sqrt(sum(t * s * (1 - s) * phi))) - 0.5
-            }
-
-          pnorm(numerator / std_dev, lower.tail = !lower.tail)
-        }),
-        "binomial" = quote({
-          std_dev <- sqrt(
-            sum(t * s * (1 - s) * ((1 - s) * p1 * (1 - p1) + s * p2 * (1 - p2)))
-            )
-
-          pbar <- p1 * s + p2 * (1 - s)
-
-          phi <- pbar * (1 - pbar) + (p1 - p2)^2 * s * (1 - s) / (N * t - 1)
-
-          numerator <-
-            if (alternative == "two.sided") {
-              abs(sqrt(N) * sum(t * s * (1 - s) * (p1 - p2)) -
-                     z_a * sqrt(sum(t * s * (1 - s) * phi)))
-            } else {
-              sqrt(N) * sum(t * s * (1 - s) * (p1 - p2)) -
-                  z_a * sqrt(sum(t * s * (1 - s) * phi))
-            }
-
-          pnorm(numerator / std_dev, lower.tail = !lower.tail)
-        }),
-        "unstratified" =  quote({
-          stop("Under construction")
-        })
-      )
-    )
-
-  # Run the calculation
+  # Determine if N or power is missing and then complete the calculation
   if (is.null(N)) {
     z_b <- stats::qnorm(1 - power, lower.tail = lower.tail)
-    N <- eval(calculations[["sample.size"]][[method]])
+
+    pbar <- p1 * s + p2 * (1 - s)
+
+    X <- sum(t * s * (1 - s) * pbar * (1 - pbar))
+
+    Y <- sum(t * s * (1 - s) * ((1 - s) * p1 * (1 - p1) + s * p2 * (1 - p2)))
+
+    Z <- sum(t * s * (1 - s) * (p1 - p2))
+
+    # The calculation itself
+    N <- (z_a * sqrt(X) + z_b * sqrt(Y))^2 / Z^2
+
+    # Continuity correction
+    if (correct) {
+      if (!lower.tail)
+        N <- (1 + sqrt(1 + 2 / (abs(Z) * N) ))^2 * N / 4
+      else
+        N <- (1 + sqrt(1 - 2 / (Z * N) ))^2 * N / 4
+    }
+
+    # Splitting N into groups
+    n1 <- N*t*s
+    n2 <- N*t*(1 - s)
+
+    # Calculating effective N
+    N.effective <- sum(ceiling(c(n1,n2)))
+
   } else {
-    power <- eval(calculations[["power"]][[method]])
+
+    std_dev <- sqrt(
+      sum(t * s * (1 - s) * ((1 - s) * p1 * (1 - p1) + s * p2 * (1 - p2)))
+    )
+
+    pbar <- p1 * s + p2 * (1 - s)
+
+    phi <- pbar * (1 - pbar) + (p1 - p2)^2 * s * (1 - s) / (N * t - 1)
+
+    ## Correction procedure according to Wittes and Wallenstein
+    ## DOES NOT RETURN CORRECT NUMBERS!!!
+    # numerator <-
+    #   sqrt(N) * sum(t * s * (1 - s) * (p1 - p2)) -
+    #   z_a * sqrt(sum(t * s * (1 - s) * phi))
+    #
+    # if (alternative == "two.sided")
+    #   numerator <- abs(numerator)
+    #
+    # U <-
+    #   (numerator - ifelse(!correct,0,ifelse(alternative == "less",-0.5,0.5))) /
+    #   std_dev
+
+    ## Alternate attempt to get numbers in Table 3 of Wittes & Wallenstein
+    Eg <- sum(N * t * s * (1 - s) * (p1 - p2))
+    numerator <- (
+      ifelse(alternative == "two.sided", abs(Eg), Eg) +
+      ifelse(!correct,0,ifelse(alternative == "less",0.5,-0.5))) / sqrt(N) -
+      z_a * sqrt(sum(t * s * (1 - s) * phi))
+
+    U <- numerator / std_dev
+
+    ## Woolson, Rojas, & Bean
+    # numerator <- sqrt(N) * Z - z_a * sqrt(X) -
+    #   ifelse(!correct,0,ifelse(alternative == "less",-0.5,0.5))
+    #
+    # if (alternative == "two.sided")
+    #   numerator <- abs(numerator)
+    #
+    # U <- numerator / sqrt(Y)
+
+    power <- pnorm(U, lower.tail = !lower.tail)
+
+    ## Debugging
+    # cat(
+    #   "Numerator  : ", numerator, "\n",
+    #   "Denominator: ", std_dev, "\n",
+    #   "U          : ", U, "\n",
+    #   "Power      : ", power, "\n",
+    #   sep = ""
+    #   )
+
+    # Splitting N into groups
+    n1 <- round(N*t*s,0)
+    n2 <- round(N*t*(1 - s),0)
+
+    # N.effective will just be N
+    N.effective <- N
+
   }
 
   # Return an object of class "power.cmh"
@@ -337,10 +299,7 @@ power.cmh.test <- function(
     list(
       p1 = p1, p2 = p2, theta = theta, N = N, sig.level = sig.level,
       power = power, alternative = alternative, s = s, t = t, J = J,
-      n1 = N*t*s, n2 = N*t*(1 - s),
-      N.effective = sum(ceiling(rep(N,J)*t*s), ceiling(rep(N,J)*t*(1 - s))),
-      method = method, method.desc = methods[method],
-      call = match.call()
+      n1 = n1, n2 = n2, N.effective = N.effective, call = match.call()
     ),
     class = "power.cmh"
     )
@@ -353,7 +312,7 @@ print.power.cmh <- function(x, detail = TRUE, n.frac = FALSE, ...) {
     cat(
       "Power and sample size calculation for the Cochran Mantel Haenszel test\n\n",
 
-      "                 N = ",ceiling(N),"\n",
+      "                 N = ",ifelse(n.frac,N,ceiling(N)),"\n",
       "       Effective N = ",N.effective,"\n",
       "Significance level = ",sig.level,"\n",
       "             Power = ",power,"\n",
@@ -387,8 +346,9 @@ print.power.cmh <- function(x, detail = TRUE, n.frac = FALSE, ...) {
     }
 
     cat(
-      "CALL: \n", paste(deparse(x$call), sep = "\n", collapse = "\n"), "\n\n",
-      "METHOD: ", method.desc, "\n", sep = ""
+      "CALL: \n",
+      paste(deparse(x$call), sep = "\n", collapse = "\n"),
+      "\n", sep = ""
     )
 
   })

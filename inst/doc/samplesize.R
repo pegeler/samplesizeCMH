@@ -1,44 +1,28 @@
-## ----unstratified--------------------------------------------------------
+## ----uncorrected---------------------------------------------------------
 library(samplesizeCMH)
 
-sample_size_unstratified <- power.cmh.test(
+sample_size_uncorrected <- power.cmh.test(
   p2 = c(0.75,0.70,0.65,0.60),
   theta = 3,
   power = 0.9,
   t = c(0.10,0.40,0.35,0.15),
-  alternative = "one",
-  method = "unstratified"
+  alternative = "greater",
+  correct = FALSE
 )
 
-print(sample_size_unstratified, detail = FALSE)
+print(sample_size_uncorrected, detail = FALSE)
 
-## ----binomial------------------------------------------------------------
-sample_size_binomial <- power.cmh.test(
-  p2 = c(0.75,0.70,0.65,0.60),
-  theta = 3,
-  power = 0.9,
-  t = c(0.10,0.40,0.35,0.15),
-  alternative = "one",
-  method = "bin"
-)
-
-sample_size_binomial
-
-## ----cc------------------------------------------------------------------
-# Continuity corrected sample size estimate added by Nam
+## ----corrected-----------------------------------------------------------
 sample_size_corrected <- power.cmh.test(
   p2 = c(0.75,0.70,0.65,0.60),
   theta = 3,
   power = 0.9,
   t = c(0.10,0.40,0.35,0.15),
-  alternative = "one",
-  method = "cc.bin"
+  alternative = "greater",
+  correct = TRUE
 )
 
-sample_size_corrected
-
-## ----cc2-----------------------------------------------------------------
-sample_size_corrected$N
+print(sample_size_corrected, n.frac = TRUE)
 
 ## ----s-------------------------------------------------------------------
 power.cmh.test(
@@ -47,8 +31,8 @@ power.cmh.test(
   theta = 3,
   power = 0.9,
   t = c(0.10,0.40,0.35,0.15),
-  alternative = "one",
-  method = "cc.bin"
+  alternative = "greater",
+  correct = TRUE
 )
 
 ## ----effect-size---------------------------------------------------------
