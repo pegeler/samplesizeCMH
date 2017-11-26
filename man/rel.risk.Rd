@@ -7,9 +7,9 @@
 rel.risk(x, col.num = 1)
 }
 \arguments{
-\item{x}{A table or matrix containing frequencies}
+\item{x}{A table or matrix containing frequencies.}
 
-\item{col.num}{The column number upon which relative risk should be calculated}
+\item{col.num}{The column number upon which relative risk should be calculated.}
 }
 \value{
 A numeric vector.

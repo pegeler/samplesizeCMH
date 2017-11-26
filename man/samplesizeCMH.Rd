@@ -4,7 +4,8 @@
 \name{samplesizeCMH}
 \alias{samplesizeCMH}
 \alias{samplesizeCMH-package}
-\title{samplesizeCMH: Power and Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test}
+\title{samplesizeCMH: Power and Sample Size Calcualtion for the
+Cochran-Mantel-Haenszel Test}
 \description{
 This package provides functions relating to power and sample size calculation
 for the CMH test. There are also several helper functions for interconverting

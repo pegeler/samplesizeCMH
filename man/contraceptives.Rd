@@ -14,7 +14,7 @@
 }}
 \source{
 Hennekens, C. H., F. E. Speizer, R. J. Lipnick, B. Rosner, C. Bain,
-C. Belanger, M. J. Stampfer, W. Willett, and R. Peto. 1984. "A Case-Control
+C. Belanger, M. J. Stampfer, W. Willett, and R. Peto. (1984). "A Case-Control
 Study of Oral Contraceptive Use and Breast Cancer." \emph{Journal of the
 National Cancer Institute} \strong{72} (1): 39–42. Table 1.
 }

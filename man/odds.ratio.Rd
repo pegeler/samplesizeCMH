@@ -7,7 +7,7 @@
 odds.ratio(x)
 }
 \arguments{
-\item{x}{A two-dimensional matrix or table containing frequencies or proportions}
+\item{x}{A two-dimensional matrix or table containing frequencies or proportions.}
 }
 \value{
 A numeric vector.

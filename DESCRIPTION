@@ -24,3 +24,5 @@ Suggests:
     datasets
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
+URL: http://github.com/pegeler/samplesizeCMH
+BugReports: http://github.com/pegeler/samplesizeCMH/issues

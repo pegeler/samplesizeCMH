@@ -1,6 +1,6 @@
 #' Create an odds ratio estimate from a 2-by-2 table of frequencies or proportions
 #'
-#' @param x A two-dimensional matrix or table containing frequencies or proportions
+#' @param x A two-dimensional matrix or table containing frequencies or proportions.
 #'
 #' @return A numeric vector.
 #' @examples
@@ -27,6 +27,6 @@ odds.ratio <- function (x) {
 
   stopifnot(identical(dim(x), c(2L,2L)))
 
-  x[1,1] * x[2,2] / x[1,2] / x[2,1]
+  as.vector(x[1,1] * x[2,2] / x[1,2] / x[2,1])
 
 }

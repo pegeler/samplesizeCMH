@@ -18,7 +18,8 @@
 #'
 #' Power calculations are based on the writings of Wittes and Wallenstein
 #' (1987). They are functionally equivalent to the derivations of the sample
-#' size calculation desribed by Woolson and others and Nam.
+#' size calculation described by Woolson and others and Nam, but have slightly
+#' added precision.
 #'
 #' Terminology and symbolic conventions are borrowed from Woolson \emph{et al.}
 #' (1986). The \code{p1} group is dubbed the \emph{Case} group and \code{p2}
@@ -273,7 +274,13 @@ power.cmh.test <- function(
     )
 }
 
-# Print method so that "samplesize.cmh" will look nice
+#' Print power.cmh object
+#'
+#' @param x A \code{"power.cmh"} object.
+#' @param detail Logical to toggle detailed or simple output.
+#' @param n.frac Logical indicating whether sample n's should be rounded to the
+#'   next whole number.
+#' @param ... Ignored.
 #' @export
 print.power.cmh <- function(x, detail = TRUE, n.frac = FALSE, ...) {
   with(x, {
