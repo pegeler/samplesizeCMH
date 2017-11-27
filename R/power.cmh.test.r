@@ -128,7 +128,7 @@
 #' comparison of stratified and unstratified analyses."
 #' \emph{Biometrics} \strong{48}: 389-395.
 #'
-#' Wittes, J. and S. Wallenstein. (1987). "The power of the Mantel-Haensel
+#' Wittes, J. and S. Wallenstein. (1987). "The power of the Mantel-Haenszel
 #' test." \emph{Journal of the American Statistical Association} \strong{82}:
 #' 1104-1109.
 #'

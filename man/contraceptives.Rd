@@ -22,7 +22,7 @@ National Cancer Institute} \strong{72} (1): 39–42. Table 1.
 data(contraceptives)
 }
 \description{
-This data summrizes the raw counts of the case-control study investigating
+This data summarizes the raw counts of the case-control study investigating
 the link between breast cancer rates and oral contraceptive use, stratified
 by age group. In toto, 10,890 subjects. See source for details.
 }

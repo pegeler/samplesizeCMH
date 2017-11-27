@@ -1,6 +1,6 @@
 #' Oral contraceptive use and breast cancer rates
 #'
-#' This data summrizes the raw counts of the case-control study investigating
+#' This data summarizes the raw counts of the case-control study investigating
 #' the link between breast cancer rates and oral contraceptive use, stratified
 #' by age group. In toto, 10,890 subjects. See source for details.
 #'

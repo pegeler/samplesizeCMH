@@ -4,7 +4,7 @@
 \name{samplesizeCMH}
 \alias{samplesizeCMH}
 \alias{samplesizeCMH-package}
-\title{samplesizeCMH: Power and Sample Size Calcualtion for the
+\title{samplesizeCMH: Power and Sample Size Calculation for the
 Cochran-Mantel-Haenszel Test}
 \description{
 This package provides functions relating to power and sample size calculation
@@ -37,7 +37,7 @@ Cochran-Mantel-Haenszel test.
 Researchers interested in estimating the probability of detecting a true
 positive result from an inferential test must perform a power calculation
 using a known sample size, effect size, significance level, \emph{et cetera}.
-The \code{\link{power.cmh.test}} fuction can compute the power of a CMH test,
+The \code{\link{power.cmh.test}} function can compute the power of a CMH test,
 given parameters from the experiment.
 }
 
