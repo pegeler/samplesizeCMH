@@ -5,7 +5,7 @@ Authors@R: c(
     person("Paul", "Egeler", email = "paul.egeler@spectrumhealth.org", role = c("aut", "cre")),
     person("Spectrum Health, Grand Rapids, MI", role = "cph"))
 Copyright: Spectrum Health, Grand Rapids, MI
-Description: 
+Description:
     This package provides a function for calculating the required number of 
     subjects per group to achieve a specified power for a 
     Cochran-Mantel-Haenszel test. Users may also calculate
@@ -17,11 +17,12 @@ Imports: stats
 License: GPL-2 | GPL-3
 Encoding: UTF-8
 LazyData: true
-Suggests: 
+Suggests:
     knitr,
     rmarkdown,
     DescTools,
-    datasets
+    datasets,
+    testthat
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 URL: http://github.com/pegeler/samplesizeCMH
