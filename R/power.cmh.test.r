@@ -172,7 +172,7 @@ power.cmh.test <- function(
   t <- rep(as.vector(t), length.out = J)
 
   # Check that 's' and 't' are reasonable
-  if (!isTRUE(all.equal(s + (1 - s), rep(1,J)))) {
+  if (any(s < 0) || any(s > 1)) {
     stop("The variable 's' must be a decimal fraction")
   }
   if (!isTRUE(all.equal(sum(t),1))) {
