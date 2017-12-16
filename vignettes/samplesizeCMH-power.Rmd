@@ -14,7 +14,7 @@ vignette: >
 
 ### The Data Set
 
-We will use the `Titanic`{.r} dataset in the `datasets`{.r} package to demonstrate a *post hoc* power calculation. This dataset is explored in greater detail in the [introductory vignette](introduction.html).
+We will use the `Titanic`{.r} dataset in the `datasets`{.r} package to demonstrate a *post hoc* power calculation. This dataset is explored in greater detail in the [introductory vignette](samplesizeCMH-introduction.html).
 
 Let $X$ = sex, $Y$ = survival, and $Z$ = class. Just as was performed in the introductory vignette, we will load the data and then create a set of partial tables stratified at fixed levels of class.
 
