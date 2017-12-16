@@ -1,0 +1,3 @@
+inst/doc/* linguist-documentation 
+vignettes/* linguist-documentation
+man/* linguist-documentation
