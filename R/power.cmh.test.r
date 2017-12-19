@@ -150,13 +150,13 @@ power.cmh.test <- function(
   correct = TRUE
   ) {
 
-  # Process the expected proportions and/or effect size
+  # Determine if the correct number of arguments are set to NULL
   if (sum(sapply(list(p1,p2,theta),is.null)) != 1L) {
     stop("exactly one of 'p1', 'p2', or 'theta' must be NULL")
   }
 
   if (sum(sapply(list(N, power),is.null)) != 1L) {
-    stop("either 'N'or 'power' must be NULL")
+    stop("either 'N' or 'power' must be NULL")
   }
 
   # Determine upper, lower, or two-sided hypothesis
@@ -167,7 +167,7 @@ power.cmh.test <- function(
   # Infer J from vector lengths of first three args
   J <- max(sapply(list(p1,p2,theta),length))
 
-  #Ensure that s and t are of correct lengths
+  # Ensure that 's' and 't' are of correct lengths
   s <- rep(as.vector(s), length.out = J)
   t <- rep(as.vector(t), length.out = J)
 
@@ -179,7 +179,7 @@ power.cmh.test <- function(
     stop("The 't' levels must sum to 1")
   }
 
-  # Determine missing p vector or theta
+  # Determine missing 'p' or 'theta' vector
   if (is.null(theta)) {
     theta <- props2theta(p1,p2)
   } else if (is.null(p1)) {
