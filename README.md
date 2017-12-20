@@ -39,13 +39,10 @@ given parameters from the experiment.
 
 ## Installation
 
-You must have [`devtools`](https://cran.r-project.org/web/packages/devtools/index.html)
-installed in order to download and install this package. To do so, type the 
-following into your R console:
+Downloading and installing the package from GitHub is facilitated by
+[`devtools`](https://CRAN.R-project.org/package=devtools).
+To do so, type the following into your R console:
 
     install.packages("devtools")
-
-After you have `devtools`, type the following in the R console to download and 
-install this package:
-
     devtools::install_github("pegeler/samplesizeCMH")
+

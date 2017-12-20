@@ -1,5 +1,5 @@
 Package: samplesizeCMH
-Title: Power and Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test
+Title: Power and Sample Size Calculation for the Cochran-Mantel-Haenszel Test
 Date: 2017-12-13
 Version: 0.0.0
 Authors@R: c(
@@ -26,5 +26,5 @@ Suggests:
     testthat
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
-URL: http://github.com/pegeler/samplesizeCMH
-BugReports: http://github.com/pegeler/samplesizeCMH/issues
+URL: https://github.com/pegeler/samplesizeCMH
+BugReports: https://github.com/pegeler/samplesizeCMH/issues
