@@ -1,7 +1,7 @@
 samplesizeCMH: Sample Size Calculation for the Cochran-Mantel-Haenszel Test
 ===============
 
-by Paul. W. Egeler M.S.
+by Paul W. Egeler M.S.
 
 ## Description
 This package provides functions relating to power and sample size calculation
