@@ -7,11 +7,8 @@ Authors@R: c(
     person("Spectrum Health, Grand Rapids, MI", role = "cph"))
 Copyright: Spectrum Health, Grand Rapids, MI
 Description:
-    This package provides a function for calculating the required number of 
-    subjects per group to achieve a specified power for a 
-    Cochran-Mantel-Haenszel test. Users may also calculate
-    post-hoc power of a test, given parameters of the experiment.
-    There are also several helper functions for interconverting probability,
+    Calculates the power and sample size for Cochran-Mantel-Haenszel tests. 
+    There are also several helper functions for working with probability,
     odds, relative risk, and odds ratio values.
 Depends: R (>= 3.4.1)
 Imports: stats
