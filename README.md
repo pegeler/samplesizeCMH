@@ -1,4 +1,4 @@
-samplesizeCMH: Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test
+samplesizeCMH: Sample Size Calculation for the Cochran-Mantel-Haenszel Test
 ===============
 
 by Paul. W. Egeler M.S.

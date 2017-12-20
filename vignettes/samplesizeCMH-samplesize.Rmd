@@ -1,12 +1,12 @@
 ---
-title: "Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test"
+title: "Sample Size Calculation for the Cochran-Mantel-Haenszel Test"
 author:
   "Paul W. Egeler, M.S., GStat"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: refs.bib
 vignette: >
-  %\VignetteIndexEntry{Sample Size Calcualtion for the Cochran-Mantel-Haenszel Test}
+  %\VignetteIndexEntry{Sample Size Calculation for the Cochran-Mantel-Haenszel Test}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

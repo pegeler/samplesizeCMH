@@ -1,12 +1,12 @@
 ---
-title: "Power Calcualtion for the Cochran-Mantel-Haenszel Test"
+title: "Power Calculation for the Cochran-Mantel-Haenszel Test"
 author:
   "Paul W. Egeler, M.S., GStat"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: refs.bib
 vignette: >
-  %\VignetteIndexEntry{Power Calcualtion for the Cochran-Mantel-Haenszel Test}
+  %\VignetteIndexEntry{Power Calculation for the Cochran-Mantel-Haenszel Test}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
