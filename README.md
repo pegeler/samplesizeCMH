@@ -1,6 +1,9 @@
 samplesizeCMH: Sample Size Calculation for the Cochran-Mantel-Haenszel Test
 ===============
 
+[![CRAN\_version](http://www.r-pkg.org/badges/version/samplesizeCMH)](https://cran.r-project.org/package=samplesizeCMH)
+[![Number\_of\_Downloads](https://cranlogs.r-pkg.org/badges/grand-total/samplesizeCMH)](https://cran.r-project.org/package=samplesizeCMH)
+
 by Paul W. Egeler M.S.
 
 ## Description
@@ -8,7 +11,7 @@ This package provides functions relating to power and sample size calculation
 for the CMH test. There are also several helper functions for interconverting
 probability, odds, relative risk, and odds ratio values.
 
-Please see the package vingettes for more information on how this package is used.
+Please see the [package vingettes](https://cran.r-project.org/web/packages/samplesizeCMH/vignettes/) for more information on how this package is used.
 
 ### The Cochran Mantel Haenszel Test
 
