@@ -10,7 +10,7 @@ Description:
     Calculates the power and sample size for Cochran-Mantel-Haenszel tests. 
     There are also several helper functions for working with probability,
     odds, relative risk, and odds ratio values.
-Depends: R (>= 3.4.1)
+Depends: R (>= 3.4.0)
 Imports: stats
 License: GPL-2 | GPL-3
 Encoding: UTF-8
