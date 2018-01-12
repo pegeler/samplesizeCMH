@@ -105,7 +105,7 @@ legend(
   legend = c("95%", "90%", "80%"), 
   col = c("gold", "red", "blue"),
   bty = "n",
-  lty = c(1,1),
+  lty = 1L,
   title = "Power level"
   )
 ```
