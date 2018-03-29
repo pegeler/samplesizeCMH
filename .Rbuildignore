@@ -5,3 +5,4 @@
 ^vignettes/refs$
 ^RBuildIgnore$
 ^data-raw$
+^docs$

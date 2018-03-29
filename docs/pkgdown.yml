@@ -1,0 +1,8 @@
+pandoc: 1.19.2.1
+pkgdown: 0.1.0.9000
+pkgdown_sha: ba364393708b38fd6368f1d089586e54df3e1948
+articles:
+  samplesizeCMH-introduction: samplesizeCMH-introduction.html
+  samplesizeCMH-power: samplesizeCMH-power.html
+  samplesizeCMH-samplesize: samplesizeCMH-samplesize.html
+

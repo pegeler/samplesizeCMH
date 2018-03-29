@@ -11,7 +11,7 @@ This package provides functions relating to power and sample size calculation
 for the CMH test. There are also several helper functions for interconverting
 probability, odds, relative risk, and odds ratio values.
 
-Please see the [package vingettes](https://cran.r-project.org/web/packages/samplesizeCMH/vignettes/) for more information on how this package is used.
+Please see the [package website](https://pegeler.github.io/samplesizeCMH/) for more information on how this package is used, including [documentation](https://pegeler.github.io/samplesizeCMH/reference/) and [vignettes](https://pegeler.github.io/samplesizeCMH/vignettes/).
 
 ### The Cochran Mantel Haenszel Test
 
@@ -42,7 +42,11 @@ given parameters from the experiment.
 
 ## Installation
 
-Downloading and installing the package from GitHub is facilitated by
+Installation of the CRAN release can be done with `install.packages()`. From the R console:
+
+    install.packages("samplesizeCMH")
+
+Downloading and installing the latest version from GitHub is facilitated by
 [`devtools`](https://CRAN.R-project.org/package=devtools).
 To do so, type the following into your R console:
 
