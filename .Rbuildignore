@@ -6,3 +6,4 @@
 ^RBuildIgnore$
 ^data-raw$
 ^docs$
+^\.travis\.yml$
