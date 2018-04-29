@@ -4,6 +4,7 @@ samplesizeCMH: Sample Size Calculation for the Cochran-Mantel-Haenszel Test
 [![CRAN\_version](http://www.r-pkg.org/badges/version/samplesizeCMH)](https://cran.r-project.org/package=samplesizeCMH)
 [![Number\_of\_Downloads](https://cranlogs.r-pkg.org/badges/grand-total/samplesizeCMH)](https://cran.r-project.org/package=samplesizeCMH)
 [![Travis-CI Build Status](https://travis-ci.org/pegeler/samplesizeCMH.svg?branch=master)](https://travis-ci.org/pegeler/samplesizeCMH)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/pegeler/samplesizeCMH?branch=master&svg=true)](https://ci.appveyor.com/project/pegeler/samplesizeCMH)
 
 by Paul W. Egeler M.S.
 
