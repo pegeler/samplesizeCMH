@@ -2,7 +2,7 @@
 % Please edit documentation in R/power.cmh.test.r
 \name{print.power.cmh}
 \alias{print.power.cmh}
-\title{Print power.cmh object}
+\title{Print \code{"power.cmh"} object}
 \usage{
 \method{print}{power.cmh}(x, detail = TRUE, n.frac = FALSE, ...)
 }
@@ -17,5 +17,5 @@ next whole number.}
 \item{...}{Ignored.}
 }
 \description{
-Print power.cmh object
+The S3 print method for the \code{"power.cmh"} object
 }

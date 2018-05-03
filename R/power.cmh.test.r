@@ -274,7 +274,9 @@ power.cmh.test <- function(
     )
 }
 
-#' Print power.cmh object
+#' Print \code{"power.cmh"} object
+#'
+#' The S3 print method for the \code{"power.cmh"} object
 #'
 #' @param x A \code{"power.cmh"} object.
 #' @param detail Logical to toggle detailed or simple output.
