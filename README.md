@@ -3,8 +3,8 @@ samplesizeCMH: Sample Size Calculation for the Cochran-Mantel-Haenszel Test
 
 [![CRAN\_version](http://www.r-pkg.org/badges/version/samplesizeCMH)](https://cran.r-project.org/package=samplesizeCMH)
 [![Number\_of\_Downloads](https://cranlogs.r-pkg.org/badges/grand-total/samplesizeCMH)](https://cran.r-project.org/package=samplesizeCMH)
-[![Travis-CI Build Status](https://travis-ci.org/pegeler/samplesizeCMH.svg?branch=master)](https://travis-ci.org/pegeler/samplesizeCMH)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/pegeler/samplesizeCMH?branch=master&svg=true)](https://ci.appveyor.com/project/pegeler/samplesizeCMH)
+[![Travis-CI Build Status](https://travis-ci.org/SpectrumHealthResearch/samplesizeCMH.svg?branch=master)](https://travis-ci.org/SpectrumHealthResearch/samplesizeCMH)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/SpectrumHealthResearch/samplesizeCMH?branch=master&svg=true)](https://ci.appveyor.com/project/SpectrumHealthResearch/samplesizeCMH)
 
 by Paul W. Egeler M.S.
 
@@ -13,7 +13,7 @@ This package provides functions relating to power and sample size calculation
 for the CMH test. There are also several helper functions for interconverting
 probability, odds, relative risk, and odds ratio values.
 
-Please see the [package website](https://pegeler.github.io/samplesizeCMH/) for more information on how this package is used, including [documentation](https://pegeler.github.io/samplesizeCMH/reference/) and [vignettes](https://pegeler.github.io/samplesizeCMH/articles/).
+Please see the [package website](https://SpectrumHealthResearch.github.io/samplesizeCMH/) for more information on how this package is used, including [documentation](https://SpectrumHealthResearch.github.io/samplesizeCMH/reference/) and [vignettes](https://SpectrumHealthResearch.github.io/samplesizeCMH/articles/).
 
 ### The Cochran Mantel Haenszel Test
 
@@ -53,5 +53,5 @@ Downloading and installing the latest version from GitHub is facilitated by
 To do so, type the following into your R console:
 
     install.packages("devtools")
-    devtools::install_github("pegeler/samplesizeCMH")
+    devtools::install_github("SpectrumHealthResearch/samplesizeCMH")
 
