@@ -8,3 +8,4 @@ vignettes/refs/
 vignettes/*.R
 vignettes/*.html
 vignettes/.*
+article/
