@@ -4,14 +4,16 @@
 \name{contraceptives}
 \alias{contraceptives}
 \title{Oral contraceptive use and breast cancer rates}
-\format{A 3-dimensional table.
+\format{
+A 3-dimensional table.
 
 \enumerate{
   \item \code{OC Usage}: Subject exposure to oral contraceptives.
   \item \code{Disease Status}: Breast cancer present (case) or absent (control).
   \item \code{Age Group}: Age group of the subject.
 
-}}
+}
+}
 \source{
 Hennekens, C. H., F. E. Speizer, R. J. Lipnick, B. Rosner, C. Bain,
 C. Belanger, M. J. Stampfer, W. Willett, and R. Peto. (1984). "A Case-Control

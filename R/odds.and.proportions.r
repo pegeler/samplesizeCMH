@@ -19,7 +19,7 @@
 #' # Raise a proportion by an effect size theta
 #' effect.size(0.5, 2)
 #'
-#' # Find the odds ratio between to proportions
+#' # Find the odds ratio between two proportions
 #' props2theta(0.75, 0.5)
 #' @return A numeric vector.
 #' @author Paul W. Egeler, M.S.
