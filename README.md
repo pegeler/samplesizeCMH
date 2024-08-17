@@ -1,5 +1,5 @@
 samplesizeCMH: Sample Size Calculation for the Cochran-Mantel-Haenszel Test
-===============
+===========================================================================
 
 [![CRAN\_version](http://www.r-pkg.org/badges/version/samplesizeCMH)](https://cran.r-project.org/package=samplesizeCMH)
 [![Number\_of\_Downloads](https://cranlogs.r-pkg.org/badges/grand-total/samplesizeCMH)](https://cran.r-project.org/package=samplesizeCMH)
