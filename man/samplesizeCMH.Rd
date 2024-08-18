@@ -3,7 +3,6 @@
 \docType{package}
 \name{samplesizeCMH}
 \alias{samplesizeCMH}
-\alias{samplesizeCMH-package}
 \title{samplesizeCMH: Power and Sample Size Calculation for the
 Cochran-Mantel-Haenszel Test}
 \description{

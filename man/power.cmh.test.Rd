@@ -4,9 +4,18 @@
 \alias{power.cmh.test}
 \title{Power and sample size calculation for the Cochran-Mantel-Haenszel test}
 \usage{
-power.cmh.test(p1 = NULL, p2 = NULL, theta = NULL, N = NULL,
-  sig.level = 0.05, power = 0.8, alternative = c("two.sided", "less",
-  "greater"), s = 0.5, t = 1/J, correct = TRUE)
+power.cmh.test(
+  p1 = NULL,
+  p2 = NULL,
+  theta = NULL,
+  N = NULL,
+  sig.level = 0.05,
+  power = 0.8,
+  alternative = c("two.sided", "less", "greater"),
+  s = 0.5,
+  t = 1/J,
+  correct = TRUE
+)
 }
 \arguments{
 \item{p1}{Vector of proportions of the \emph{J} case groups.}
