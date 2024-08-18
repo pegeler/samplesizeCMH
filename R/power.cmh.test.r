@@ -87,10 +87,10 @@
 #' # Uncorrected sample size estimate first introduced
 #' # by Woolson and others in 1986
 #' sample_size_uncorrected <- power.cmh.test(
-#'   p2 = c(0.75,0.70,0.65,0.60),
+#'   p2 = c(0.75, 0.70, 0.65, 0.60),
 #'   theta = 3,
 #'   power = 0.9,
-#'   t = c(0.10,0.40,0.35,0.15),
+#'   t = c(0.10, 0.40, 0.35, 0.15),
 #'   alternative = "greater",
 #'   correct = FALSE
 #' )
@@ -103,10 +103,10 @@
 #'
 #' # Continuity corrected sample size estimate added by Nam
 #' sample_size_corrected <- power.cmh.test(
-#'   p2 = c(0.75,0.70,0.65,0.60),
+#'   p2 = c(0.75, 0.70, 0.65, 0.60),
 #'   theta = 3,
 #'   power = 0.9,
-#'   t = c(0.10,0.40,0.35,0.15),
+#'   t = c(0.10, 0.40, 0.35, 0.15),
 #'   alternative = "greater",
 #'   correct = TRUE
 #' )
@@ -144,18 +144,18 @@ power.cmh.test <- function(
   N = NULL,
   sig.level = 0.05,
   power = 0.80,
-  alternative = c("two.sided","less","greater"),
+  alternative = c("two.sided", "less", "greater"),
   s = 0.5,
   t = 1 / J,
   correct = TRUE
   ) {
 
   # Determine if the correct number of arguments are set to NULL
-  if (sum(sapply(list(p1,p2,theta),is.null)) != 1L) {
+  if (count_nulls(p1, p2, theta) != 1L) {
     stop("exactly one of 'p1', 'p2', or 'theta' must be NULL")
   }
 
-  if (sum(sapply(list(N, power),is.null)) != 1L) {
+  if (count_nulls(N, power) != 1L) {
     stop("either 'N' or 'power' must be NULL")
   }
 
@@ -165,7 +165,7 @@ power.cmh.test <- function(
   lower.tail <- switch(alternative, less = TRUE, FALSE)
 
   # Infer J from vector lengths of first three args
-  J <- max(sapply(list(p1,p2,theta),length))
+  J <- max(vapply(list(p1, p2, theta), length, integer(1)))
 
   # Ensure that 's' and 't' are of correct lengths
   s <- rep(as.vector(s), length.out = J)
@@ -175,17 +175,17 @@ power.cmh.test <- function(
   if (any(s < 0) || any(s > 1)) {
     stop("The variable 's' must be a decimal fraction")
   }
-  if (!isTRUE(all.equal(sum(t),1))) {
+  if (!isTRUE(all.equal(sum(t), 1))) {
     stop("The 't' levels must sum to 1")
   }
 
   # Determine missing 'p' or 'theta' vector
   if (is.null(theta)) {
-    theta <- props2theta(p1,p2)
+    theta <- props2theta(p1, p2)
   } else if (is.null(p1)) {
-    p1 <- effect.size(p2,theta)
+    p1 <- effect.size(p2, theta)
   } else {
-    p2 <- effect.size(p1,theta)
+    p2 <- effect.size(p1, theta)
   }
 
   if (all(theta == 1)) {
@@ -205,7 +205,7 @@ power.cmh.test <- function(
   z_a <- stats::qnorm(sig.level / tside, lower.tail = lower.tail)
 
   # Determine if N or power is missing and then complete the calculation
-  if (is.null(N)) {
+  if (is.null(N)) {  # Get sample size
     z_b <- stats::qnorm(1 - power, lower.tail = lower.tail)
 
     pbar <- p1 * s + p2 * (1 - s)
@@ -232,9 +232,9 @@ power.cmh.test <- function(
     n2 <- N*t*(1 - s)
 
     # Calculating effective N
-    N.effective <- sum(ceiling(c(n1,n2)))
+    N.effective <- sum(ceiling(c(n1, n2)))
 
-  } else {
+  } else {  # Get power
 
     std_dev <- sqrt(
       sum(t * s * (1 - s) * ((1 - s) * p1 * (1 - p1) + s * p2 * (1 - p2)))
@@ -247,7 +247,7 @@ power.cmh.test <- function(
     Eg <- sum(N * t * s * (1 - s) * (p1 - p2))
     numerator <- (
       ifelse(alternative == "two.sided", abs(Eg), Eg) +
-      ifelse(!correct,0,ifelse(alternative == "less",0.5,-0.5))) / sqrt(N) -
+      ifelse(!correct, 0, ifelse(alternative == "less", 0.5, -0.5))) / sqrt(N) -
       z_a * sqrt(sum(t * s * (1 - s) * phi))
 
     U <- numerator / std_dev
@@ -255,8 +255,8 @@ power.cmh.test <- function(
     power <- stats::pnorm(U, lower.tail = !lower.tail)
 
     # Splitting N into groups
-    n1 <- round(N*t*s,0)
-    n2 <- round(N*t*(1 - s),0)
+    n1 <- round(N*t*s, 0)
+    n2 <- round(N*t*(1 - s), 0)
 
     # N.effective will just be N
     N.effective <- N
@@ -289,11 +289,11 @@ print.power.cmh <- function(x, detail = TRUE, n.frac = FALSE, ...) {
     cat(
       "Power and sample size calculation for the Cochran Mantel Haenszel test\n\n",
 
-      "                 N = ",ifelse(n.frac,N,ceiling(N)),"\n",
-      "       Effective N = ",N.effective,"\n",
-      "Significance level = ",sig.level,"\n",
-      "             Power = ",power,"\n",
-      "       Alternative = ",alternative,"\n\n",
+      "                 N = ", ifelse(n.frac, N, ceiling(N)), "\n",
+      "       Effective N = ", N.effective, "\n",
+      "Significance level = ", sig.level, "\n",
+      "             Power = ", power, "\n",
+      "       Alternative = ", alternative, "\n\n",
       sep = ""
     )
 
@@ -302,21 +302,21 @@ print.power.cmh <- function(x, detail = TRUE, n.frac = FALSE, ...) {
       if (n.frac) {
         cat(
           "Number of subjects per each group:\n",
-          rep("_",10 + J * 9),"\n",
-          "Group   |",sprintf(" %7i ",1:J),"\n",
-          rep("=",10 + J * 9),"\n",
-          "Case    |",sprintf(" %7.2f ",n1),"\n",
-          "Control |",sprintf(" %7.2f ",n2),"\n\n",
+          rep("_", 10 + J * 9), "\n",
+          "Group   |", sprintf(" %7i ", 1:J), "\n",
+          rep("=", 10 + J * 9), "\n",
+          "Case    |", sprintf(" %7.2f ", n1), "\n",
+          "Control |", sprintf(" %7.2f ", n2), "\n\n",
           sep = ""
         )
       } else {
         cat(
           "Number of subjects per each group:\n",
-          rep("_",10 + J * 7),"\n",
-          "Group   |",sprintf(" %5i ",1:J),"\n",
-          rep("=",10 + J * 7),"\n",
-          "Case    |",sprintf(" %5i ",ceiling(n1)),"\n",
-          "Control |",sprintf(" %5i ",ceiling(n2)),"\n\n",
+          rep("_", 10 + J * 7), "\n",
+          "Group   |", sprintf(" %5i ", 1:J), "\n",
+          rep("=", 10 + J * 7), "\n",
+          "Case    |", sprintf(" %5i ", ceiling(n1)), "\n",
+          "Control |", sprintf(" %5i ", ceiling(n2)), "\n\n",
           sep = ""
         )
       }
@@ -333,3 +333,5 @@ print.power.cmh <- function(x, detail = TRUE, n.frac = FALSE, ...) {
   invisible(x)
 
 }
+
+count_nulls <- function(...) sum(vapply(list(...), is.null, logical(1)))
