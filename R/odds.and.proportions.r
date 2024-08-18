@@ -10,7 +10,7 @@
 #' @param rr Relative risk vector (\code{p1 / p2}).
 #' @examples
 #' # Convert proportions of 0 through 1 to odds
-#' props <- seq(0,1,0.1)
+#' props <- seq(0, 1, 0.1)
 #' prop2odds(props)
 #'
 #' # Convert odds to proportions
@@ -26,30 +26,28 @@
 #' @name odds.and.proportions
 NULL
 
+#' @rdname odds.and.proportions
+#' @export
+prop2odds <- function(p) p / (1 - p)
 
 #' @rdname odds.and.proportions
 #' @export
-prop2odds <- function(p) {p / (1 - p)}
+odds2prop <- function(o) o / (1 + o)
 
 #' @rdname odds.and.proportions
 #' @export
-odds2prop <- function(o) {o / (1 + o)}
+effect.size <- function(p, theta) (p * theta) / (1 - p + p * theta)
 
 #' @rdname odds.and.proportions
 #' @export
-effect.size <- function(p,theta) {(p * theta) / (1 - p + p * theta)}
+props2theta <- function(p1, p2) p1 * (1 - p2) / p2 / (1 - p1)
 
 #' @rdname odds.and.proportions
 #' @export
-props2theta <- function(p1,p2) {p1 * (1 - p2) / p2 / (1 - p1)}
-
-
-# Should include? ---------------------------------------------------------
+rr2theta <- function(rr, p1, p2) rr * (1 - p2) / (1 - p1)
 
 #' @rdname odds.and.proportions
 #' @export
-rr2theta <- function(rr,p1,p2) {rr * (1 - p2) / (1 - p1)}
+theta2rr <- function(theta, p1, p2) theta * (1 - p1) / (1 - p2)
 
-#' @rdname odds.and.proportions
-#' @export
-theta2rr <- function(theta,p1,p2) {theta * (1 - p1) / (1 - p2)}
+NULL  # Linter
