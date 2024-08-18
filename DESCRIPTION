@@ -1,7 +1,7 @@
 Package: samplesizeCMH
 Title: Power and Sample Size Calculation for the Cochran-Mantel-Haenszel Test
-Date: 2023-12-10
-Version: 0.0.3
+Date: 2024-08-18
+Version: 0.0.4
 Authors@R: c(
     person("Paul", "Egeler", email = "paulegeler@gmail.com", role = c("aut", "cre")),
     person("Spectrum Health, Grand Rapids, MI", role = "cph"))
