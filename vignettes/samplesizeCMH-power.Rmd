@@ -20,7 +20,7 @@ Let $X$ = sex, $Y$ = survival, and $Z$ = class. Just as was performed in the int
 
 ```{r partial-tables}
 data(Titanic, package = "datasets")
-partial_tables <- margin.table(Titanic, c(2,4,1))
+partial_tables <- margin.table(Titanic, c(2, 4, 1))
 ftable(partial_tables)
 ```
 
@@ -40,11 +40,11 @@ Using the `power.cmh.test()`{.r} function, we may calculate the probability that
 library(samplesizeCMH)
 
 power.cmh.test(
-  p1 = apply(partial_tables, 3, prop.table, 2)[1,],
-  p2 = apply(partial_tables, 3, prop.table, 2)[3,],
+  p1 = apply(partial_tables, 3, prop.table, 2)[1, ],
+  p2 = apply(partial_tables, 3, prop.table, 2)[3, ],
   N = sum(Titanic),
   power = NULL,
-  s = apply(partial_tables[,1,],2,sum) / apply(partial_tables,3,sum),
+  s = apply(partial_tables[, 1, ], 2, sum) / apply(partial_tables, 3, sum),
   t = apply(partial_tables, 3, sum) / sum(Titanic)
 )
 
@@ -71,15 +71,21 @@ mantelhaen.test(contraceptives)
 The question now is what effect size would be detectable if an effect truly did
 exist in the data. That is to say, what effect size were we prepared to
 correctly detect given our data and specified significance level and power? We
-may partially apply the `power.cmh.test()`{.r} function and then vectorize it
-over `theta` to test a wide range of effect sizes to see where the effect size
+can test a wide range of effect sizes to see where the effect size
 crosses over into adequate power.
 
+To accomplish this, we will partially apply the `power.cmh.test()`{.r} function
+and then vectorize it over `theta`. Passing in a vector of thetas will then
+provide us with a vector of computed powers. Although a simple `for` loop would
+suffice to generate a power curve, there is an additional benefit associated
+with the creation of a partially applied function. We will see later how it can
+be used to compute the exact effect size that will yield 90% power.
+
 ```{r contraceptives-effect.size}
-# Precompute several counts
-obs_control_exposed <- contraceptives[1,2,]
-obs_control_total <- apply(contraceptives[,2,],2,sum)
-obs_by_age <- apply(contraceptives, 3, sum)
+# Precomputing several counts, also for readability
+obs_control_exposed <- contraceptives[1, 2, ]
+obs_control_total <- apply(contraceptives[, 2, ], 2, sum)
+obs_total_by_age <- apply(contraceptives, 3, sum)
 obs_total <- sum(contraceptives)
 
 partial_power_func <- function(theta) {
@@ -89,21 +95,20 @@ partial_power_func <- function(theta) {
     N = obs_total,
     power = NULL,
     s = 1/11,
-    t = obs_by_age / obs_total,
+    t = obs_total_by_age / obs_total,
     alternative = "greater"
   )[["power"]]
 }
 
-vectorized_power_func <- Vectorize(partial_power_func, "theta", SIMPLIFY = FALSE)
-
-thetas <- seq(1.05,1.5,0.05)
-
-powers <- stats::setNames(vectorized_power_func(thetas), thetas)
+vectorized_power_func <- Vectorize(partial_power_func, "theta", SIMPLIFY = TRUE)
 ```
 
-Using the data above, we may create a power curve.
+Using the function above, we may create a power curve.
 
 ```{r contraceptives-plot, fig.width = 6, fig.height = 4, fig.align = 'center'}
+thetas <- seq(1.05, 1.5, 0.05)
+powers <- vectorized_power_func(thetas)
+
 plot(y = powers, x = thetas, main = "Power curve as a function of effect size")
 abline(h = 0.95, col = "gold")
 abline(h = 0.90, col = "red")
@@ -119,10 +124,14 @@ legend(
   )
 ```
 
-As we can see from above, 90% power would have been achieved if the common odds ratio was estimated to be approximately 1.25.
+As we can see from above, 90% power would have been achieved if the common odds
+ratio was estimated to be approximately 1.25. To compute the exact effect size,
+we employ the `stats::uniroot()`{.r} function.
 
-```{r}
-uniroot(function(theta) partial_power_func(theta) - 0.90, c(1.2, 1.25))
+```{r contraceptives-uniroot}
+first_over <- which.min(powers <= 0.9)
+interval <- thetas[c(first_over - 1, first_over)]
+uniroot(function(theta) partial_power_func(theta) - 0.90, interval)$root
 ```
 
 
