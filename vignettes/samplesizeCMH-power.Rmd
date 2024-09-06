@@ -20,13 +20,16 @@ Let $X$ = sex, $Y$ = survival, and $Z$ = class. Just as was performed in the int
 
 ```{r partial-tables}
 data(Titanic, package = "datasets")
-partial_tables <- margin.table(Titanic, c(2,4,1))
+partial_tables <- margin.table(Titanic, c(2, 4, 1))
 ftable(partial_tables)
 ```
 
 ### The Test Statistic
 
-Performing a CMH test on the partial tables above shows that there is strong evidence that the common odds ratio is greater than one.
+As we saw in the introductory vignette, performing a CMH test on the partial
+tables above shows that there is strong evidence that the common odds ratio is
+greater than one. This would indicate an association between *sex* and
+*survival*, even when accounting for the confounding *class* variable.
 
 ```{r mantelhaen}
 mantelhaen.test(partial_tables)
@@ -34,18 +37,26 @@ mantelhaen.test(partial_tables)
 
 ### The Power Calculation
 
-Using the `power.cmh.test()`{.r} function, we may calculate the probability that our rejection of the null hypothesis is a true result.
+Now that we've established an association, we'll use the `power.cmh.test()`{.r} function to calculate the probability that our rejection of the null hypothesis is a true result.
 
 ```{r power}
 library(samplesizeCMH)
 
+# Pre-computing counts (for readability)
+column_props <- apply(partial_tables, 3, prop.table, 2)
+props_male_survived_no <- column_props[1, ]
+props_male_survived_yes <- column_props[3, ]
+n_total_by_class <- apply(partial_tables, 3, sum)
+n_total_by_class_survived_no <- apply(partial_tables[, 1, ], 2, sum)
+n_total <- sum(Titanic)
+
 power.cmh.test(
-  p1 = apply(partial_tables, 3, prop.table, 2)[1,],
-  p2 = apply(partial_tables, 3, prop.table, 2)[3,],
-  N = sum(Titanic),
+  p1 = props_male_survived_no,
+  p2 = props_male_survived_yes,
+  N = n_total,
   power = NULL,
-  s = apply(partial_tables[,1,],2,sum) / apply(partial_tables,3,sum),
-  t = apply(partial_tables, 3, sum) / sum(Titanic)
+  s = n_total_by_class_survived_no / n_total_by_class,
+  t = n_total_by_class / n_total
 )
 
 ```
@@ -61,40 +72,53 @@ data(contraceptives, package = "samplesizeCMH")
 ftable(contraceptives)
 ```
 
-
 Here, as shown in @Hennekens1984, the Mantel-Haenszel test shows non-significant results, with the common odds ratio approximately equal to 1.
 
 ```{r contraceptives-mh}
 mantelhaen.test(contraceptives)
 ```
 
-The question now is what effect size would be detectable if an effect truly did exist in the data. That is to say, what effect size were we prepared to correctly detect given our data and specified significance level and power? We may vectorize the `power.cmh.test()`{.r} function to test a wide range of effect sizes to see where the effect size crosses over into adequate power.
+The question now is what effect size would be detectable if an effect truly did
+exist in the data. That is to say, what effect size were we prepared to
+correctly detect given our data and specified significance level and power? We
+can test a wide range of effect sizes to see where the effect size
+crosses over into adequate power.
+
+To accomplish this, we will partially apply the `power.cmh.test()`{.r} function
+and then vectorize it over `theta`. Passing in a vector of thetas to the new
+function will provide us with a vector of computed powers. Although a simple
+`for()`{.r} loop would suffice to generate a power curve, there is an additional
+benefit associated with the creation of a partially applied function---we will
+see later how it can be used to compute the exact effect size that will yield
+90% power.
 
 ```{r contraceptives-effect.size}
-vpower <- Vectorize(power.cmh.test, "theta", SIMPLIFY = FALSE)
+n_control_exposed <- contraceptives[1, 2, ]
+n_control_total <- apply(contraceptives[, 2, ], 2, sum)
+n_total_by_age <- apply(contraceptives, 3, sum)
+n_total <- sum(contraceptives)
 
-thetas <- seq(1.05,1.5,0.05)
+partial_power_func <- function(theta) {
+  power.cmh.test(
+    theta = theta,
+    p2 = n_control_exposed / n_control_total,
+    N = n_total,
+    power = NULL,
+    s = 1/11,
+    t = n_total_by_age / n_total,
+    alternative = "greater"
+  )[["power"]]
+}
 
-power_list <- vpower(
-  theta = thetas,
-  p2 = contraceptives[1,2,] / apply(contraceptives[,2,],2,sum),
-  N = sum(contraceptives),
-  power = NULL,
-  s = 1/11,
-  t = apply(contraceptives, 3, sum) / sum(contraceptives),
-  alternative = "greater"
-)
-
-powers <- sapply(power_list, "[[", "power")
-
-names(powers) <- thetas
-
-powers
+vectorized_power_func <- Vectorize(partial_power_func, "theta", SIMPLIFY = TRUE)
 ```
 
-Using the data above, we may create a power curve.
+Using the function above, we may create a power curve.
 
 ```{r contraceptives-plot, fig.width = 6, fig.height = 4, fig.align = 'center'}
+thetas <- seq(1.05, 1.5, 0.05)
+powers <- vectorized_power_func(thetas)
+
 plot(y = powers, x = thetas, main = "Power curve as a function of effect size")
 abline(h = 0.95, col = "gold")
 abline(h = 0.90, col = "red")
@@ -110,6 +134,16 @@ legend(
   )
 ```
 
-As we can see from above, 90% power would have been achieved if the common odds ratio was estimated to be approximately 1.25.
+As we can see from above, 90% power would have been achieved if the common odds
+ratio was estimated to be approximately 1.25. To compute the exact effect size,
+we employ the `stats::uniroot()`{.r} function.
+
+```{r contraceptives-uniroot}
+target_power <- 0.90
+first_over <- which.min(powers <= target_power)
+interval <- thetas[c(first_over - 1, first_over)]
+uniroot(function(theta) partial_power_func(theta) - target_power, interval)$root
+```
+
 
 ## References

@@ -9,7 +9,7 @@
 #' @author Paul W. Egeler, M.S.
 #' @export
 rel.risk <- function(x, col.num = 1) {
-  stopifnot(identical(dim(x), c(2L,2L)))
-  y <- prop.table(x,1)[,col.num]
+  stopifnot(identical(dim(x), c(2L, 2L)))
+  y <- prop.table(x, 1)[, col.num]
   as.vector(y[1] / y[2])
 }
