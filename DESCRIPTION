@@ -3,7 +3,17 @@ Title: Power and Sample Size Calculation for the Cochran-Mantel-Haenszel Test
 Date: 2024-08-18
 Version: 0.0.4
 Authors@R: c(
-    person("Paul", "Egeler", email = "paulegeler@gmail.com", role = c("aut", "cre")),
+    person(
+      "Paul", "Egeler",
+      email = "paulegeler@gmail.com",
+      role = c("aut", "cre"),
+      comment = c(ORCID = "0000-0001-6948-9498")
+    ),
+    person("Andy", "Kampfschulte", 
+        email = "andykampfschulte@gmail.com", 
+        role = c("ctb"),
+        comment = c(ORCID = "0000-0001-9368-690X")
+    ),
     person("Spectrum Health, Grand Rapids, MI", role = "cph"))
 Copyright: Spectrum Health, Grand Rapids, MI
 Description:
