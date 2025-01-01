@@ -1,4 +1,4 @@
-# samplesizeCMH Version 0.0.2
+# samplesizeCMH Version 0.0.4
 
 - Updated the power vignette to show how to compute exact effect size for a
   given power using the `stats::uniroot()` function.
