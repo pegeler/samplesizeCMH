@@ -1,0 +1,11 @@
+url: https://github.com/pegeler/samplesizeCMH/
+
+template:
+  bootstrap: 5
+
+repo:
+  url:
+    home: https://github.com/pegeler/samplesizeCMH/
+    source: https://github.com/pegeler/samplesizeCMH/
+    issue: https://github.com/pegeler/samplesizeCMH/issues/
+    user: https://github.com/pegeler/

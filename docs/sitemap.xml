@@ -1,51 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/samplesizeCMH-introduction.html</loc>
-  </url>
-  <url>
-    <loc>/articles/samplesizeCMH-power.html</loc>
-  </url>
-  <url>
-    <loc>/articles/samplesizeCMH-samplesize.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/contraceptives.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/odds.and.proportions.html</loc>
-  </url>
-  <url>
-    <loc>/reference/odds.ratio.html</loc>
-  </url>
-  <url>
-    <loc>/reference/power.cmh.test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.power.cmh.html</loc>
-  </url>
-  <url>
-    <loc>/reference/rel.risk.html</loc>
-  </url>
-  <url>
-    <loc>/reference/samplesizeCMH.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://github.com/pegeler/samplesizeCMH/404.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/articles/index.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/articles/samplesizeCMH-introduction.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/articles/samplesizeCMH-power.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/articles/samplesizeCMH-samplesize.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/authors.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/index.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/news/index.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/reference/contraceptives.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/reference/index.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/reference/odds.and.proportions.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/reference/odds.ratio.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/reference/power.cmh.test.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/reference/print.power.cmh.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/reference/rel.risk.html</loc></url>
+<url><loc>https://github.com/pegeler/samplesizeCMH/reference/samplesizeCMH.html</loc></url>
 </urlset>
+
