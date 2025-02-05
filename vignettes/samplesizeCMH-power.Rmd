@@ -93,22 +93,22 @@ see later how it can be used to compute the exact effect size that will yield
 90% power.
 
 ```{r contraceptives-effect.size}
+partially_apply_power_func <-
+  function(...) function(theta) power.cmh.test(theta = theta, ...)[["power"]]
+
 n_control_exposed <- contraceptives[1, 2, ]
 n_control_total <- apply(contraceptives[, 2, ], 2, sum)
 n_total_by_age <- apply(contraceptives, 3, sum)
 n_total <- sum(contraceptives)
 
-partial_power_func <- function(theta) {
-  power.cmh.test(
-    theta = theta,
-    p2 = n_control_exposed / n_control_total,
-    N = n_total,
-    power = NULL,
-    s = 1/11,
-    t = n_total_by_age / n_total,
-    alternative = "greater"
-  )[["power"]]
-}
+partial_power_func <- partially_apply_power_func(
+  p2 = n_control_exposed / n_control_total,
+  N = n_total,
+  power = NULL,
+  s = 1/11,
+  t = n_total_by_age / n_total,
+  alternative = "greater"
+)
 
 vectorized_power_func <- Vectorize(partial_power_func, "theta", SIMPLIFY = TRUE)
 ```

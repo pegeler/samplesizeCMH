@@ -165,7 +165,7 @@ power.cmh.test <- function(
   lower.tail <- switch(alternative, less = TRUE, FALSE)
 
   # Infer J from vector lengths of first three args
-  J <- max(vapply(list(p1, p2, theta), length, integer(1)))
+  J <- max(lengths(list(p1, p2, theta)))
 
   # Ensure that 's' and 't' are of correct lengths
   s <- rep(as.vector(s), length.out = J)
