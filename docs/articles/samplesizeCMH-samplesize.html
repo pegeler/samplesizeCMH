@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">samplesizeCMH</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,13 +54,15 @@
 
 
 
-<script src="samplesizeCMH-samplesize_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Sample Size Calculation for the Cochran-Mantel-Haenszel Test</h1>
-                        <h4 data-toc-skip class="author">Paul W. Egeler, M.S., GStat</h4>
+                        <h4 data-toc-skip class="author">Paul W. Egeler,
+M.S., GStat</h4>
             
-            <h4 data-toc-skip class="date">2025-01-03</h4>
+            <h4 data-toc-skip class="date">2025-02-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/pegeler/samplesizeCMH/vignettes/samplesizeCMH-samplesize.Rmd"><code>vignettes/samplesizeCMH-samplesize.Rmd</code></a></small>
       <div class="d-none name"><code>samplesizeCMH-samplesize.Rmd</code></div>
@@ -71,14 +73,66 @@
 <div class="section level2">
 <h2 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
 </h2>
-<p>The first method to estimate sample size for the CMH test was introduced by <span class="citation">Gail (1973)</span> using a least squares method. <span class="citation">Munoz and Rosner (1984)</span> later produced sample size estimators useful in the special case when both margins are fixed. However, this is often not the case in retrospective case-control designs. As such, <span class="citation">Woolson, Bean, and Rojas (1986)</span> introduced a calculation using the weighted difference between two binomial distributions, which assumes only one margin to be fixed. This was corroborated by <span class="citation">Wittes and Wallenstein (1987)</span> in their paper a year later. Later still, <span class="citation">Nam (1992)</span> improved upon that calculation by introducing a coefficient to address continuity corrected CMH tests.</p>
-<p>The methods included in the package are based on calculations derived by <span class="citation">Woolson, Bean, and Rojas (1986)</span> for uncorrected statistics and <span class="citation">Nam (1992)</span> for continuity corrected statistics. A slightly more precise power calculation is used based on <span class="citation">Wittes and Wallenstein (1987)</span>, but it is functionally equivalent to the calculation by <span class="citation">Woolson, Bean, and Rojas (1986)</span>.</p>
+<p>The first method to estimate sample size for the CMH test was
+introduced by <span class="citation">Gail (1973)</span> using a least
+squares method. <span class="citation">Munoz and Rosner (1984)</span>
+later produced sample size estimators useful in the special case when
+both margins are fixed. However, this is often not the case in
+retrospective case-control designs. As such, <span class="citation">Woolson, Bean, and Rojas (1986)</span> introduced a
+calculation using the weighted difference between two binomial
+distributions, which assumes only one margin to be fixed. This was
+corroborated by <span class="citation">Wittes and Wallenstein
+(1987)</span> in their paper a year later. Later still, <span class="citation">Nam (1992)</span> improved upon that calculation by
+introducing a coefficient to address continuity corrected CMH tests.</p>
+<p>The methods included in the package are based on calculations derived
+by <span class="citation">Woolson, Bean, and Rojas (1986)</span> for
+uncorrected statistics and <span class="citation">Nam (1992)</span> for
+continuity corrected statistics. A slightly more precise power
+calculation is used based on <span class="citation">Wittes and
+Wallenstein (1987)</span>, but it is functionally equivalent to the
+calculation by <span class="citation">Woolson, Bean, and Rojas
+(1986)</span>.</p>
 </div>
 <div class="section level2">
 <h2 id="the-research-question">The Research Question<a class="anchor" aria-label="anchor" href="#the-research-question"></a>
 </h2>
-<p>Starting with the example first used by <span class="citation">Woolson, Bean, and Rojas (1986)</span> and then revisited by <span class="citation">Nam (1992)</span>, we will explore the usage of the central function of the <code class="sourceCode r">samplesizeCMH</code> package, the <code class="sourceCode r"><span class="kw">power.cmh.test</span>()</code> function.</p>
-<p>This was a case–control study which looked at whether there was an association between colon cancer and chlorinated drinking water among males in Iowa, stratified by age. There were four age categories, 20–54 years, 55–69 years, 70–79 years, and 80–84 years; therefore the number of levels of the stratifying variable <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math> = 4. The relative proportion of each age group to the total sample is as follows: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mn>1</mn></msub><annotation encoding="application/x-tex">t_1</annotation></semantics></math> = 0.10, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mn>2</mn></msub><annotation encoding="application/x-tex">t_2</annotation></semantics></math> = 0.40, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mn>3</mn></msub><annotation encoding="application/x-tex">t_3</annotation></semantics></math> = 0.35, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mn>4</mn></msub><annotation encoding="application/x-tex">t_4</annotation></semantics></math> = 0.15. The National Collaborative Bladder Cancer Study showed that exposure rate for controls for each age stratum, denoted by <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mrow><mn>2</mn><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">\pi_{2j}</annotation></semantics></math> (where the subscript ‘2’ indicates second column proportions and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math> is the stratum), was <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mn>21</mn></msub><annotation encoding="application/x-tex">\pi_{21}</annotation></semantics></math> = 0.75, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mn>22</mn></msub><annotation encoding="application/x-tex">\pi_{22}</annotation></semantics></math> = 0.70, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mn>23</mn></msub><annotation encoding="application/x-tex">\pi_{23}</annotation></semantics></math> = 0.65, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mn>24</mn></msub><annotation encoding="application/x-tex">\pi_{24}</annotation></semantics></math> = 0.60. Level of significance was set at 0.05 and desired power was 90% with an effect size of 3. They matched equal number of cases and controls in each stratum, <em>i.e.</em>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mn>1</mn></msub><mo>=</mo><msub><mi>s</mi><mn>2</mn></msub><mo>=</mo><msub><mi>s</mi><mn>3</mn></msub><mo>=</mo><msub><mi>s</mi><mn>4</mn></msub><mo>=</mo></mrow><annotation encoding="application/x-tex">s_1=s_2=s_3=s_4=</annotation></semantics></math> 0.5.</p>
+<p>Starting with the example first used by <span class="citation">Woolson, Bean, and Rojas (1986)</span> and then
+revisited by <span class="citation">Nam (1992)</span>, we will explore
+the usage of the central function of the <code class="sourceCode r">samplesizeCMH</code> package, the <code class="sourceCode r"><span class="fu">power.cmh.test</span>()</code>
+function.</p>
+<p>This was a case–control study which looked at whether there was an
+association between colon cancer and chlorinated drinking water among
+males in Iowa, stratified by age. There were four age categories, 20–54
+years, 55–69 years, 70–79 years, and 80–84 years; therefore the number
+of levels of the stratifying variable
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>
+= 4. The relative proportion of each age group to the total sample is as
+follows:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mn>1</mn></msub><annotation encoding="application/x-tex">t_1</annotation></semantics></math>
+= 0.10,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mn>2</mn></msub><annotation encoding="application/x-tex">t_2</annotation></semantics></math>
+= 0.40,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mn>3</mn></msub><annotation encoding="application/x-tex">t_3</annotation></semantics></math>
+= 0.35, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mn>4</mn></msub><annotation encoding="application/x-tex">t_4</annotation></semantics></math>
+= 0.15. The National Collaborative Bladder Cancer Study showed that
+exposure rate for controls for each age stratum, denoted by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mrow><mn>2</mn><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">\pi_{2j}</annotation></semantics></math>
+(where the subscript ‘2’ indicates second column proportions and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+is the stratum), was
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mn>21</mn></msub><annotation encoding="application/x-tex">\pi_{21}</annotation></semantics></math>
+= 0.75,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mn>22</mn></msub><annotation encoding="application/x-tex">\pi_{22}</annotation></semantics></math>
+= 0.70,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mn>23</mn></msub><annotation encoding="application/x-tex">\pi_{23}</annotation></semantics></math>
+= 0.65, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mn>24</mn></msub><annotation encoding="application/x-tex">\pi_{24}</annotation></semantics></math>
+= 0.60. Level of significance was set at 0.05 and desired power was 90%
+with an effect size of 3. They matched equal number of cases and
+controls in each stratum, <em>i.e.</em>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mn>1</mn></msub><mo>=</mo><msub><mi>s</mi><mn>2</mn></msub><mo>=</mo><msub><mi>s</mi><mn>3</mn></msub><mo>=</mo><msub><mi>s</mi><mn>4</mn></msub><mo>=</mo></mrow><annotation encoding="application/x-tex">s_1=s_2=s_3=s_4=</annotation></semantics></math>
+0.5.</p>
 </div>
 <div class="section level2">
 <h2 id="calculating-sample-size">Calculating Sample Size<a class="anchor" aria-label="anchor" href="#calculating-sample-size"></a>
@@ -86,11 +140,26 @@
 <div class="section level3">
 <h3 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a>
 </h3>
-<p>We will go over several variations on the experimental design to explore the usage of the <code class="sourceCode r"><span class="kw">power.cmh.test</span>()</code> function.</p>
+<p>We will go over several variations on the experimental design to
+explore the usage of the <code class="sourceCode r"><span class="fu">power.cmh.test</span>()</code>
+function.</p>
 <div class="section level4">
 <h4 id="uncorrected">Uncorrected<a class="anchor" aria-label="anchor" href="#uncorrected"></a>
 </h4>
-<p>Suppose that the researchers first decided to use the original CMH calculation, ignoring contnuity correction. As such, the parameter <code>correct</code> is set to <code class="sourceCode r"><span class="ot">FALSE</span></code>. We see that the researcher has put in the control exposure proportions as a vector (<code>p2</code>), the effect size has been given (<code>theta</code>), and a vector of relative stratum sizes has been assigned (<code>t</code>). Since there are equal numbers of cases and controls for each group, the <code>s</code> parameter is not required. Only <code>p1</code> and <code>p2</code> <em>or</em> one of the proportions and a <code>theta</code> are required to carry out the calculation. The number of strata (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>) is inferred from the maximum vector length of <code>p1</code>, <code>p2</code>, or <code>theta</code>.</p>
+<p>Suppose that the researchers first decided to use the original CMH
+calculation, ignoring contnuity correction. As such, the parameter
+<code>correct</code> is set to <code class="sourceCode r"><span class="cn">FALSE</span></code>. We see that
+the researcher has put in the control exposure proportions as a vector
+(<code>p2</code>), the effect size has been given (<code>theta</code>),
+and a vector of relative stratum sizes has been assigned
+(<code>t</code>). Since there are equal numbers of cases and controls
+for each group, the <code>s</code> parameter is not required. Only
+<code>p1</code> and <code>p2</code> <em>or</em> one of the proportions
+and a <code>theta</code> are required to carry out the calculation. The
+number of strata
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>)
+is inferred from the maximum vector length of <code>p1</code>,
+<code>p2</code>, or <code>theta</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pegeler/samplesizeCMH">samplesizeCMH</a></span><span class="op">)</span></span>
 <span></span>
@@ -115,12 +184,20 @@
 <span><span class="co">## CALL: </span></span>
 <span><span class="co">## power.cmh.test(p2 = c(0.75, 0.7, 0.65, 0.6), theta = 3, power = 0.9, </span></span>
 <span><span class="co">##     alternative = "greater", t = c(0.1, 0.4, 0.35, 0.15), correct = FALSE)</span></span></code></pre>
-<p>Note that the <code class="sourceCode r">detail =<span class="st"> </span><span class="ot">FALSE</span></code> parameter was passed to the <code class="sourceCode r">print</code> method to reduce output.</p>
+<p>Note that the <code class="sourceCode r">detail <span class="ot">=</span> <span class="cn">FALSE</span></code>
+parameter was passed to the <code class="sourceCode r">print</code>
+method to reduce output.</p>
 </div>
 <div class="section level4">
 <h4 id="continuity-corrected-estimate">Continuity Corrected Estimate<a class="anchor" aria-label="anchor" href="#continuity-corrected-estimate"></a>
 </h4>
-<p>After further reading, the researcher has now determined that a continuity correction would be appropriate when performing the CMH test (the default of the <code class="sourceCode r"><span class="kw">mantaelhaen.test</span>()</code> is <code class="sourceCode r">correct =<span class="st"> </span><span class="ot">TRUE</span></code>). The <code>correct</code> parameter in the code below has be flipped to <code class="sourceCode r"><span class="ot">TRUE</span></code> to take continuity correction into account.</p>
+<p>After further reading, the researcher has now determined that a
+continuity correction would be appropriate when performing the CMH test
+(the default of the <code class="sourceCode r"><span class="fu">mantaelhaen.test</span>()</code>
+is <code class="sourceCode r">correct <span class="ot">=</span> <span class="cn">TRUE</span></code>).
+The <code>correct</code> parameter in the code below has be flipped to
+<code class="sourceCode r"><span class="cn">TRUE</span></code> to take
+continuity correction into account.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample_size_corrected</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/power.cmh.test.html">power.cmh.test</a></span><span class="op">(</span></span>
 <span>  p2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.75</span>,<span class="fl">0.70</span>,<span class="fl">0.65</span>,<span class="fl">0.60</span><span class="op">)</span>,</span>
@@ -150,12 +227,23 @@
 <span><span class="co">## CALL: </span></span>
 <span><span class="co">## power.cmh.test(p2 = c(0.75, 0.7, 0.65, 0.6), theta = 3, power = 0.9, </span></span>
 <span><span class="co">##     alternative = "greater", t = c(0.1, 0.4, 0.35, 0.15), correct = TRUE)</span></span></code></pre>
-<p>We see that the <code>N</code> has increased by <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>≈</mo><annotation encoding="application/x-tex">\approx</annotation></semantics></math> 12%, as is expected when continuity correction is taken into account. The <code>n.frac</code> option was used to get fractional n’s, rather than rounding the the next whole number.</p>
+<p>We see that the <code>N</code> has increased by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>≈</mo><annotation encoding="application/x-tex">\approx</annotation></semantics></math>
+12%, as is expected when continuity correction is taken into account.
+The <code>n.frac</code> option was used to get fractional n’s, rather
+than rounding the the next whole number.</p>
 </div>
 <div class="section level4">
 <h4 id="unequal-numbers-of-cases-and-controls">Unequal Numbers of Cases and Controls<a class="anchor" aria-label="anchor" href="#unequal-numbers-of-cases-and-controls"></a>
 </h4>
-<p>Consider now that the researcher performed some preparatory work and has found that the number of cases available is much fewer than the number of available controls. In fact, it is very difficult to find cases that meet the inclusion criteria, but is relatively easy to find controls that meet the inclusion criteria. Wanting to leverage all of the available data, an adjustment was be made to the sample size calculation performed earlier by including the <code>s</code> parameter. The design now supposes two controls matched to each case.</p>
+<p>Consider now that the researcher performed some preparatory work and
+has found that the number of cases available is much fewer than the
+number of available controls. In fact, it is very difficult to find
+cases that meet the inclusion criteria, but is relatively easy to find
+controls that meet the inclusion criteria. Wanting to leverage all of
+the available data, an adjustment was be made to the sample size
+calculation performed earlier by including the <code>s</code> parameter.
+The design now supposes two controls matched to each case.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/power.cmh.test.html">power.cmh.test</a></span><span class="op">(</span></span>
 <span>  p2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.75</span>,<span class="fl">0.70</span>,<span class="fl">0.65</span>,<span class="fl">0.60</span><span class="op">)</span>,</span>
@@ -185,15 +273,27 @@
 <span><span class="co">## power.cmh.test(p2 = c(0.75, 0.7, 0.65, 0.6), theta = 3, power = 0.9, </span></span>
 <span><span class="co">##     alternative = "greater", s = 1/3, t = c(0.1, 0.4, 0.35, 0.15), </span></span>
 <span><span class="co">##     correct = TRUE)</span></span></code></pre>
-<p>Note that effective N has increased by 24 subjects. The CMH test is at optimum efficiency when <code>s</code> is balanced. Therefore, altering the case/control ratio should be implemented only when there is a compelling reason to do so, such as difficulty in finding cases or prohibitive costs.</p>
+<p>Note that effective N has increased by 24 subjects. The CMH test is
+at optimum efficiency when <code>s</code> is balanced. Therefore,
+altering the case/control ratio should be implemented only when there is
+a compelling reason to do so, such as difficulty in finding cases or
+prohibitive costs.</p>
 </div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="a-closer-look-at-a-partial-table">A Closer Look at a Partial Table<a class="anchor" aria-label="anchor" href="#a-closer-look-at-a-partial-table"></a>
 </h2>
-<p>Let’s take a moment to look at the partial table of stratum <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math> = 1. Given the information above, we can reconstruct this table to better understand the question at hand. We can also use this as an opportunity to use some of the peripheral functions included in the <code class="sourceCode r">samplesizeCMH</code> package.</p>
-<p>The proportion of controls exposed to chlorinated drinking water was <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mn>21</mn></msub><annotation encoding="application/x-tex">\pi_{21}</annotation></semantics></math> = 0.75. It follows then that the complementary column proportion is 0.25. The table below shows column percents.</p>
+<p>Let’s take a moment to look at the partial table of stratum
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+= 1. Given the information above, we can reconstruct this table to
+better understand the question at hand. We can also use this as an
+opportunity to use some of the peripheral functions included in the
+<code class="sourceCode r">samplesizeCMH</code> package.</p>
+<p>The proportion of controls exposed to chlorinated drinking water was
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mn>21</mn></msub><annotation encoding="application/x-tex">\pi_{21}</annotation></semantics></math>
+= 0.75. It follows then that the complementary column proportion is
+0.25. The table below shows column percents.</p>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -213,7 +313,9 @@
 </tr>
 </tbody>
 </table>
-<p>Using the <code class="sourceCode r"><span class="kw">effect.size</span>()</code> function, we can use the expected exposure rate of control to estimate expected exposure rate of cases.</p>
+<p>Using the <code class="sourceCode r"><span class="fu">effect.size</span>()</code>
+function, we can use the expected exposure rate of control to estimate
+expected exposure rate of cases.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/odds.and.proportions.html">effect.size</a></span><span class="op">(</span><span class="fl">0.75</span>,<span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.9</span></span></code></pre>
@@ -237,7 +339,8 @@
 </tr>
 </tbody>
 </table>
-<p>To determine the odds of exposure for the two groups, we can use <code class="sourceCode r"><span class="kw">prop2odds</span>()</code>.</p>
+<p>To determine the odds of exposure for the two groups, we can use
+<code class="sourceCode r"><span class="fu">prop2odds</span>()</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Control</span></span>
 <span><span class="fu"><a href="../reference/odds.and.proportions.html">prop2odds</a></span><span class="op">(</span><span class="fl">0.75</span><span class="op">)</span></span></code></pre></div>
@@ -246,31 +349,49 @@
 <code class="sourceCode R"><span><span class="co"># Case</span></span>
 <span><span class="fu"><a href="../reference/odds.and.proportions.html">prop2odds</a></span><span class="op">(</span><span class="fl">0.9</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 9</span></span></code></pre>
-<p>We can also use either row or column proportions to calculate the odds ratio for a 2 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math> 2 table.</p>
+<p>We can also use either row or column proportions to calculate the
+odds ratio for a 2
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+2 table.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/odds.and.proportions.html">props2theta</a></span><span class="op">(</span><span class="fl">0.90</span>,<span class="fl">0.75</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 3</span></span></code></pre>
-<p>We see that this brings us back to our specified effect size, <code>theta</code> = 3, which was used in the sample size calculaion.</p>
-<p>There are several other peripheral functions in this package to interconvert between proportions, odds, relative risk, and odds ratios. Use <code class="sourceCode r"><span class="kw">help</span>(<span class="st">"odds.and.proportions"</span>, <span class="st">"samplesizeCMH"</span>)</code> to find out more.</p>
+<p>We see that this brings us back to our specified effect size,
+<code>theta</code> = 3, which was used in the sample size
+calculaion.</p>
+<p>There are several other peripheral functions in this package to
+interconvert between proportions, odds, relative risk, and odds ratios.
+Use <code class="sourceCode r"><span class="fu">help</span>(<span class="st">"odds.and.proportions"</span>, <span class="st">"samplesizeCMH"</span>)</code>
+to find out more.</p>
 </div>
 <div class="section level2 unnumbered">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references hanging-indent">
-<div id="ref-Gail1973">
-<p>Gail, M. 1973. “The Determination of Sample Sizes for Trials Involving Several Independent 2x2 Tables.” <em>Journal of Chronic Diseases</em> 26 (10): 669–73. <a href="https://pubmed.ncbi.nlm.nih.gov/4765321" class="external-link">https://pubmed.ncbi.nlm.nih.gov/4765321</a>.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Gail1973" class="csl-entry">
+Gail, M. 1973. <span>“The Determination of Sample Sizes for Trials
+Involving Several Independent 2x2 Tables.”</span> <em>Journal of Chronic
+Diseases</em> 26 (10): 669–73. <a href="https://pubmed.ncbi.nlm.nih.gov/4765321" class="external-link">https://pubmed.ncbi.nlm.nih.gov/4765321</a>.
 </div>
-<div id="ref-Munoz1984">
-<p>Munoz, A., and B. Rosner. 1984. “Power and Sample Size for a Collection of 2 X 2 Tables.” <em>Biometrics</em> 40 (4): 995–1004.</p>
+<div id="ref-Munoz1984" class="csl-entry">
+Munoz, A., and B. Rosner. 1984. <span>“Power and Sample Size for a
+Collection of 2 x 2 Tables.”</span> <em>Biometrics</em> 40 (4):
+995–1004.
 </div>
-<div id="ref-Nam1992">
-<p>Nam, J. 1992. “Sample Size Determination for Case-Control Studies and the Comparison of Stratified and Unstratified Analyses.” <em>Biometrics</em> 48 (2): 389–95. <a href="https://pubmed.ncbi.nlm.nih.gov/1637968" class="external-link">https://pubmed.ncbi.nlm.nih.gov/1637968</a>.</p>
+<div id="ref-Nam1992" class="csl-entry">
+Nam, J. 1992. <span>“Sample Size Determination for Case-Control Studies
+and the Comparison of Stratified and Unstratified Analyses.”</span>
+<em>Biometrics</em> 48 (2): 389–95. <a href="https://pubmed.ncbi.nlm.nih.gov/1637968" class="external-link">https://pubmed.ncbi.nlm.nih.gov/1637968</a>.
 </div>
-<div id="ref-Wittes1987">
-<p>Wittes, Janet, and Sylvan Wallenstein. 1987. “The Power of the Mantel-Haenszel Test.” <em>Journal of the American Statistical Association</em> 82 (400): 1104–9. <a href="https://www.jstor.org/stable/2289387" class="external-link">https://www.jstor.org/stable/2289387</a>.</p>
+<div id="ref-Wittes1987" class="csl-entry">
+Wittes, Janet, and Sylvan Wallenstein. 1987. <span>“The Power of the
+Mantel-Haenszel Test.”</span> <em>Journal of the American Statistical
+Association</em> 82 (400): 1104–9. <a href="https://www.jstor.org/stable/2289387" class="external-link">https://www.jstor.org/stable/2289387</a>.
 </div>
-<div id="ref-Woolson1986">
-<p>Woolson, R. F., J. A. Bean, and P. B. Rojas. 1986. “Sample Size for Case-Control Studies Using Cochran’s Statistic.” <em>Biometrics</em> 42 (4): 927–32. <a href="https://pubmed.ncbi.nlm.nih.gov/3814733" class="external-link">https://pubmed.ncbi.nlm.nih.gov/3814733</a>.</p>
+<div id="ref-Woolson1986" class="csl-entry">
+Woolson, R. F., J. A. Bean, and P. B. Rojas. 1986. <span>“Sample Size
+for Case-Control Studies Using Cochran’s Statistic.”</span>
+<em>Biometrics</em> 42 (4): 927–32. <a href="https://pubmed.ncbi.nlm.nih.gov/3814733" class="external-link">https://pubmed.ncbi.nlm.nih.gov/3814733</a>.
 </div>
 </div>
 </div>

@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">samplesizeCMH</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,13 +54,15 @@
 
 
 
-<script src="samplesizeCMH-introduction_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Introduction to the Cochran-Mantel-Haenszel Test</h1>
-                        <h4 data-toc-skip class="author">Paul W. Egeler, M.S., GStat</h4>
+                        <h4 data-toc-skip class="author">Paul W. Egeler,
+M.S., GStat</h4>
             
-            <h4 data-toc-skip class="date">2025-01-03</h4>
+            <h4 data-toc-skip class="date">2025-02-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/pegeler/samplesizeCMH/vignettes/samplesizeCMH-introduction.Rmd"><code>vignettes/samplesizeCMH-introduction.Rmd</code></a></small>
       <div class="d-none name"><code>samplesizeCMH-introduction.Rmd</code></div>
@@ -71,17 +73,55 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>The <strong>Cochran-Mantel-Haenszel test</strong> (CMH) is an inferential test for the association between two binary variables, while controlling for a third confounding nominal variable <span class="citation">(Cochran 1954; Mantel and Haenszel 1959)</span>. Essentially, the CMH test examines the <em>weighted</em> association of a set of 2 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math> 2 tables. A common odds ratio relating to the test statistic can also be generated <span class="citation">(Mantel and Haenszel 1959)</span>. The CMH test is a common technique in the field of biostatistics, where it is often used for case-control studies.</p>
-<p>This introduction briefly describes some of the terminology and concepts surrounding stratified tables. Examples are given which show some basic techniques for working with multidimensional tables in <code>R</code>. Functionality of the <code>samplesizeCMH</code> package is highlighted where it may augment the analysis.</p>
+<p>The <strong>Cochran-Mantel-Haenszel test</strong> (CMH) is an
+inferential test for the association between two binary variables, while
+controlling for a third confounding nominal variable <span class="citation">(Cochran 1954; Mantel and Haenszel 1959)</span>.
+Essentially, the CMH test examines the <em>weighted</em> association of
+a set of 2
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>×</mo><annotation encoding="application/x-tex">\times</annotation></semantics></math>
+2 tables. A common odds ratio relating to the test statistic can also be
+generated <span class="citation">(Mantel and Haenszel 1959)</span>. The
+CMH test is a common technique in the field of biostatistics, where it
+is often used for case-control studies.</p>
+<p>This introduction briefly describes some of the terminology and
+concepts surrounding stratified tables. Examples are given which show
+some basic techniques for working with multidimensional tables in
+<code>R</code>. Functionality of the <code>samplesizeCMH</code> package
+is highlighted where it may augment the analysis.</p>
 </div>
 <div class="section level2">
 <h2 id="partial-and-marginal-tables">Partial and Marginal Tables<a class="anchor" aria-label="anchor" href="#partial-and-marginal-tables"></a>
 </h2>
-<p>Consider a contingency table comparing <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math> at some fixed level of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>. The cross-section of the three-way table examining only one level of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math> is called a <em>partial table</em>. On the other hand, the combined counts of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math> across all levels of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>, <em>id est</em> a simple two-way contingency table ignoring <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>, produce the <em>marginal table</em>. These concepts are described in depth by <span class="citation">Agresti (2002, sec. 2.7.1)</span>.</p>
+<p>Consider a contingency table comparing
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
+at some fixed level of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>.
+The cross-section of the three-way table examining only one level of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>
+is called a <em>partial table</em>. On the other hand, the combined
+counts of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
+across all levels of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>,
+<em>id est</em> a simple two-way contingency table ignoring
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>,
+produce the <em>marginal table</em>. These concepts are described in
+depth by <span class="citation">Agresti (2002, sec. 2.7.1)</span>.</p>
 <div class="section level3">
 <h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h3>
-<p>We will use the <code class="sourceCode r">Titanic</code> dataset in the <code class="sourceCode r">datasets</code> package to illustrate. This dataset is a four-dimensional table which includes the <em>Class</em> (1<sup>st</sup>, 2<sup>nd</sup>, 3<sup>rd</sup>, Crew), <em>Sex</em> (Male, Female), <em>Age</em> (Child, Adult), and <em>Survival</em> (No, Yes) of the passengers of the 1912 maritime disaster. Use <code class="sourceCode r"><span class="kw">help</span>(<span class="st">"Titanic"</span>, <span class="st">"datasets"</span>)</code> to find more information.</p>
+<p>We will use the <code class="sourceCode r">Titanic</code> dataset in
+the <code class="sourceCode r">datasets</code> package to illustrate.
+This dataset is a four-dimensional table which includes the
+<em>Class</em> (1<sup>st</sup>, 2<sup>nd</sup>, 3<sup>rd</sup>, Crew),
+<em>Sex</em> (Male, Female), <em>Age</em> (Child, Adult), and
+<em>Survival</em> (No, Yes) of the passengers of the 1912 maritime
+disaster. Use <code class="sourceCode r"><span class="fu">help</span>(<span class="st">"Titanic"</span>, <span class="st">"datasets"</span>)</code>
+to find more information.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Titanic</span>, package <span class="op">=</span> <span class="st">"datasets"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">Titanic</span><span class="op">)</span></span></code></pre></div>
@@ -91,7 +131,16 @@
 <span><span class="co">##   ..$ Sex     : chr [1:2] "Male" "Female"</span></span>
 <span><span class="co">##   ..$ Age     : chr [1:2] "Child" "Adult"</span></span>
 <span><span class="co">##   ..$ Survived: chr [1:2] "No" "Yes"</span></span></code></pre>
-<p>For this illustration, we will remove the <em>age</em> dimension, transforming the four-dimensional table into a three-dimensional table. Let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math> = sex, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math> = survival, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math> = class. This dimensionality reduction is accomplished using the <code class="sourceCode r"><span class="kw">margin.table</span>()</code> function in the <code>base</code> package.</p>
+<p>For this illustration, we will remove the <em>age</em> dimension,
+transforming the four-dimensional table into a three-dimensional table.
+Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
+= sex,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
+= survival, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>
+= class. This dimensionality reduction is accomplished using the <code class="sourceCode r"><span class="fu">margin.table</span>()</code>
+function in the <code>base</code> package.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">partial_tables</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/marginSums.html" class="external-link">margin.table</a></span><span class="op">(</span><span class="va">Titanic</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">partial_tables</span></span></code></pre></div>
@@ -122,8 +171,13 @@
 <span><span class="co">## Sex       No Yes</span></span>
 <span><span class="co">##   Male   670 192</span></span>
 <span><span class="co">##   Female   3  20</span></span></code></pre>
-<p>Each of the tables above is a partial table: <em>survival by sex at a fixed level of class</em>. The tables can be flattened for easier viewing using the <code class="sourceCode r"><span class="kw">ftable</span>()</code> function in the <code class="sourceCode r">stats</code> package (not shown).</p>
-<p>The code below shows the marginal table of survival by sex, ignoring class. Again the dimensionality is reduced using the <code class="sourceCode r"><span class="kw">margin.table</span>()</code> function.</p>
+<p>Each of the tables above is a partial table: <em>survival by sex at a
+fixed level of class</em>. The tables can be flattened for easier
+viewing using the <code class="sourceCode r"><span class="fu">ftable</span>()</code> function in
+the <code class="sourceCode r">stats</code> package (not shown).</p>
+<p>The code below shows the marginal table of survival by sex, ignoring
+class. Again the dimensionality is reduced using the <code class="sourceCode r"><span class="fu">margin.table</span>()</code>
+function.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">marginal_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/marginSums.html" class="external-link">margin.table</a></span><span class="op">(</span><span class="va">Titanic</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">marginal_table</span></span></code></pre></div>
@@ -131,7 +185,13 @@
 <span><span class="co">## Sex        No  Yes</span></span>
 <span><span class="co">##   Male   1364  367</span></span>
 <span><span class="co">##   Female  126  344</span></span></code></pre>
-<p>As an aside, we may get the table, row, or column proportions using the <code class="sourceCode r"><span class="kw">prop.table</span>()</code> function. Because the <code class="sourceCode r">Titanic</code> dataset is a multidimensional table, it must first be transformed into a two-dimensional table using <code class="sourceCode r"><span class="kw">margin.table</span>()</code> (as was performed above). Failure to do so will produce unexpected results.</p>
+<p>As an aside, we may get the table, row, or column proportions using
+the <code class="sourceCode r"><span class="fu">prop.table</span>()</code>
+function. Because the <code class="sourceCode r">Titanic</code> dataset
+is a multidimensional table, it must first be transformed into a
+two-dimensional table using <code class="sourceCode r"><span class="fu">margin.table</span>()</code> (as
+was performed above). Failure to do so will produce unexpected
+results.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Table proportions</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/proportions.html" class="external-link">prop.table</a></span><span class="op">(</span><span class="va">marginal_table</span><span class="op">)</span></span></code></pre></div>
@@ -158,19 +218,48 @@
 <div class="section level2">
 <h2 id="conditional-marginal-and-common-odds-ratios">Conditional, Marginal, and Common Odds Ratios<a class="anchor" aria-label="anchor" href="#conditional-marginal-and-common-odds-ratios"></a>
 </h2>
-<p>In comparing variables <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math> at a fixed <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math> level of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>, we may use a <em>conditional odds ratio</em>, described by <span class="citation">Agresti (2002, sec. 2.7.4)</span>, to represent the point estimate of association between the to variables. We will denote it as <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>θ</mi><mrow><mi>X</mi><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo stretchy="false" form="postfix">)</mo></mrow></msub><annotation encoding="application/x-tex">\theta_{XY(j)}</annotation></semantics></math>. The <em>marginal odds ratio</em> would then refer to the odds ratio of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math> generated by the marginal table. It follows that the marginal odds ratio would be denoted by <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>θ</mi><mrow><mi>X</mi><mi>Y</mi></mrow></msub><annotation encoding="application/x-tex">\theta_{XY}</annotation></semantics></math>.</p>
-<p>An odds ratio estimate (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>θ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\theta</annotation></semantics></math>) can be calculated from a table or matrix using the <code class="sourceCode r">samplesizeCMH</code> package using the <code class="sourceCode r"><span class="kw">odds.ratio</span>()</code> function. The <code class="sourceCode r"><span class="kw">odds.ratio</span>()</code> function can take either a table of frequencies, probabilities, or percents, as the results are algebraically equivalent.</p>
+<p>In comparing variables
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
+at a fixed
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+level of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>,
+we may use a <em>conditional odds ratio</em>, described by <span class="citation">Agresti (2002, sec. 2.7.4)</span>, to represent the
+point estimate of association between the to variables. We will denote
+it as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>θ</mi><mrow><mi>X</mi><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>j</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></msub><annotation encoding="application/x-tex">\theta_{XY(j)}</annotation></semantics></math>.
+The <em>marginal odds ratio</em> would then refer to the odds ratio of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
+generated by the marginal table. It follows that the marginal odds ratio
+would be denoted by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>θ</mi><mrow><mi>X</mi><mi>Y</mi></mrow></msub><annotation encoding="application/x-tex">\theta_{XY}</annotation></semantics></math>.</p>
+<p>An odds ratio estimate
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>θ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\theta</annotation></semantics></math>)
+can be calculated from a table or matrix using the <code class="sourceCode r">samplesizeCMH</code> package using the <code class="sourceCode r"><span class="fu">odds.ratio</span>()</code>
+function. The <code class="sourceCode r"><span class="fu">odds.ratio</span>()</code>
+function can take either a table of frequencies, probabilities, or
+percents, as the results are algebraically equivalent.</p>
 <div class="section level3">
-<h3 id="demonstration-of-algebraic-equivalence-of-using-frequencies-or-proportions-in-odds-ratio-calculation">Demonstration of Algebraic Equivalence of using Frequencies or Proportions in Odds Ratio Calculation<a class="anchor" aria-label="anchor" href="#demonstration-of-algebraic-equivalence-of-using-frequencies-or-proportions-in-odds-ratio-calculation"></a>
+<h3 id="demonstration-of-algebraic-equivalence-of-using-frequencies-or-proportions-in-odds-ratio-calculation">Demonstration of Algebraic Equivalence of using Frequencies or
+Proportions in Odds Ratio Calculation<a class="anchor" aria-label="anchor" href="#demonstration-of-algebraic-equivalence-of-using-frequencies-or-proportions-in-odds-ratio-calculation"></a>
 </h3>
-<p>Using proportions, we see how the ratio of the row odds <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>o</mi><mn>1</mn></msub><annotation encoding="application/x-tex">o_1</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>o</mi><mn>2</mn></msub><annotation encoding="application/x-tex">o_2</annotation></semantics></math> are estimated.</p>
+<p>Using proportions, we see how the ratio of the row odds
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>o</mi><mn>1</mn></msub><annotation encoding="application/x-tex">o_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>o</mi><mn>2</mn></msub><annotation encoding="application/x-tex">o_2</annotation></semantics></math>
+are estimated.</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>=</mo><mfrac><msub><mover><mi>o</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><msub><mover><mi>o</mi><mo accent="true">̂</mo></mover><mn>2</mn></msub></mfrac><mo>=</mo><mfrac><mrow><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>11</mn></msub><mi>/</mi><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>12</mn></msub></mrow><mrow><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>21</mn></msub><mi>/</mi><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>22</mn></msub></mrow></mfrac><mo>=</mo><mfrac><mrow><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>11</mn></msub><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>22</mn></msub></mrow><mrow><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>12</mn></msub><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>21</mn></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
 \hat{\theta}=
 \frac{\hat{o}_1}{\hat{o}_2} =
 \frac{\hat{\pi}_{11} / \hat{\pi}_{12}}{\hat{\pi}_{21} / \hat{\pi}_{22}} =
 \frac{\hat{\pi}_{11}\hat{\pi}_{22}}{\hat{\pi}_{12}\hat{\pi}_{21}}.
 </annotation></semantics></math></p>
-<p>And since row odds estimates are related row proportions, which are in turn related to to cell counts through the following,</p>
+<p>And since row odds estimates are related row proportions, which are
+in turn related to to cell counts through the following,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>o</mi><mo accent="true">̂</mo></mover><mo>=</mo><mfrac><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mrow><mn>1</mn><mo>−</mo><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub></mrow></mfrac><mo>=</mo><mfrac><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>2</mn></msub></mfrac><mo>=</mo><mfrac><mrow><msub><mi>n</mi><mn>1</mn></msub><mi>/</mi><msub><mi>n</mi><mo>+</mo></msub></mrow><mrow><msub><mi>n</mi><mn>2</mn></msub><mi>/</mi><msub><mi>n</mi><mo>+</mo></msub></mrow></mfrac><mo>=</mo><mfrac><msub><mi>n</mi><mn>1</mn></msub><msub><mi>n</mi><mn>2</mn></msub></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">
 \hat{o} =
 \frac{\hat{\pi}_1}{1 - \hat{\pi}_1} =
@@ -178,7 +267,11 @@
 \frac{n_1 / n_+}{n_2 / n_+} =
 \frac{n_1}{n_2},
 </annotation></semantics></math></p>
-<p>the odds estimate, defined as <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>2</mn></msub></mfrac><annotation encoding="application/x-tex">\frac{\hat{\pi}_1}{\hat{\pi}_2}</annotation></semantics></math>, is equivalent to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><msub><mi>n</mi><mn>1</mn></msub><msub><mi>n</mi><mn>2</mn></msub></mfrac><annotation encoding="application/x-tex">\frac{n_1}{n_2}</annotation></semantics></math>. Therefore,</p>
+<p>the odds estimate, defined as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>2</mn></msub></mfrac><annotation encoding="application/x-tex">\frac{\hat{\pi}_1}{\hat{\pi}_2}</annotation></semantics></math>,
+is equivalent to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><msub><mi>n</mi><mn>1</mn></msub><msub><mi>n</mi><mn>2</mn></msub></mfrac><annotation encoding="application/x-tex">\frac{n_1}{n_2}</annotation></semantics></math>.
+Therefore,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>=</mo><mfrac><mrow><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>11</mn></msub><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>22</mn></msub></mrow><mrow><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>12</mn></msub><msub><mover><mi>π</mi><mo accent="true">̂</mo></mover><mn>21</mn></msub></mrow></mfrac><mo>=</mo><mfrac><mrow><msub><mi>n</mi><mn>11</mn></msub><msub><mi>n</mi><mn>22</mn></msub></mrow><mrow><msub><mi>n</mi><mn>12</mn></msub><msub><mi>n</mi><mn>21</mn></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
 \hat{\theta}=
 \frac{\hat{\pi}_{11}\hat{\pi}_{22}}{\hat{\pi}_{12}\hat{\pi}_{21}} =
@@ -188,19 +281,28 @@
 <div class="section level3">
 <h3 id="example-1">Example<a class="anchor" aria-label="anchor" href="#example-1"></a>
 </h3>
-<p>Let’s first look at the marginal odds ratio of survival by sex using the Titanic data.</p>
+<p>Let’s first look at the marginal odds ratio of survival by sex using
+the Titanic data.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pegeler/samplesizeCMH">samplesizeCMH</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/odds.ratio.html">odds.ratio</a></span><span class="op">(</span><span class="va">marginal_table</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 10.14697</span></span></code></pre>
-<p>The conditional odds ratios can be calculated using the partial tables.</p>
+<p>The conditional odds ratios can be calculated using the partial
+tables.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">partial_tables</span>, <span class="fl">3</span>, <span class="va">odds.ratio</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##       1st       2nd       3rd      Crew </span></span>
 <span><span class="co">## 67.088710 44.067692  4.071612 23.263889</span></span></code></pre>
-<p>Obviously this is more informative than a simple marginal odds ratio. Based on what we see above, survival by sex appears to vary widely by class, where women in 1<sup>st</sup> class survive at a much higher rate than men, whereas 3<sup>rd</sup> class women had only slightly better chance of survival than their male counterparts.</p>
-<p>We can produce a <em>common (weighted) odds ratio</em> using <code class="sourceCode r"><span class="kw">mantelhaen.test</span>()</code> from the <code class="sourceCode r">stats</code> package. Note that it differs slightly from the marginal odds ratio above since it takes into account the differential sizes of each partial table.</p>
+<p>Obviously this is more informative than a simple marginal odds ratio.
+Based on what we see above, survival by sex appears to vary widely by
+class, where women in 1<sup>st</sup> class survive at a much higher rate
+than men, whereas 3<sup>rd</sup> class women had only slightly better
+chance of survival than their male counterparts.</p>
+<p>We can produce a <em>common (weighted) odds ratio</em> using <code class="sourceCode r"><span class="fu">mantelhaen.test</span>()</code>
+from the <code class="sourceCode r">stats</code> package. Note that it
+differs slightly from the marginal odds ratio above since it takes into
+account the differential sizes of each partial table.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/mantelhaen.test.html" class="external-link">mantelhaen.test</a></span><span class="op">(</span><span class="va">partial_tables</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
@@ -219,15 +321,53 @@
 <div class="section level2">
 <h2 id="conditional-and-marginal-associationindependence">Conditional and Marginal Association/Independence<a class="anchor" aria-label="anchor" href="#conditional-and-marginal-associationindependence"></a>
 </h2>
-<p>The term <em>conditional association</em> refers to the association of the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math> variables conditional on the level of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>. Likewise, the <em>marginal association</em> refers to the overall association between <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math> while ignoring <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>.</p>
-<p>The finding of conditional association does not imply marginal association, nor vice-versa. The use of the CMH test to control for the stratifying variable in analysis serves to avoid the well-documented phenomenon of the Simpson’s Paradox in which statistical significance may be found when considering the association between two variables, but where no such significance may be found after considering the stratification. Likewise, the reverse situation may arise where no association may be found between the binary variables, but may be observed when the third variable is introduced.</p>
-<p>Refer to <span class="citation">Agresti (2002, sec. 2.7.3)</span> for more information on the content of this section.</p>
+<p>The term <em>conditional association</em> refers to the association
+of the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
+variables conditional on the level of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>.
+Likewise, the <em>marginal association</em> refers to the overall
+association between
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
+while ignoring
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>.</p>
+<p>The finding of conditional association does not imply marginal
+association, nor vice-versa. The use of the CMH test to control for the
+stratifying variable in analysis serves to avoid the well-documented
+phenomenon of the Simpson’s Paradox in which statistical significance
+may be found when considering the association between two variables, but
+where no such significance may be found after considering the
+stratification. Likewise, the reverse situation may arise where no
+association may be found between the binary variables, but may be
+observed when the third variable is introduced.</p>
+<p>Refer to <span class="citation">Agresti (2002, sec. 2.7.3)</span> for
+more information on the content of this section.</p>
 </div>
 <div class="section level2">
 <h2 id="homogeneous-associationindependence">Homogeneous Association/Independence<a class="anchor" aria-label="anchor" href="#homogeneous-associationindependence"></a>
 </h2>
-<p><em>Homogeneous association</em> is when all the odds ratios between binary variables <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math> are equal for all <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math> levels of variable <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>, such that <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mrow><mi>X</mi><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msub><mo>=</mo><msub><mi>θ</mi><mrow><mi>X</mi><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msub><mo>=</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>=</mo><msub><mi>θ</mi><mrow><mi>X</mi><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo stretchy="false" form="postfix">)</mo></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\theta_{XY(1)}=\theta_{XY(2)}=...=\theta_{XY(j)}.</annotation></semantics></math><span class="citation">(Agresti 2002, sec. 2.7.6)</span></p>
-<p>The Breslow-Day test can be used to check the null hypothesis that all odds ratios are equal. The Cochran-Mantel-Haenszel test can be thought of as a special case of the Breslow-Day test wherein the common odds ratio is assumed to be 1 (however, the calculations are not equivalent). Using the <code>Titanic</code> data, we can perform the Breslow-Day test using <code class="sourceCode r"><span class="kw">BreslowDayTest</span>()</code> from the <code class="sourceCode r">DescTools</code> package.</p>
+<p><em>Homogeneous association</em> is when all the odds ratios between
+binary variables
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
+are equal for all
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+levels of variable
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>,
+such that
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mrow><mi>X</mi><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow></msub><mo>=</mo><msub><mi>θ</mi><mrow><mi>X</mi><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow></msub><mo>=</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>=</mo><msub><mi>θ</mi><mrow><mi>X</mi><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>j</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\theta_{XY(1)}=\theta_{XY(2)}=...=\theta_{XY(j)}.</annotation></semantics></math><span class="citation">(Agresti 2002, sec. 2.7.6)</span></p>
+<p>The Breslow-Day test can be used to check the null hypothesis that
+all odds ratios are equal. The Cochran-Mantel-Haenszel test can be
+thought of as a special case of the Breslow-Day test wherein the common
+odds ratio is assumed to be 1 (however, the calculations are not
+equivalent). Using the <code>Titanic</code> data, we can perform the
+Breslow-Day test using <code class="sourceCode r"><span class="fu">BreslowDayTest</span>()</code>
+from the <code class="sourceCode r">DescTools</code> package.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://andrisignorell.github.io/DescTools/" class="external-link">DescTools</a></span><span class="op">)</span></span>
 <span></span>
@@ -237,20 +377,26 @@
 <span><span class="co">## </span></span>
 <span><span class="co">## data:  partial_tables</span></span>
 <span><span class="co">## X-squared = 397.54, df = 3, p-value &lt; 2.2e-16</span></span></code></pre>
-<p>Note the near agreement with the output from <code class="sourceCode r"><span class="kw">mantelhaen.test</span>()</code> from the section above.</p>
+<p>Note the near agreement with the output from <code class="sourceCode r"><span class="fu">mantelhaen.test</span>()</code>
+from the section above.</p>
 </div>
 <div class="section level2 unnumbered">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references hanging-indent">
-<div id="ref-Agresti">
-<p>Agresti, A. 2002. <em>An Introduction to Categorical Data Analysis</em>. 2nd ed. Wiley Series in Probability and Statistics. Wiley-Interscience.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Agresti" class="csl-entry">
+Agresti, A. 2002. <em><span class="nocase">An Introduction to
+Categorical Data Analysis</span></em>. 2nd ed. Wiley Series in
+Probability and Statistics. Wiley-Interscience.
 </div>
-<div id="ref-Cochran1954">
-<p>Cochran, William G. 1954. “Some Methods for Strengthening the Common Chi-Squared Tests.” <em>Biometrics</em> 10 (4): 417–51. <a href="https://www.jstor.org/stable/3001616" class="external-link">https://www.jstor.org/stable/3001616</a>.</p>
+<div id="ref-Cochran1954" class="csl-entry">
+Cochran, William G. 1954. <span>“Some Methods for Strengthening the
+Common Chi-Squared Tests.”</span> <em>Biometrics</em> 10 (4): 417–51. <a href="https://www.jstor.org/stable/3001616" class="external-link">https://www.jstor.org/stable/3001616</a>.
 </div>
-<div id="ref-Mantel1959">
-<p>Mantel, N., and W. Haenszel. 1959. “Statistical Aspects of the Analysis of Data from Retrospective Studies of Disease.” <em>Journal of the National Cancer Institute</em> 22 (4): 719–48. <a href="https://pubmed.ncbi.nlm.nih.gov/13655060" class="external-link">https://pubmed.ncbi.nlm.nih.gov/13655060</a>.</p>
+<div id="ref-Mantel1959" class="csl-entry">
+Mantel, N., and W. Haenszel. 1959. <span>“Statistical Aspects of the
+Analysis of Data from Retrospective Studies of Disease.”</span>
+<em>Journal of the National Cancer Institute</em> 22 (4): 719–48. <a href="https://pubmed.ncbi.nlm.nih.gov/13655060" class="external-link">https://pubmed.ncbi.nlm.nih.gov/13655060</a>.
 </div>
 </div>
 </div>
